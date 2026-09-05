@@ -1387,87 +1387,103 @@ function renderUserProfile() {
 }
 
 function renderUserLogin() {
-  return `
-    <div class="min-h-screen bg-[#07090d] flex items-center justify-center p-4">
+return ` <div
+   class="min-h-screen flex items-center justify-center p-4 bg-cover bg-center relative"
+   style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80');"
+ >
 
-      <div class="w-full max-w-sm bg-[#0e1118] border border-amber-500/30 rounded-2xl p-7 shadow-2xl">
+```
+  <div class="absolute inset-0 bg-black/70"></div>
 
-        <div class="text-center mb-6">
+  <div class="relative z-10 w-full max-w-md">
 
-          <div class="w-14 h-14 mx-auto rounded-full bg-amber-500 flex items-center justify-center mb-3">
-            <div class="w-11 h-11 bg-[#0e1118] rounded-full flex items-center justify-center text-amber-400 text-lg">
-              💎
-            </div>
-          </div>
+    <div class="text-center mb-6">
 
-          <h1 class="text-xl font-bold text-amber-300">
-            LUXURY PROPERTIES
-          </h1>
+      <div class="w-16 h-16 mx-auto rounded-full bg-amber-500 flex items-center justify-center mb-4 shadow-lg">
+        <div class="w-12 h-12 bg-[#0e1118] rounded-full flex items-center justify-center text-amber-400 text-xl">
+          💎
+        </div>
+      </div>
 
-          <p class="text-xs text-slate-400 mt-1">
-            Sign in to your account
-          </p>
+      <h1 class="text-3xl font-bold text-white font-serif tracking-wide">
+        WELCOME TO
+      </h1>
 
+      <h2 class="text-2xl font-extrabold text-amber-400 mt-1">
+        LUXURY PROPERTIES
+      </h2>
+
+      <p class="text-sm text-slate-300 mt-2">
+        Sign in to continue
+      </p>
+
+    </div>
+
+    <div class="bg-[#0b0e14]/95 backdrop-blur-md border border-amber-500/30 rounded-2xl p-7 shadow-2xl">
+
+      <form onsubmit="handleUserLoginSubmit(event)" class="space-y-4">
+
+        <div>
+          <label class="block text-xs text-slate-300 mb-1">
+            Email / Username
+          </label>
+
+          <input
+            id="u-login-email"
+            type="text"
+            placeholder="Enter email or username"
+            required
+            class="w-full bg-[#090b0f] border border-[#252b38] rounded-lg px-4 py-3 text-sm text-white focus:border-amber-500 focus:outline-none"
+          />
         </div>
 
-        <form onsubmit="handleUserLoginSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs text-slate-300 mb-1">
+            Password
+          </label>
 
-          <div>
-            <label class="block text-xs text-slate-300 mb-1">
-              Email / Username
-            </label>
-
-            <input
-              id="u-login-email"
-              type="text"
-              placeholder="Enter email or username"
-              required
-              class="w-full bg-[#090b0f] border border-[#252b38] rounded-lg px-4 py-3 text-sm text-white focus:border-amber-500 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs text-slate-300 mb-1">
-              Password
-            </label>
-
-            <input
-              id="u-login-pass"
-              type="password"
-              placeholder="Enter password"
-              required
-              class="w-full bg-[#090b0f] border border-[#252b38] rounded-lg px-4 py-3 text-sm text-white focus:border-amber-500 focus:outline-none"
-            />
-          </div>
-
-          <button
-            type="submit"
-            class="btn-gold w-full py-3 text-xs font-bold"
-          >
-            SIGN IN
-          </button>
-
-        </form>
-
-        <div class="text-center mt-5">
-
-          <p class="text-xs text-slate-400">
-            Don't have an account?
-          </p>
-
-          <a
-            href="#/signup"
-            class="inline-block mt-2 text-sm text-amber-400 hover:text-amber-300 font-bold"
-          >
-            Create New Account →
-          </a>
-
+          <input
+            id="u-login-pass"
+            type="password"
+            placeholder="Enter password"
+            required
+            class="w-full bg-[#090b0f] border border-[#252b38] rounded-lg px-4 py-3 text-sm text-white focus:border-amber-500 focus:outline-none"
+          />
         </div>
+
+        <button
+          type="submit"
+          class="btn-gold w-full py-3 text-xs font-bold"
+        >
+          SIGN IN
+        </button>
+
+      </form>
+
+      <div class="text-center mt-5">
+
+        <p class="text-xs text-slate-400">
+          Don't have an account?
+        </p>
+
+        <a
+          href="#/signup"
+          class="inline-block mt-2 text-sm text-amber-400 hover:text-amber-300 font-bold"
+        >
+          Create New Account →
+        </a>
 
       </div>
+
     </div>
-  `;
+
+  </div>
+</div>
+```
+
+`;
 }
+
 
 
 function renderUserSignup() {
