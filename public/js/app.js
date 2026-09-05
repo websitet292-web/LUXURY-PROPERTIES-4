@@ -1387,10 +1387,8 @@ function renderUserProfile() {
 }
 
 function renderUserLogin() {
-return ` <div
-   class="min-h-screen flex items-center justify-center p-4 bg-cover bg-center relative"
-   style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80');"
- >
+return ` <div class="min-h-screen flex items-center justify-center p-4 bg-cover bg-center relative"
+      style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80');">
 
 ```
   <div class="absolute inset-0 bg-black/70"></div>
@@ -1419,7 +1417,7 @@ return ` <div
 
     </div>
 
-    <div class="bg-[#0b0e14]/95 backdrop-blur-md border border-amber-500/30 rounded-2xl p-7 shadow-2xl">
+    <div class="bg-[#0b0e14]/95 border border-amber-500/30 rounded-2xl p-7 shadow-2xl">
 
       <form onsubmit="handleUserLoginSubmit(event)" class="space-y-4">
 
@@ -1483,8 +1481,6 @@ return ` <div
 
 `;
 }
-
-
 
 function renderUserSignup() {
   return `
