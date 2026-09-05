@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luxury Properties - Supreme Real Estate & Wealth Platform</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            luxury: {
+              bg: '#0a0c10',
+              sidebar: '#0d1017',
+              card: '#121622',
+              cardHover: '#161c2b',
+              border: '#1f2636',
+              gold: '#d4af37',
+              goldLight: '#f3e5ab',
+              goldDark: '#aa771c',
+              goldGlow: 'rgba(212, 175, 55, 0.25)',
+              green: '#22c55e',
+              red: '#ef4444',
+              blue: '#3b82f6',
+              purple: '#a855f7'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="./css/style.css?v=2.0" />
+</head>
+<body class="bg-[#0a0c10] text-slate-100 min-h-screen">
+
+  <!-- Main Application Root -->
+  <div id="app" class="min-h-screen flex flex-col">
+    <!-- Rendered dynamically by app.js -->
+  </div>
+
+  <!-- Global Modal Container -->
+  <div id="modal-container"></div>
+
+  <!-- Global Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Application Logic & Hybrid Engine -->
+  <script src="./js/db-engine.js?v=3.0"></script>
+  <script src="./js/app.js?v=3.0"></script>
+</body>
+</html>
