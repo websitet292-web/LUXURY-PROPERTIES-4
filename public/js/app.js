@@ -2668,7 +2668,7 @@ async function render() {
 
   // Public/Auth routes
   if (currentRoute === '#/login') {
-    app.innerHTML = ();
+    app.innerHTML = render();
     if (window.lucide) lucide.createIcons();
     return;
   }
