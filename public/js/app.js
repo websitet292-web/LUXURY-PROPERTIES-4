@@ -1386,21 +1386,198 @@ function renderUserProfile() {
   `;
 }
 
-function renderUserLogin() {
-  return `
-    <div class="min-h-screen bg-[#07090d] flex items-center justify-center p-4">
-      <div class="luxury-card border border-amber-500/30 w-full max-w-md p-8 bg-[#0e1118] shadow-2xl">
+function () {
+return ` <style>
+.luxury-brand-animation {
+position: relative;
+height: 82px;
+display: flex;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+margin-bottom: 8px;
+}
 
-        <div class="text-center mb-6">
-          <div class="w-14 h-14 mx-auto rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-amber-200 flex items-center justify-center mb-3">
-            <div class="w-12 h-12 bg-[#0d1017] rounded-full flex items-center justify-center text-amber-400 text-xl">
-              💎
-            </div>
-          </div>
+```
+  .luxury-main-title {
+    position: relative;
+    z-index: 2;
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: 7px;
+    color: #f5c451;
+    text-shadow:
+      0 0 8px rgba(245,196,81,.45),
+      0 0 25px rgba(245,196,81,.20);
+    animation: luxuryTitleIn 1.2s ease-out forwards;
+  }
 
-          <h1 class="text-xl font-extrabold text-amber-300 font-serif">
-            LUXURY PROPERTIES
-          </h1>
+  .luxury-properties-bg {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: 40px;
+    transform: translateX(-50%);
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: 10px;
+    white-space: nowrap;
+    color: rgba(245,196,81,.10);
+    text-shadow: 0 0 25px rgba(245,196,81,.12);
+    opacity: 0;
+    animation: propertiesReveal 2s ease-out .2s forwards;
+  }
+
+  .luxury-brand-animation::after {
+    content: "";
+    position: absolute;
+    z-index: 3;
+    top: -30%;
+    left: -45%;
+    width: 30%;
+    height: 160%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,.65),
+      transparent
+    );
+    transform: skewX(-20deg);
+    animation: goldSweep 2.3s ease-out 1s forwards;
+  }
+
+  @keyframes luxuryTitleIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(.94);
+      letter-spacing: 14px;
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      letter-spacing: 7px;
+    }
+  }
+
+  @keyframes propertiesReveal {
+    from {
+      opacity: 0;
+      transform: translate(-50%, 25px) scale(1.15);
+      letter-spacing: 18px;
+    }
+
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0) scale(1);
+      letter-spacing: 10px;
+    }
+  }
+
+  @keyframes goldSweep {
+    from {
+      left: -45%;
+    }
+
+    to {
+      left: 135%;
+    }
+  }
+</style>
+
+<div class="min-h-screen bg-[#07090d] flex items-center justify-center p-4">
+  <div class="luxury-card border border-amber-500/30 w-full max-w-md p-8 bg-[#0e1118] shadow-2xl">
+
+    <div class="text-center mb-6">
+
+      <div class="w-14 h-14 mx-auto rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-amber-200 flex items-center justify-center mb-3">
+        <div class="w-12 h-12 bg-[#0d1017] rounded-full flex items-center justify-center text-amber-400 text-xl">
+          💎
+        </div>
+      </div>
+
+      <div class="luxury-brand-animation">
+
+        <div class="luxury-properties-bg">
+          PROPERTIES
+        </div>
+
+        <div class="luxury-main-title">
+          LUXURY
+        </div>
+
+      </div>
+
+      <p class="text-xs text-slate-400 mt-1">
+        Sign in to your account
+      </p>
+
+    </div>
+
+    <form onsubmit="handleUserLoginSubmit(event)" class="space-y-4">
+
+      <div>
+        <label class="block text-xs text-slate-300 mb-1">
+          Email / Username
+        </label>
+
+        <input
+          id="u-login-email"
+          type="text"
+          placeholder="Enter email or username"
+          required
+          class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs text-slate-300 mb-1">
+          Password
+        </label>
+
+        <input
+          id="u-login-pass"
+          type="password"
+          placeholder="Enter password"
+          required
+          class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="btn-gold w-full py-3 text-xs font-bold"
+      >
+        Sign In to Dashboard
+      </button>
+
+    </form>
+
+    <div class="text-center mt-5">
+
+      <p class="text-xs text-slate-400">
+        Don't have an account?
+      </p>
+
+      <a
+        href="#/signup"
+        class="inline-block mt-2 text-sm text-amber-400 hover:text-amber-300 font-bold"
+      >
+        Create New Account →
+      </a>
+
+    </div>
+
+    <div class="pt-5 mt-5 border-t border-[#1f2636] text-center">
+    </div>
+
+  </div>
+</div>
+```
+
+`;
+}
+
 
           <p class="text-xs text-slate-400 mt-1">
             Sign in to your account
@@ -2668,7 +2845,7 @@ async function render() {
 
   // Public/Auth routes
   if (currentRoute === '#/login') {
-    app.innerHTML = renderUserLogin();
+    app.innerHTML = ();
     if (window.lucide) lucide.createIcons();
     return;
   }
