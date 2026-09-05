@@ -2715,38 +2715,14 @@ if (currentRoute === '#/signup') {
     return;
   }
 
-  // User Routes Protection
+// User Routes Protection
 if (!state.token || state.role !== 'user') {
-
-  if (currentRoute === '#/signup') {
-    app.innerHTML = renderUserSignup();
-    if (window.lucide) lucide.createIcons();
-    return;
-  }
-
   navigate('#/login');
   return;
 }
-    // If not logged in, default demo account is initialized or prompt login
-    // Let's auto login with demo user if no token exists yet so the user immediately sees their dashboard!
-    try {
-      const res = await api('/api/auth/user/login', {
-        method: 'POST',
-        body: JSON.stringify({ email: 'suresh@example.com', password: 'user123' })
-      });
-      state.token = res.token;
-      state.user = res.user;
-      state.role = 'user';
-      localStorage.setItem('lp_token', res.token);
-      localStorage.setItem('lp_role', 'user');
-      localStorage.setItem('lp_user', JSON.stringify(res.user));
-    } catch (e) {
-      navigate('#/login');
-      return;
-    }
-  }
 
-  let html = '';
+let html = '';
+  
   if (currentRoute === '#/dashboard' || currentRoute === '#/' || currentRoute === '') {
     html = await renderUserDashboard();
   } else if (currentRoute === '#/tasks') {
