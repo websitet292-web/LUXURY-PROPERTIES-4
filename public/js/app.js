@@ -1460,12 +1460,7 @@ function renderUserLogin() {
         </div>
 
         <div class="pt-5 mt-5 border-t border-[#1f2636] text-center">
-          <a
-            href="#/admin/login"
-            class="text-xs text-slate-400 hover:text-amber-300 font-semibold"
-          >
-            👑 Master Admin Portal
-          </a>
+         
         </div>
 
       </div>
