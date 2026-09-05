@@ -1386,57 +1386,330 @@ function renderUserProfile() {
   `;
 }
 
-// View: User Login Screen
 function renderUserLogin() {
   return `
-    <div class="min-h-screen bg-[#0a0c10] flex items-center justify-center p-4 relative overflow-hidden">
-      <!-- Background glow elements -->
-      <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="min-h-screen bg-[#07090d] flex items-center justify-center p-4">
+      <div class="luxury-card border border-amber-500/30 w-full max-w-md p-8 bg-[#0e1118] shadow-2xl">
 
-      <div class="luxury-card border border-amber-500/30 w-full max-w-md p-8 relative z-10 shadow-2xl bg-[#0f121a]">
-        
-        <!-- Logo Header -->
         <div class="text-center mb-6">
-          <div class="w-14 h-14 mx-auto rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-amber-200 p-0.5 shadow-lg flex items-center justify-center mb-2">
-            <div class="w-full h-full bg-[#0d1017] rounded-full flex items-center justify-center text-amber-400 font-serif font-bold text-xl">
-              LP
+          <div class="w-14 h-14 mx-auto rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-amber-200 flex items-center justify-center mb-3">
+            <div class="w-12 h-12 bg-[#0d1017] rounded-full flex items-center justify-center text-amber-400 text-xl">
+              💎
             </div>
           </div>
-          <h1 class="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 font-serif tracking-wide">
+
+          <h1 class="text-xl font-extrabold text-amber-300 font-serif">
             LUXURY PROPERTIES
           </h1>
-          <p class="text-xs text-slate-400 mt-1">Client Wealth & Dashboard Portal</p>
+
+          <p class="text-xs text-slate-400 mt-1">
+            Sign in to your account
+          </p>
         </div>
 
-        <!-- Login Form -->
-        <form onsubmit="handleUserLoginSubmit(event)" class="space-y-4 text-xs">
+        <form onsubmit="handleUserLoginSubmit(event)" class="space-y-4">
+
           <div>
-            <label class="block text-slate-300 font-medium mb-1">Email / Username</label>
-            <input id="u-login-email" type="text" value="suresh@example.com" required class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-white focus:border-amber-500 focus:outline-none" />
+            <label class="block text-xs text-slate-300 mb-1">
+              Email / Username
+            </label>
+
+            <input
+              id="u-login-email"
+              type="text"
+              placeholder="Enter email or username"
+              required
+              class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none"
+            />
           </div>
 
           <div>
-            <label class="block text-slate-300 font-medium mb-1">Password</label>
-            <input id="u-login-pass" type="password" value="user123" required class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-white focus:border-amber-500 focus:outline-none" />
+            <label class="block text-xs text-slate-300 mb-1">
+              Password
+            </label>
+
+            <input
+              id="u-login-pass"
+              type="password"
+              placeholder="Enter password"
+              required
+              class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none"
+            />
           </div>
 
-          <button type="submit" class="btn-gold w-full py-3 text-xs font-bold tracking-wide mt-2">
+          <button
+            type="submit"
+            class="btn-gold w-full py-3 text-xs font-bold"
+          >
             Sign In to Dashboard
           </button>
+
         </form>
 
-        <!-- Switch to Admin Link -->
-        <div class="pt-6 mt-6 border-t border-[#1f2636] text-center flex flex-col gap-2">
-          <a href="#/admin/login" class="text-xs text-amber-400/90 hover:text-amber-300 font-semibold transition-colors flex items-center justify-center gap-1.5">
-            <span>👑</span> Switch to Master Admin Portal
+        <div class="text-center mt-5">
+          <p class="text-xs text-slate-400">
+            Don't have an account?
+          </p>
+
+          <a
+            href="#/signup"
+            class="inline-block mt-2 text-sm text-amber-400 hover:text-amber-300 font-bold"
+          >
+            Create New Account →
           </a>
         </div>
+
+        <div class="pt-5 mt-5 border-t border-[#1f2636] text-center">
+          <a
+            href="#/admin/login"
+            class="text-xs text-slate-400 hover:text-amber-300 font-semibold"
+          >
+            👑 Master Admin Portal
+          </a>
+        </div>
+
       </div>
     </div>
   `;
 }
 
+function renderUserSignup() {
+  return `
+    <div class="min-h-screen bg-[#07090d] flex items-center justify-center p-4">
+      <div class="luxury-card border border-amber-500/30 w-full max-w-md p-8 bg-[#0e1118] shadow-2xl">
+
+        <div class="text-center mb-6">
+          <div class="w-14 h-14 mx-auto rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-amber-200 flex items-center justify-center mb-3">
+            <div class="w-12 h-12 bg-[#0d1017] rounded-full flex items-center justify-center text-amber-400 text-xl">
+              💎
+            </div>
+          </div>
+
+          <h1 class="text-xl font-extrabold text-amber-300 font-serif">
+            CREATE ACCOUNT
+          </h1>
+
+          <p class="text-xs text-slate-400 mt-1">
+            Join Luxury Properties
+          </p>
+        </div>
+
+        <form onsubmit="handleUserSignupSubmit(event)" class="space-y-4">
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1">
+              Full Name
+            </label>
+
+            <input
+              id="signup-name"
+              type="text"
+              placeholder="Enter your full name"
+              required
+              class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1">
+              Username
+            </label>
+
+            <input
+              id="signup-username"
+              type="text"
+              placeholder="Choose a username"
+              required
+              minlength="3"
+              class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1">
+              Email
+            </label>
+
+            <input
+              id="signup-email"
+              type="email"
+              placeholder="Enter your email"
+              required
+              class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1">
+              Phone
+            </label>
+
+            <input
+              id="signup-phone"
+              type="tel"
+              placeholder="Enter phone number"
+              class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1">
+              Password
+            </label>
+
+            <input
+              id="signup-password"
+              type="password"
+              placeholder="Create a password"
+              required
+              minlength="6"
+              class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-300 mb-1">
+              Confirm Password
+            </label>
+
+            <input
+              id="signup-confirm-password"
+              type="password"
+              placeholder="Confirm your password"
+              required
+              minlength="6"
+              class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none"
+            />
+          </div>
+
+          <p
+            id="signup-message"
+            class="text-xs text-center min-h-[18px]"
+          ></p>
+
+          <button
+            type="submit"
+            class="btn-gold w-full py-3 text-xs font-bold"
+          >
+            Create Account
+          </button>
+
+        </form>
+
+        <div class="text-center mt-5">
+          <a
+            href="#/login"
+            class="text-xs text-slate-400 hover:text-amber-300 font-semibold"
+          >
+            ← Already have an account? Sign In
+          </a>
+        </div>
+
+      </div>
+    </div>
+  `;
+}
+
+
+async function handleUserSignupSubmit(e) {
+  e.preventDefault();
+
+  const name =
+    document.getElementById('signup-name')?.value.trim();
+
+  const username =
+    document.getElementById('signup-username')?.value.trim();
+
+  const email =
+    document.getElementById('signup-email')?.value.trim();
+
+  const phone =
+    document.getElementById('signup-phone')?.value.trim();
+
+  const password =
+    document.getElementById('signup-password')?.value;
+
+  const confirmPassword =
+    document.getElementById('signup-confirm-password')?.value;
+
+  const message =
+    document.getElementById('signup-message');
+
+  if (!name || !username || !email || !password) {
+    if (message) {
+      message.textContent = 'Please fill all required fields.';
+      message.className = 'text-xs text-center min-h-[18px] text-red-400';
+    }
+    return;
+  }
+
+  if (password.length < 6) {
+    if (message) {
+      message.textContent = 'Password must be at least 6 characters.';
+      message.className = 'text-xs text-center min-h-[18px] text-red-400';
+    }
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    if (message) {
+      message.textContent = 'Passwords do not match.';
+      message.className = 'text-xs text-center min-h-[18px] text-red-400';
+    }
+    return;
+  }
+
+  const button = e.submitter;
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = 'Creating Account...';
+  }
+
+  try {
+    const res = await api('/api/auth/user/register', {
+      method: 'POST',
+      body: JSON.stringify({
+        username,
+        email,
+        password,
+        name,
+        phone
+      })
+    });
+
+    if (res.token && res.user) {
+      showToast('Account created successfully!', 'success');
+
+      loginUser(
+        res.token,
+        res.user,
+        'user'
+      );
+
+      return;
+    }
+
+    throw new Error(
+      res.message || 'Registration failed.'
+    );
+
+  } catch (err) {
+
+    if (message) {
+      message.textContent =
+        err.message || 'Registration failed.';
+
+      message.className =
+        'text-xs text-center min-h-[18px] text-red-400';
+    }
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = 'Create Account';
+    }
+  }
+}
 async function handleUserLoginSubmit(e) {
   e.preventDefault();
   const email = document.getElementById('u-login-email').value;
@@ -2404,6 +2677,13 @@ async function render() {
     if (window.lucide) lucide.createIcons();
     return;
   }
+  
+if (currentRoute === '#/signup') {
+  app.innerHTML = renderUserSignup();
+  if (window.lucide) lucide.createIcons();
+  return;
+}
+  
   if (currentRoute === '#/admin/login') {
     app.innerHTML = renderAdminLogin();
     if (window.lucide) lucide.createIcons();
@@ -2436,7 +2716,17 @@ async function render() {
   }
 
   // User Routes Protection
-  if (!state.token || state.role !== 'user') {
+if (!state.token || state.role !== 'user') {
+
+  if (currentRoute === '#/signup') {
+    app.innerHTML = renderUserSignup();
+    if (window.lucide) lucide.createIcons();
+    return;
+  }
+
+  navigate('#/login');
+  return;
+}
     // If not logged in, default demo account is initialized or prompt login
     // Let's auto login with demo user if no token exists yet so the user immediately sees their dashboard!
     try {
