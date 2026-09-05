@@ -1387,85 +1387,154 @@ function renderUserProfile() {
 }
 
 function renderUserLogin() {
-  return `
-    <div class="min-h-screen bg-[#07090d] flex items-center justify-center p-4">
-      <div class="luxury-card border border-amber-500/30 w-full max-w-md p-8 bg-[#0e1118] shadow-2xl">
+return ` <div class="min-h-screen bg-[#05070b] flex items-center justify-center p-4 relative overflow-hidden">
 
-        <div class="text-center mb-6">
-          <div class="w-14 h-14 mx-auto rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-amber-200 flex items-center justify-center mb-3">
-            <div class="w-12 h-12 bg-[#0d1017] rounded-full flex items-center justify-center text-amber-400 text-xl">
-              💎
-            </div>
+```
+  <!-- Luxury Background Glow -->
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="absolute top-[-120px] left-[-100px] w-80 h-80 bg-amber-500/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-[-120px] right-[-100px] w-80 h-80 bg-amber-600/10 rounded-full blur-3xl"></div>
+  </div>
+
+  <!-- Login Card -->
+  <div class="relative z-10 w-full max-w-md">
+
+    <div class="luxury-card border border-amber-500/30 rounded-2xl
+                bg-[#0b0e14]/95 backdrop-blur-xl
+                shadow-[0_0_60px_rgba(245,158,11,0.08)]
+                p-8">
+
+      <!-- Logo -->
+      <div class="text-center mb-7">
+
+        <div class="w-16 h-16 mx-auto rounded-full
+                    bg-gradient-to-tr from-amber-700 via-amber-400 to-amber-200
+                    p-[2px] shadow-lg shadow-amber-500/20 mb-4">
+
+          <div class="w-full h-full bg-[#080b11] rounded-full
+                      flex items-center justify-center
+                      text-amber-400 text-2xl">
+            💎
           </div>
 
-          <h1 class="text-xl font-extrabold text-amber-300 font-serif">
-            LUXURY PROPERTIES
-          </h1>
-
-          <p class="text-xs text-slate-400 mt-1">
-            Sign in to your account
-          </p>
         </div>
 
-        <form onsubmit="handleUserLoginSubmit(event)" class="space-y-4">
+        <h1 class="text-2xl font-extrabold text-amber-300 font-serif tracking-wide">
+          LUXURY PROPERTIES
+        </h1>
 
-          <div>
-            <label class="block text-xs text-slate-300 mb-1">
-              Email / Username
-            </label>
-
-            <input
-              id="u-login-email"
-              type="text"
-              placeholder="Enter email or username"
-              required
-              class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs text-slate-300 mb-1">
-              Password
-            </label>
-
-            <input
-              id="u-login-pass"
-              type="password"
-              placeholder="Enter password"
-              required
-              class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none"
-            />
-          </div>
-
-          <button
-            type="submit"
-            class="btn-gold w-full py-3 text-xs font-bold"
-          >
-            Sign In to Dashboard
-          </button>
-
-        </form>
-
-        <div class="text-center mt-5">
-          <p class="text-xs text-slate-400">
-            Don't have an account?
-          </p>
-
-          <a
-            href="#/signup"
-            class="inline-block mt-2 text-sm text-amber-400 hover:text-amber-300 font-bold"
-          >
-            Create New Account →
-          </a>
-        </div>
-
-        <div class="pt-5 mt-5 border-t border-[#1f2636] text-center">
-         
-        </div>
+        <p class="text-xs text-slate-400 mt-2">
+          Welcome back. Sign in to continue.
+        </p>
 
       </div>
+
+      <!-- Login Form -->
+      <form onsubmit="handleUserLoginSubmit(event)" class="space-y-5">
+
+        <!-- Email -->
+        <div>
+
+          <label class="block text-xs font-semibold text-slate-300 mb-2">
+            Email / Username
+          </label>
+
+          <input
+            id="u-login-email"
+            type="text"
+            placeholder="Enter email or username"
+            required
+            autocomplete="username"
+            class="w-full bg-[#070a0f]
+                   border border-[#252c3a]
+                   rounded-xl px-4 py-3.5
+                   text-white text-sm
+                   placeholder-slate-600
+                   focus:border-amber-500
+                   focus:ring-1 focus:ring-amber-500/30
+                   focus:outline-none
+                   transition"
+          />
+
+        </div>
+
+        <!-- Password -->
+        <div>
+
+          <label class="block text-xs font-semibold text-slate-300 mb-2">
+            Password
+          </label>
+
+          <input
+            id="u-login-pass"
+            type="password"
+            placeholder="Enter your password"
+            required
+            autocomplete="current-password"
+            class="w-full bg-[#070a0f]
+                   border border-[#252c3a]
+                   rounded-xl px-4 py-3.5
+                   text-white text-sm
+                   placeholder-slate-600
+                   focus:border-amber-500
+                   focus:ring-1 focus:ring-amber-500/30
+                   focus:outline-none
+                   transition"
+          />
+
+        </div>
+
+        <!-- Sign In Button -->
+        <button
+          type="submit"
+          class="w-full py-3.5 rounded-xl
+                 bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-400
+                 hover:from-amber-500 hover:via-yellow-400 hover:to-amber-500
+                 text-black text-sm font-extrabold
+                 shadow-lg shadow-amber-500/20
+                 transition-all duration-200
+                 hover:scale-[1.01]"
+        >
+          SIGN IN TO DASHBOARD
+        </button>
+
+      </form>
+
+      <!-- Signup -->
+      <div class="text-center mt-6">
+
+        <p class="text-xs text-slate-500">
+          Don't have an account?
+        </p>
+
+        <a
+          href="#/signup"
+          class="inline-block mt-2 text-sm
+                 text-amber-400 hover:text-amber-300
+                 font-bold transition"
+        >
+          Create New Account →
+        </a>
+
+      </div>
+
+      <!-- Bottom Line -->
+      <div class="mt-6 pt-5 border-t border-[#202633] text-center">
+
+        <p class="text-[10px] uppercase tracking-[0.25em] text-slate-600">
+          Premium Property & Wealth Platform
+        </p>
+
+      </div>
+
     </div>
-  `;
+
+  </div>
+
+</div>
+```
+
+`;
 }
 
 function renderUserSignup() {
