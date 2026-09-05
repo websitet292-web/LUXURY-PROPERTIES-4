@@ -1386,7 +1386,7 @@ function renderUserProfile() {
   `;
 }
 
-function () {
+function renderUserLogin() {
   return `
     <div class="min-h-screen bg-[#07090d] flex items-center justify-center p-4">
       <div class="luxury-card border border-amber-500/30 w-full max-w-md p-8 bg-[#0e1118] shadow-2xl">
