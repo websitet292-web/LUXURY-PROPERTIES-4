@@ -84,13 +84,13 @@ function convertSql(sql) {
      * db.run() needs an inserted ID because the existing
      * registration/admin code expects result.lastID.
      */
-    if (
-      !/RETURNING\s+/i.test(converted) &&
-      !/^INSERT\s+INTO\s+transactions/i.test(converted)
-    ) {
-      converted += ' RETURNING id';
-    }
-  }
+   if (
+  !/RETURNING\s+/i.test(converted) &&
+  !/^INSERT\s+INTO\s+transactions/i.test(converted) &&
+  !/^INSERT\s+INTO\s+system_settings/i.test(converted)
+) {
+  converted += ' RETURNING id';
+}
 
   return convertPlaceholders(converted);
 }
