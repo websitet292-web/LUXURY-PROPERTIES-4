@@ -129,7 +129,8 @@ router.get('/users', async (req, res) => {
         params.push(status);
       }
       query += ` ORDER BY id DESC`;
-      users = await db.all(query, params);
+     users = await db.all(query, params);
+console.log('[ADMIN USERS] PostgreSQL users count:', users.length);
     } else {
       users = fileStore.data.users.map(u => {
         const { password_hash, ...safe } = u;
