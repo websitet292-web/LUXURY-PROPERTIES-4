@@ -474,20 +474,37 @@ async function renderUserDashboard() {
   const circ = 2 * Math.PI * radius;
   const offset = circ - (pct / 100) * circ;
 
-  return `
-    <div class="min-h-screen bg-[#0a0c10] flex">
+return `
+    <div class="min-h-screen bg-[#f5f3ee] flex relative overflow-hidden">
+
+      <!-- LIGHT PREMIUM LUXURY PROPERTY BACKGROUND -->
+      <div class="absolute inset-0 z-0">
+        <img
+          src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=2200&q=90"
+          alt="Luxury Property"
+          class="w-full h-full object-cover"
+          style="object-position:center;"
+        />
+
+        <!-- Soft White Luxury Overlay -->
+        <div class="absolute inset-0 bg-white/75"></div>
+
+        <!-- Premium Warm Gradient -->
+        <div class="absolute inset-0 bg-gradient-to-br from-white/90 via-[#f8f5ee]/75 to-[#e9dfc9]/60"></div>
+      </div>
+
       <!-- Desktop Sidebar -->
-      <div class="hidden lg:block">
+      <div class="hidden lg:block relative z-20">
         ${renderUserSidebar('#/dashboard')}
       </div>
 
       <!-- Mobile Drawer -->
-      <div id="mobile-sidebar" class="sidebar-drawer lg:hidden ${state.sidebarOpen ? 'open' : ''}">
+      <div id="mobile-sidebar" class="sidebar-drawer lg:hidden relative z-30 ${state.sidebarOpen ? 'open' : ''}">
         ${renderUserSidebar('#/dashboard')}
       </div>
 
       <!-- Main Content Area -->
-      <main class="flex-1 p-5 md:p-8 max-w-7xl mx-auto overflow-y-auto">
+      <main class="relative z-10 flex-1 p-5 md:p-8 max-w-7xl mx-auto overflow-y-auto">
         ${renderUserHeader(user)}
 
         <!-- 4 Top Balance Cards (Pixel-Perfect Match) -->
