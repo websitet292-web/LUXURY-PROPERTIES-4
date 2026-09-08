@@ -1389,49 +1389,200 @@ function renderUserProfile() {
 // View: User Login Screen
 function renderUserLogin() {
   return `
-    <div class="min-h-screen bg-[#0a0c10] flex items-center justify-center p-4 relative overflow-hidden">
-      <!-- Background glow elements -->
-      <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="min-h-screen relative overflow-hidden bg-[#05070a] flex items-center justify-center px-4 py-8 sm:px-6 lg:px-10">
 
-      <div class="luxury-card border border-amber-500/30 w-full max-w-md p-8 relative z-10 shadow-2xl bg-[#0f121a]">
-        
-        <!-- Logo Header -->
-        <div class="text-center mb-6">
-          <div class="w-14 h-14 mx-auto rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-amber-200 p-0.5 shadow-lg flex items-center justify-center mb-2">
-            <div class="w-full h-full bg-[#0d1017] rounded-full flex items-center justify-center text-amber-400 font-serif font-bold text-xl">
-              LP
+      <!-- Luxury Background -->
+      <div class="absolute inset-0">
+        <img
+          src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=2200&q=90"
+          alt="Luxury Property"
+          class="w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-black/65"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/65 to-black/80"></div>
+      </div>
+
+      <!-- Ambient Gold Glow -->
+      <div class="absolute -top-32 -left-32 w-80 h-80 bg-amber-500/15 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl"></div>
+
+      <!-- Main Content -->
+      <div class="relative z-10 w-full max-w-6xl mx-auto">
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+
+          <!-- LEFT SIDE -->
+          <div class="hidden lg:block text-white">
+
+            <div class="flex items-center gap-4 mb-8">
+              <div class="w-16 h-16 rounded-2xl border border-amber-400/50 bg-black/40 backdrop-blur-md flex items-center justify-center shadow-2xl">
+                <span class="text-2xl font-serif font-bold text-amber-400">
+                  LP
+                </span>
+              </div>
+
+              <div>
+                <h1 class="text-3xl xl:text-4xl font-serif font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500">
+                  LUXURY PROPERTIES
+                </h1>
+                <p class="text-xs text-slate-300 tracking-[0.35em] mt-1">
+                  PREMIUM REAL ESTATE
+                </p>
+              </div>
+            </div>
+
+            <h2 class="text-4xl xl:text-6xl font-serif font-bold leading-tight">
+              Your Gateway to
+              <span class="block text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500">
+                Luxury Living
+              </span>
+            </h2>
+
+            <p class="mt-6 max-w-lg text-slate-300 text-base leading-7">
+              Discover exceptional properties, manage your wealth,
+              and experience a premium real-estate dashboard designed
+              for modern luxury.
+            </p>
+
+            <div class="flex gap-8 mt-8 text-sm text-slate-300">
+              <div>
+                <div class="text-amber-400 text-xl mb-1">◆</div>
+                Premium Properties
+              </div>
+
+              <div>
+                <div class="text-amber-400 text-xl mb-1">◆</div>
+                Secure Dashboard
+              </div>
+
+              <div>
+                <div class="text-amber-400 text-xl mb-1">◆</div>
+                Wealth Management
+              </div>
             </div>
           </div>
-          <h1 class="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 font-serif tracking-wide">
-            LUXURY PROPERTIES
-          </h1>
-          <p class="text-xs text-slate-400 mt-1">Client Wealth & Dashboard Portal</p>
-        </div>
 
-        <!-- Login Form -->
-        <form onsubmit="handleUserLoginSubmit(event)" class="space-y-4 text-xs">
-          <div>
-            <label class="block text-slate-300 font-medium mb-1">Email / Username</label>
-            <input id="u-login-email" type="text" value="suresh@example.com" required class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-white focus:border-amber-500 focus:outline-none" />
+          <!-- LOGIN CARD -->
+          <div class="w-full max-w-md mx-auto">
+
+            <div class="rounded-3xl border border-amber-400/30 bg-[#080b10]/85 backdrop-blur-2xl shadow-[0_25px_80px_rgba(0,0,0,0.7)] p-6 sm:p-8">
+
+              <!-- Mobile Logo -->
+              <div class="lg:hidden text-center mb-7">
+
+                <div class="w-16 h-16 mx-auto rounded-2xl border border-amber-400/50 bg-black/50 flex items-center justify-center shadow-xl mb-4">
+                  <span class="text-2xl font-serif font-bold text-amber-400">
+                    LP
+                  </span>
+                </div>
+
+                <h1 class="text-xl sm:text-2xl font-serif font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500">
+                  LUXURY PROPERTIES
+                </h1>
+
+                <p class="text-[10px] text-slate-400 tracking-[0.25em] mt-2">
+                  PREMIUM REAL ESTATE
+                </p>
+              </div>
+
+              <!-- Login Header -->
+              <div class="text-center mb-7">
+
+                <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/10 border border-amber-400/30 mb-3">
+                  <span class="text-amber-400">◆</span>
+                </div>
+
+                <h2 class="text-2xl font-serif font-bold text-white">
+                  Welcome Back
+                </h2>
+
+                <p class="text-xs text-slate-400 mt-2">
+                  Sign in to access your luxury dashboard
+                </p>
+
+              </div>
+
+              <!-- Login Form -->
+              <form onsubmit="handleUserLoginSubmit(event)" class="space-y-5">
+
+                <div>
+                  <label class="block text-xs text-slate-300 font-semibold mb-2">
+                    Email / Username
+                  </label>
+
+                  <div class="relative">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">
+                      ✉
+                    </span>
+
+                    <input
+                      id="u-login-email"
+                      type="text"
+                      value="suresh@example.com"
+                      required
+                      autocomplete="username"
+                      class="w-full bg-black/40 border border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-sm text-white placeholder-slate-500 focus:border-amber-400/70 focus:ring-1 focus:ring-amber-400/30 focus:outline-none transition"
+                      placeholder="Enter your email or username"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-xs text-slate-300 font-semibold mb-2">
+                    Password
+                  </label>
+
+                  <div class="relative">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">
+                      🔒
+                    </span>
+
+                    <input
+                      id="u-login-pass"
+                      type="password"
+                      value="user123"
+                      required
+                      autocomplete="current-password"
+                      class="w-full bg-black/40 border border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-sm text-white placeholder-slate-500 focus:border-amber-400/70 focus:ring-1 focus:ring-amber-400/30 focus:outline-none transition"
+                      placeholder="Enter your password"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 text-black text-sm font-extrabold tracking-wide shadow-lg shadow-amber-500/20 hover:scale-[1.01] active:scale-[0.99] transition"
+                >
+                  Sign In to Dashboard
+                </button>
+
+              </form>
+
+              <!-- Admin -->
+              <div class="mt-7 pt-6 border-t border-white/10 text-center">
+
+                <a
+                  href="#/admin/login"
+                  class="inline-flex items-center justify-center gap-2 text-xs text-amber-400 hover:text-amber-300 font-semibold transition"
+                >
+                  <span>👑</span>
+                  Switch to Master Admin Portal
+                </a>
+
+              </div>
+
+              <div class="text-center mt-5">
+                <p class="text-[10px] text-slate-500 tracking-wider">
+                  SECURE • PRIVATE • PREMIUM
+                </p>
+              </div>
+
+            </div>
+
           </div>
 
-          <div>
-            <label class="block text-slate-300 font-medium mb-1">Password</label>
-            <input id="u-login-pass" type="password" value="user123" required class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-white focus:border-amber-500 focus:outline-none" />
-          </div>
-
-          <button type="submit" class="btn-gold w-full py-3 text-xs font-bold tracking-wide mt-2">
-            Sign In to Dashboard
-          </button>
-        </form>
-
-        <!-- Switch to Admin Link -->
-        <div class="pt-6 mt-6 border-t border-[#1f2636] text-center flex flex-col gap-2">
-          <a href="#/admin/login" class="text-xs text-amber-400/90 hover:text-amber-300 font-semibold transition-colors flex items-center justify-center gap-1.5">
-            <span>👑</span> Switch to Master Admin Portal
-          </a>
         </div>
+
       </div>
     </div>
   `;
