@@ -1414,21 +1414,34 @@ function renderUserLogin() {
           <!-- LEFT SIDE -->
           <div class="hidden lg:block text-white">
 
-            <div class="flex items-center gap-4 mb-8">
-              <div class="w-16 h-16 rounded-2xl border border-amber-400/50 bg-black/40 backdrop-blur-md flex items-center justify-center shadow-2xl">
-                <span class="text-2xl font-serif font-bold text-amber-400">
-                  LP
+            <!-- PREMIUM WORDMARK -->
+            <div class="mb-10">
+
+              <div class="flex items-center gap-4 mb-4">
+                <div class="h-px w-14 bg-gradient-to-r from-transparent to-amber-400"></div>
+
+                <span class="text-[10px] tracking-[0.5em] text-amber-400 uppercase">
+                  ESTABLISHED
                 </span>
+
+                <div class="h-px w-14 bg-gradient-to-l from-transparent to-amber-400"></div>
               </div>
 
-              <div>
-                <h1 class="text-3xl xl:text-4xl font-serif font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500">
-                  LUXURY PROPERTIES
-                </h1>
-                <p class="text-xs text-slate-300 tracking-[0.35em] mt-1">
+              <h1 class="font-serif text-4xl xl:text-5xl font-semibold tracking-[0.18em] leading-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-400 to-yellow-500">
+                LUXURY
+              </h1>
+
+              <h1 class="font-serif text-4xl xl:text-5xl font-semibold tracking-[0.18em] leading-tight text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 via-amber-300 to-amber-100">
+                PROPERTIES
+              </h1>
+
+              <div class="flex items-center gap-3 mt-4">
+                <div class="h-px flex-1 max-w-[70px] bg-amber-400/60"></div>
+                <p class="text-[10px] text-slate-300 tracking-[0.45em]">
                   PREMIUM REAL ESTATE
                 </p>
               </div>
+
             </div>
 
             <h2 class="text-4xl xl:text-6xl font-serif font-bold leading-tight">
@@ -1445,51 +1458,71 @@ function renderUserLogin() {
             </p>
 
             <div class="flex gap-8 mt-8 text-sm text-slate-300">
+
               <div>
-                <div class="text-amber-400 text-xl mb-1">◆</div>
+                <div class="text-amber-400 text-xl mb-1">✦</div>
                 Premium Properties
               </div>
 
               <div>
-                <div class="text-amber-400 text-xl mb-1">◆</div>
+                <div class="text-amber-400 text-xl mb-1">✦</div>
                 Secure Dashboard
               </div>
 
               <div>
-                <div class="text-amber-400 text-xl mb-1">◆</div>
+                <div class="text-amber-400 text-xl mb-1">✦</div>
                 Wealth Management
               </div>
+
             </div>
+
           </div>
+
 
           <!-- LOGIN CARD -->
           <div class="w-full max-w-md mx-auto">
 
             <div class="rounded-3xl border border-amber-400/30 bg-[#080b10]/85 backdrop-blur-2xl shadow-[0_25px_80px_rgba(0,0,0,0.7)] p-6 sm:p-8">
 
-              <!-- Mobile Logo -->
-              <div class="lg:hidden text-center mb-7">
+              <!-- MOBILE PREMIUM WORDMARK -->
+              <div class="lg:hidden text-center mb-8">
 
-                <div class="w-16 h-16 mx-auto rounded-2xl border border-amber-400/50 bg-black/50 flex items-center justify-center shadow-xl mb-4">
-                  <span class="text-2xl font-serif font-bold text-amber-400">
-                    LP
+                <div class="flex items-center justify-center gap-3 mb-3">
+                  <div class="h-px w-8 bg-gradient-to-r from-transparent to-amber-400"></div>
+
+                  <span class="text-[8px] text-amber-400 tracking-[0.4em]">
+                    ESTABLISHED
                   </span>
+
+                  <div class="h-px w-8 bg-gradient-to-l from-transparent to-amber-400"></div>
                 </div>
 
-                <h1 class="text-xl sm:text-2xl font-serif font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500">
-                  LUXURY PROPERTIES
+                <h1 class="font-serif text-2xl sm:text-3xl font-semibold tracking-[0.16em] text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-400 to-yellow-500">
+                  LUXURY
                 </h1>
 
-                <p class="text-[10px] text-slate-400 tracking-[0.25em] mt-2">
+                <h1 class="font-serif text-2xl sm:text-3xl font-semibold tracking-[0.16em] text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 via-amber-300 to-amber-100">
+                  PROPERTIES
+                </h1>
+
+                <p class="text-[9px] text-slate-400 tracking-[0.35em] mt-3">
                   PREMIUM REAL ESTATE
                 </p>
+
               </div>
+
 
               <!-- Login Header -->
               <div class="text-center mb-7">
 
-                <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-amber-500/10 border border-amber-400/30 mb-3">
-                  <span class="text-amber-400">◆</span>
+                <div class="inline-flex items-center justify-center mb-4">
+                  <div class="h-px w-10 bg-gradient-to-r from-transparent to-amber-400/70"></div>
+
+                  <span class="mx-3 text-amber-400 text-sm">
+                    ✦
+                  </span>
+
+                  <div class="h-px w-10 bg-gradient-to-l from-transparent to-amber-400/70"></div>
                 </div>
 
                 <h2 class="text-2xl font-serif font-bold text-white">
@@ -1502,6 +1535,7 @@ function renderUserLogin() {
 
               </div>
 
+
               <!-- Login Form -->
               <form onsubmit="handleUserLoginSubmit(event)" class="space-y-5">
 
@@ -1511,6 +1545,7 @@ function renderUserLogin() {
                   </label>
 
                   <div class="relative">
+
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">
                       ✉
                     </span>
@@ -1524,8 +1559,10 @@ function renderUserLogin() {
                       class="w-full bg-black/40 border border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-sm text-white placeholder-slate-500 focus:border-amber-400/70 focus:ring-1 focus:ring-amber-400/30 focus:outline-none transition"
                       placeholder="Enter your email or username"
                     />
+
                   </div>
                 </div>
+
 
                 <div>
                   <label class="block text-xs text-slate-300 font-semibold mb-2">
@@ -1533,6 +1570,7 @@ function renderUserLogin() {
                   </label>
 
                   <div class="relative">
+
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">
                       🔒
                     </span>
@@ -1546,9 +1584,12 @@ function renderUserLogin() {
                       class="w-full bg-black/40 border border-white/10 rounded-xl pl-11 pr-4 py-3.5 text-sm text-white placeholder-slate-500 focus:border-amber-400/70 focus:ring-1 focus:ring-amber-400/30 focus:outline-none transition"
                       placeholder="Enter your password"
                     />
+
                   </div>
                 </div>
 
+
+                <!-- LOGIN BUTTON -->
                 <button
                   type="submit"
                   class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 text-black text-sm font-extrabold tracking-wide shadow-lg shadow-amber-500/20 hover:scale-[1.01] active:scale-[0.99] transition"
@@ -1557,6 +1598,7 @@ function renderUserLogin() {
                 </button>
 
               </form>
+
 
               <!-- Admin -->
               <div class="mt-7 pt-6 border-t border-white/10 text-center">
@@ -1571,6 +1613,8 @@ function renderUserLogin() {
 
               </div>
 
+
+              <!-- Security -->
               <div class="text-center mt-5">
                 <p class="text-[10px] text-slate-500 tracking-wider">
                   SECURE • PRIVATE • PREMIUM
