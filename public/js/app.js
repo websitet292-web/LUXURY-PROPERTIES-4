@@ -475,37 +475,33 @@ async function renderUserDashboard() {
   const offset = circ - (pct / 100) * circ;
 
 return `
-    <div class="min-h-screen bg-[#f5f3ee] flex relative overflow-hidden">
+  <div class="min-h-screen flex relative overflow-hidden">
 
-      <!-- LIGHT PREMIUM LUXURY PROPERTY BACKGROUND -->
-      <div class="absolute inset-0 z-0">
-        <img
-          src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=2200&q=90"
-          alt="Luxury Property"
-          class="w-full h-full object-cover"
-          style="object-position:center;"
-        />
+    <!-- Luxury Property Background -->
+    <div
+      class="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+      style="
+        background-image:
+          linear-gradient(rgba(0,0,0,0.48), rgba(0,0,0,0.48)),
+          url('https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=2200&q=90');
+      "
+    ></div>
 
-        <!-- Soft White Luxury Overlay -->
-        <div class="absolute inset-0 bg-white/75"></div>
+    <!-- Desktop Sidebar -->
+    <div class="hidden lg:block relative z-20">
+      ${renderUserSidebar('#/dashboard')}
+    </div>
 
-        <!-- Premium Warm Gradient -->
-        <div class="absolute inset-0 bg-gradient-to-br from-white/90 via-[#f8f5ee]/75 to-[#e9dfc9]/60"></div>
-      </div>
+    <!-- Mobile Drawer -->
+    <div
+      id="mobile-sidebar"
+      class="sidebar-drawer lg:hidden relative z-30 ${state.sidebarOpen ? 'open' : ''}"
+    >
+      ${renderUserSidebar('#/dashboard')}
+    </div>
 
-      <!-- Desktop Sidebar -->
-      <div class="hidden lg:block relative z-20">
-        ${renderUserSidebar('#/dashboard')}
-      </div>
-
-      <!-- Mobile Drawer -->
-      <div id="mobile-sidebar" class="sidebar-drawer lg:hidden relative z-30 ${state.sidebarOpen ? 'open' : ''}">
-        ${renderUserSidebar('#/dashboard')}
-      </div>
-
-      <!-- Main Content Area -->
-      <main class="relative z-10 flex-1 p-5 md:p-8 max-w-7xl mx-auto overflow-y-auto">
-        ${renderUserHeader(user)}
+    <!-- Main Content -->
+    <main class="relative z-10 flex-1 p-4 sm:p-5 md:p-8 max-w-7xl mx-auto overflow-y-auto min-w-0">
 
         <!-- 4 Top Balance Cards (Pixel-Perfect Match) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
