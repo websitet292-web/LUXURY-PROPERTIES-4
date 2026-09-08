@@ -525,12 +525,19 @@ async function renderUserDashboard() {
         >
 
           <button
-            type="button"
-            onclick="toggleMobileSidebar()"
-            class="w-10 h-10 rounded-xl bg-[#151a24] border border-amber-500/30 flex items-center justify-center text-amber-400"
-          >
-            <i data-lucide="menu" class="w-5 h-5"></i>
-          </button>
+  type="button"
+  onclick="
+    const sidebar = document.getElementById('mobile-sidebar');
+    if (sidebar) {
+      sidebar.style.transform = 'translateX(0)';
+      sidebar.style.transition = 'transform .25s ease';
+      state.sidebarOpen = true;
+    }
+  "
+  class="w-10 h-10 rounded-xl bg-[#151a24] border border-amber-500/30 flex items-center justify-center text-amber-400"
+>
+  <i data-lucide="menu" class="w-5 h-5"></i>
+</button>
 
 
           <div class="text-center leading-none">
@@ -1340,7 +1347,7 @@ async function renderUserDeposit() {
       <main class="flex-1 p-5 md:p-8 max-w-7xl mx-auto overflow-y-auto">
         <header class="flex items-center justify-between pb-6 border-b border-[#1f2636]/60 mb-6">
           <div class="flex items-center gap-3">
-            <button onclick="toggleMobileSidebar()" class="lg:hidden p-2 rounded-lg bg-[#141822] text-slate-300">
+            <button  class="lg:hidden p-2 rounded-lg bg-[#141822] text-slate-300">
               <i data-lucide="menu" class="w-5 h-5"></i>
             </button>
             <div>
