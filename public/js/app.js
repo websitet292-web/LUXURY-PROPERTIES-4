@@ -509,8 +509,8 @@ async function renderUserDashboard() {
 
       <!-- MAIN -->
       <main
-        class="relative z-10 w-full lg:ml-0 px-3 py-4 sm:px-5 sm:py-5 lg:px-8 lg:py-8"
-      >
+        class="relative z-10 w-full px-3 pt-20 pb-6 sm:px-5 sm:pt-20 sm:pb-8 lg:px-8 lg:pt-8"
+       >       
 
         <!-- CONTENT WRAPPER -->
         <div class="w-full max-w-[1400px] mx-auto">
