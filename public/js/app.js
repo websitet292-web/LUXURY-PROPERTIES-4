@@ -3132,11 +3132,16 @@ async function handleAdminLoginSubmit(e) {
 
 // Toggle mobile sidebar drawer
 function toggleMobileSidebar() {
-  state.sidebarOpen = !state.sidebarOpen;
   const drawer = document.getElementById('mobile-sidebar');
-  if (drawer) {
-    if (state.sidebarOpen) drawer.classList.add('open');
-    else drawer.classList.remove('open');
+
+  if (!drawer) return;
+
+  state.sidebarOpen = !state.sidebarOpen;
+
+  if (state.sidebarOpen) {
+    drawer.classList.add('open');
+  } else {
+    drawer.classList.remove('open');
   }
 }
 
