@@ -3138,11 +3138,13 @@ function toggleMobileSidebar() {
 
   state.sidebarOpen = !state.sidebarOpen;
 
-  if (state.sidebarOpen) {
-    drawer.classList.add('open');
-  } else {
-    drawer.classList.remove('open');
-  }
+  drawer.classList.toggle('open', state.sidebarOpen);
+
+  drawer.style.transition = 'transform .25s ease';
+
+  drawer.style.transform = state.sidebarOpen
+    ? 'translateX(0)'
+    : 'translateX(-110%)';
 }
 
 /* =========================================================================
