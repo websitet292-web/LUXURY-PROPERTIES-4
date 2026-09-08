@@ -1390,9 +1390,18 @@ function renderUserLogin() {
   return `
     <div class="min-h-screen bg-[#07090d] flex items-center justify-center p-4 relative overflow-hidden">
 
-      <!-- Luxury Ambient Glow -->
-      <div class="absolute -top-40 -left-40 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl"></div>
-      <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl"></div>
+    <!-- Luxury Background -->
+<div class="absolute inset-0">
+  <img
+    src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=2200&q=90"
+    alt="Luxury Modern Villa"
+    class="w-full h-full object-cover"
+    style="object-position:center;"
+  />
+
+  <div class="absolute inset-0 bg-black/70"></div>
+  <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/80"></div>
+</div>
 
       <div class="relative z-10 luxury-card border border-amber-500/30 w-full max-w-md p-8 bg-[#0e1118]/95 shadow-2xl backdrop-blur-xl rounded-3xl">
 
