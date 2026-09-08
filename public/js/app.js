@@ -505,7 +505,7 @@ async function renderUserDashboard() {
       <main class="relative z-10 flex-1 min-w-0 w-full px-3 py-4 sm:px-5 sm:py-5 md:p-8 overflow-y-auto">
 
         <!-- 4 BALANCE CARDS -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-5 sm:mb-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-5 sm:mb-6">
 
           <!-- Total Balance -->
           <div class="luxury-card p-3 sm:p-5 relative overflow-hidden min-w-0">
@@ -603,7 +603,7 @@ async function renderUserDashboard() {
 
 
         <!-- QUICK DEPOSIT + TASK PROGRESS -->
-        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 mb-5 sm:mb-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-5 sm:mb-6">
 
           <!-- QUICK DEPOSIT -->
           <div class="luxury-card p-4 sm:p-6 min-w-0">
@@ -823,7 +823,7 @@ async function renderUserDashboard() {
 
 
         <!-- TRANSACTIONS + PROPERTIES -->
-        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
 
           <!-- RECENT TRANSACTIONS -->
           <div class="luxury-card p-4 sm:p-6 min-w-0">
