@@ -476,513 +476,699 @@ async function renderUserDashboard() {
   const offset = circ - (pct / 100) * circ;
 
   return `
-    <div class="min-h-screen flex relative overflow-hidden">
+    <div class="min-h-screen w-full relative overflow-x-hidden">
 
       <!-- Luxury Property Background -->
       <div
         class="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style="
           background-image:
-            linear-gradient(rgba(0,0,0,0.52), rgba(0,0,0,0.52)),
+            linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
             url('https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=2200&q=90');
         "
       ></div>
 
-      <!-- Desktop Sidebar -->
-      <div class="hidden lg:block relative z-20 flex-shrink-0">
+      <!-- Background Overlay -->
+      <div class="fixed inset-0 z-0 bg-black/20 pointer-events-none"></div>
+
+
+      <!-- DESKTOP SIDEBAR -->
+      <div class="hidden lg:block relative z-30 flex-shrink-0">
         ${renderUserSidebar('#/dashboard')}
       </div>
 
-      <!-- Mobile Drawer -->
+
+      <!-- MOBILE SIDEBAR -->
       <div
         id="mobile-sidebar"
-        class="sidebar-drawer lg:hidden relative z-30 ${state.sidebarOpen ? 'open' : ''}"
+        class="sidebar-drawer lg:hidden relative z-40 ${state.sidebarOpen ? 'open' : ''}"
       >
         ${renderUserSidebar('#/dashboard')}
       </div>
 
-      <!-- MAIN CONTENT -->
-      <main class="relative z-10 flex-1 min-w-0 w-full px-3 py-4 sm:px-5 sm:py-5 md:p-8 overflow-y-auto">
 
-        <!-- 4 BALANCE CARDS -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-5 sm:mb-6">
+      <!-- MAIN -->
+      <main
+        class="relative z-10 w-full lg:ml-0 px-3 py-4 sm:px-5 sm:py-5 lg:px-8 lg:py-8"
+      >
 
-          <!-- Total Balance -->
-          <div class="luxury-card p-3 sm:p-5 relative overflow-hidden min-w-0">
-            <div class="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-              <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-950/80 border border-emerald-600/30 flex-shrink-0 flex items-center justify-center text-emerald-400">
-                <i data-lucide="briefcase" class="w-4 h-4"></i>
-              </div>
-
-              <span class="text-[10px] sm:text-xs font-medium text-slate-300 truncate">
-                Total Balance
-              </span>
-            </div>
-
-            <div class="min-w-0">
-              <div class="text-lg sm:text-2xl font-extrabold metric-green tracking-tight mb-0.5 truncate">
-                ${formatLKR(user.balance)}
-              </div>
-
-              <span class="text-[9px] sm:text-[11px] text-slate-400 font-medium">
-                Available
-              </span>
-            </div>
-          </div>
-
-          <!-- Negative Balance -->
-          <div class="luxury-card p-3 sm:p-5 relative overflow-hidden min-w-0 border-red-900/30">
-            <div class="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-              <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-red-950/80 border border-red-600/30 flex-shrink-0 flex items-center justify-center text-red-400">
-                <i data-lucide="alert-circle" class="w-4 h-4"></i>
-              </div>
-
-              <span class="text-[10px] sm:text-xs font-medium text-slate-300 truncate">
-                Negative
-              </span>
-            </div>
-
-            <div class="min-w-0">
-              <div class="text-lg sm:text-2xl font-extrabold metric-red tracking-tight mb-0.5 truncate">
-                - ${formatLKR(user.negative_balance)}
-              </div>
-
-              <span class="text-[9px] sm:text-[11px] text-red-400/90 font-medium">
-                Due Amount
-              </span>
-            </div>
-          </div>
-
-          <!-- Total Deposit -->
-          <div class="luxury-card p-3 sm:p-5 relative overflow-hidden min-w-0">
-            <div class="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-              <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-blue-950/80 border border-blue-600/30 flex-shrink-0 flex items-center justify-center text-blue-400">
-                <i data-lucide="wallet" class="w-4 h-4"></i>
-              </div>
-
-              <span class="text-[10px] sm:text-xs font-medium text-slate-300 truncate">
-                Total Deposit
-              </span>
-            </div>
-
-            <div class="min-w-0">
-              <div class="text-lg sm:text-2xl font-extrabold metric-blue tracking-tight mb-0.5 truncate">
-                ${formatLKR(user.total_deposit)}
-              </div>
-
-              <span class="text-[9px] sm:text-[11px] text-slate-400 font-medium">
-                All Time
-              </span>
-            </div>
-          </div>
-
-          <!-- Total Earnings -->
-          <div class="luxury-card p-3 sm:p-5 relative overflow-hidden min-w-0">
-            <div class="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-              <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-950/80 border border-amber-600/30 flex-shrink-0 flex items-center justify-center text-amber-400">
-                <i data-lucide="trending-up" class="w-4 h-4"></i>
-              </div>
-
-              <span class="text-[10px] sm:text-xs font-medium text-slate-300 truncate">
-                Earnings
-              </span>
-            </div>
-
-            <div class="min-w-0">
-              <div class="text-lg sm:text-2xl font-extrabold metric-gold tracking-tight mb-0.5 truncate">
-                ${formatLKR(user.total_earnings)}
-              </div>
-
-              <span class="text-[9px] sm:text-[11px] text-slate-400 font-medium">
-                From Tasks
-              </span>
-            </div>
-          </div>
-
-        </div>
+        <!-- CONTENT WRAPPER -->
+        <div class="w-full max-w-[1400px] mx-auto">
 
 
-        <!-- QUICK DEPOSIT + TASK PROGRESS -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-5 sm:mb-6">
+          <!-- ===================================================== -->
+          <!-- BALANCE CARDS -->
+          <!-- ===================================================== -->
 
-          <!-- QUICK DEPOSIT -->
-          <div class="luxury-card p-4 sm:p-6 min-w-0">
-            
-            <div class="flex items-center gap-2 mb-1">
-              <div class="w-7 h-7 rounded-lg bg-amber-950/60 border border-amber-500/30 flex items-center justify-center text-amber-400 flex-shrink-0">
-                <i data-lucide="credit-card" class="w-4 h-4"></i>
-              </div>
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"
+          >
 
-              <h3 class="text-sm font-bold text-white">
-                Quick Deposit
-              </h3>
-            </div>
-
-            <p class="text-xs text-slate-400 mb-4 sm:mb-5">
-              Choose an amount and make a deposit
-            </p>
-
-            <!-- Deposit Options -->
-            <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-5">
-
-              <div class="bg-[#0e1118] border border-[#1f2636] rounded-xl p-2 sm:p-4 text-center min-w-0">
-                <i data-lucide="wallet" class="w-5 h-5 sm:w-6 sm:h-6 text-amber-400 mb-2 mx-auto"></i>
-
-                <div class="text-[9px] sm:text-xs text-slate-400">
-                  LKR
-                </div>
-
-                <div class="text-xs sm:text-base font-extrabold text-white mb-2 sm:mb-3">
-                  50,000
-                </div>
-
-                <button
-                  onclick="handleQuickDeposit(50000)"
-                  class="btn-gold w-full py-1.5 text-[9px] sm:text-xs font-bold"
-                >
-                  Deposit
-                </button>
-              </div>
-
-
-              <div class="bg-[#0e1118] border border-[#1f2636] rounded-xl p-2 sm:p-4 text-center min-w-0">
-                <i data-lucide="wallet" class="w-5 h-5 sm:w-6 sm:h-6 text-amber-400 mb-2 mx-auto"></i>
-
-                <div class="text-[9px] sm:text-xs text-slate-400">
-                  LKR
-                </div>
-
-                <div class="text-xs sm:text-base font-extrabold text-white mb-2 sm:mb-3">
-                  70,000
-                </div>
-
-                <button
-                  onclick="handleQuickDeposit(70000)"
-                  class="btn-gold w-full py-1.5 text-[9px] sm:text-xs font-bold"
-                >
-                  Deposit
-                </button>
-              </div>
-
-
-              <div class="bg-[#0e1118] border border-[#1f2636] rounded-xl p-2 sm:p-4 text-center min-w-0">
-                <i data-lucide="wallet" class="w-5 h-5 sm:w-6 sm:h-6 text-amber-400 mb-2 mx-auto"></i>
-
-                <div class="text-[9px] sm:text-xs text-slate-400">
-                  LKR
-                </div>
-
-                <div class="text-xs sm:text-base font-extrabold text-white mb-2 sm:mb-3">
-                  100,000
-                </div>
-
-                <button
-                  onclick="handleQuickDeposit(100000)"
-                  class="btn-gold w-full py-1.5 text-[9px] sm:text-xs font-bold"
-                >
-                  Deposit
-                </button>
-              </div>
-
-            </div>
-
-            <button
-              onclick="navigate('#/deposit')"
-              class="btn-gold-outline w-full py-2.5 text-xs flex items-center justify-center gap-2"
+            <!-- TOTAL BALANCE -->
+            <div
+              class="luxury-card p-5 relative overflow-hidden w-full"
             >
-              <span>💳</span>
-              View Deposit History
-            </button>
+              <div class="flex items-center gap-3 mb-4">
 
-          </div>
-
-
-          <!-- TASK PROGRESS -->
-          <div class="luxury-card p-4 sm:p-6 min-w-0">
-
-            <div class="flex items-center justify-between mb-4 gap-2">
-              
-              <div class="flex items-center gap-2 min-w-0">
-                <div class="w-7 h-7 rounded-lg bg-purple-950/60 border border-purple-500/30 flex items-center justify-center text-purple-400 flex-shrink-0">
-                  <i data-lucide="check-circle" class="w-4 h-4"></i>
-                </div>
-
-                <h3 class="text-sm font-bold text-white truncate">
-                  Task Progress
-                </h3>
-              </div>
-
-              <button
-                onclick="navigate('#/tasks')"
-                class="text-[10px] sm:text-xs font-semibold text-slate-300 hover:text-amber-400 whitespace-nowrap"
-              >
-                View Tasks
-              </button>
-
-            </div>
-
-
-            <!-- Ring + Stats -->
-            <div class="flex flex-col sm:flex-row items-center gap-5 sm:gap-6 mb-5">
-
-              <!-- Ring -->
-              <div class="relative w-28 h-28 flex-shrink-0 flex items-center justify-center">
-
-                <svg
-                  class="w-28 h-28 -rotate-90 transform"
-                  viewBox="0 0 100 100"
+                <div
+                  class="w-10 h-10 rounded-xl bg-emerald-950/80 border border-emerald-600/30 flex items-center justify-center text-emerald-400 flex-shrink-0"
                 >
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="${radius}"
-                    stroke-width="9"
-                    class="circle-progress-bg"
-                    fill="none"
-                  />
-
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="${radius}"
-                    stroke-width="9"
-                    class="circle-progress-bar"
-                    fill="none"
-                    stroke-dasharray="${circ}"
-                    stroke-dashoffset="${offset}"
-                  />
-                </svg>
-
-                <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                  <span class="text-base font-extrabold text-white">
-                    ${done} / ${total}
-                  </span>
-
-                  <span class="text-[10px] text-slate-400 font-medium">
-                    Completed
-                  </span>
+                  <i data-lucide="briefcase" class="w-5 h-5"></i>
                 </div>
+
+                <span class="text-xs font-medium text-slate-300">
+                  Total Balance
+                </span>
 
               </div>
 
-
-              <!-- Stats -->
-              <div class="w-full flex-1 space-y-2 text-xs">
-
-                <div class="flex justify-between py-1 border-b border-[#1f2636]/60">
-                  <span class="text-slate-400">Total Tasks</span>
-                  <span class="font-bold text-white">${total}</span>
+              <div>
+                <div class="text-xl sm:text-2xl font-extrabold metric-green tracking-tight mb-1 break-words">
+                  ${formatLKR(user.balance)}
                 </div>
 
-                <div class="flex justify-between py-1 border-b border-[#1f2636]/60">
-                  <span class="text-slate-400">Completed</span>
-                  <span class="font-bold text-emerald-400">${done}</span>
-                </div>
-
-                <div class="flex justify-between py-1 border-b border-[#1f2636]/60">
-                  <span class="text-slate-400">Pending</span>
-                  <span class="font-bold text-slate-300">${taskProgress.pending}</span>
-                </div>
-
-                <div class="flex justify-between py-1">
-                  <span class="text-slate-400">Reward Earned</span>
-                  <span class="font-bold text-emerald-400">
-                    ${formatLKR(taskProgress.rewardEarned)}
-                  </span>
-                </div>
-
+                <span class="text-[11px] text-slate-400 font-medium">
+                  Available to use
+                </span>
               </div>
-
             </div>
 
 
-            <!-- Progress Bar -->
-            <div class="w-full h-2 rounded-full bg-[#1b2230] overflow-hidden flex mb-2">
-              <div
-                class="bg-emerald-500 h-full"
-                style="width: ${pct}%"
-              ></div>
-
-              <div
-                class="bg-purple-600 h-full"
-                style="width: ${Math.min(25, 100 - pct)}%"
-              ></div>
-            </div>
-
-            <p class="text-[10px] sm:text-[11px] text-slate-400">
-              Complete tasks and earn
-              <span class="text-blue-400 font-semibold">
-                LKR ${taskProgress.rewardPerTask}
-              </span>
-              for each task.
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <!-- TRANSACTIONS + PROPERTIES -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-
-          <!-- RECENT TRANSACTIONS -->
-          <div class="luxury-card p-4 sm:p-6 min-w-0">
-
-            <div class="flex items-center gap-2 mb-4">
-              <i data-lucide="receipt" class="w-4 h-4 text-amber-400"></i>
-
-              <h3 class="text-sm font-bold text-white">
-                Recent Transactions
-              </h3>
-            </div>
-
-            <!-- Horizontal Scroll Only For Table -->
-            <div class="w-full overflow-x-auto">
-
-              <table class="w-full min-w-[600px] text-left text-xs">
-
-                <thead>
-                  <tr class="text-slate-400 border-b border-[#1f2636]">
-
-                    <th class="pb-2 font-medium">Type</th>
-                    <th class="pb-2 font-medium">Description</th>
-                    <th class="pb-2 font-medium">Amount</th>
-                    <th class="pb-2 font-medium">Status</th>
-                    <th class="pb-2 font-medium">Date</th>
-
-                  </tr>
-                </thead>
-
-                <tbody class="divide-y divide-[#1f2636]/60">
-
-                  ${recentTransactions.map(tx => `
-                    <tr class="hover:bg-[#161b26] transition-colors">
-
-                      <td class="py-2.5 font-medium text-slate-300">
-                        ${tx.type}
-                      </td>
-
-                      <td class="py-2.5 text-slate-400">
-                        ${tx.description}
-                      </td>
-
-                      <td class="py-2.5 font-bold ${
-                        tx.amount < 0
-                          ? 'text-red-400'
-                          : 'text-emerald-400'
-                      }">
-                        ${
-                          tx.amount < 0
-                            ? '- ' + formatLKR(Math.abs(tx.amount))
-                            : '+ ' + formatLKR(tx.amount)
-                        }
-                      </td>
-
-                      <td class="py-2.5">
-                        <span class="px-2 py-0.5 rounded text-[10px] font-semibold ${
-                          tx.status === 'Completed' || tx.status === 'Approved'
-                            ? 'bg-emerald-950 text-emerald-400 border border-emerald-800/40'
-                            : tx.status === 'Applied'
-                            ? 'bg-amber-950 text-amber-400 border border-amber-800/40'
-                            : 'bg-slate-800 text-slate-300'
-                        }">
-                          ${tx.status}
-                        </span>
-                      </td>
-
-                      <td class="py-2.5 text-slate-400 text-[11px]">
-                        ${tx.created_at ? tx.created_at.substring(0, 10) : '02 Sep 2025'}
-                      </td>
-
-                    </tr>
-                  `).join('')}
-
-                </tbody>
-
-              </table>
-
-            </div>
-
-
-            <button
-              onclick="navigate('#/transactions')"
-              class="btn-gold-outline w-full py-2.5 text-xs mt-4"
+            <!-- NEGATIVE BALANCE -->
+            <div
+              class="luxury-card p-5 relative overflow-hidden w-full border-red-900/30"
             >
-              View All Transactions
-            </button>
+              <div class="flex items-center gap-3 mb-4">
+
+                <div
+                  class="w-10 h-10 rounded-xl bg-red-950/80 border border-red-600/30 flex items-center justify-center text-red-400 flex-shrink-0"
+                >
+                  <i data-lucide="alert-circle" class="w-5 h-5"></i>
+                </div>
+
+                <span class="text-xs font-medium text-slate-300">
+                  Negative Balance
+                </span>
+
+              </div>
+
+              <div>
+                <div class="text-xl sm:text-2xl font-extrabold metric-red tracking-tight mb-1 break-words">
+                  - ${formatLKR(user.negative_balance)}
+                </div>
+
+                <span class="text-[11px] text-red-400/90 font-medium">
+                  Due Amount
+                </span>
+              </div>
+            </div>
+
+
+            <!-- TOTAL DEPOSIT -->
+            <div
+              class="luxury-card p-5 relative overflow-hidden w-full"
+            >
+              <div class="flex items-center gap-3 mb-4">
+
+                <div
+                  class="w-10 h-10 rounded-xl bg-blue-950/80 border border-blue-600/30 flex items-center justify-center text-blue-400 flex-shrink-0"
+                >
+                  <i data-lucide="wallet" class="w-5 h-5"></i>
+                </div>
+
+                <span class="text-xs font-medium text-slate-300">
+                  Total Deposit
+                </span>
+
+              </div>
+
+              <div>
+                <div class="text-xl sm:text-2xl font-extrabold metric-blue tracking-tight mb-1 break-words">
+                  ${formatLKR(user.total_deposit)}
+                </div>
+
+                <span class="text-[11px] text-slate-400 font-medium">
+                  All Time
+                </span>
+              </div>
+            </div>
+
+
+            <!-- TOTAL EARNINGS -->
+            <div
+              class="luxury-card p-5 relative overflow-hidden w-full"
+            >
+              <div class="flex items-center gap-3 mb-4">
+
+                <div
+                  class="w-10 h-10 rounded-xl bg-amber-950/80 border border-amber-600/30 flex items-center justify-center text-amber-400 flex-shrink-0"
+                >
+                  <i data-lucide="trending-up" class="w-5 h-5"></i>
+                </div>
+
+                <span class="text-xs font-medium text-slate-300">
+                  Total Earnings
+                </span>
+
+              </div>
+
+              <div>
+                <div class="text-xl sm:text-2xl font-extrabold metric-gold tracking-tight mb-1 break-words">
+                  ${formatLKR(user.total_earnings)}
+                </div>
+
+                <span class="text-[11px] text-slate-400 font-medium">
+                  From Tasks
+                </span>
+              </div>
+            </div>
 
           </div>
 
 
-          <!-- PROPERTIES -->
-          <div class="luxury-card p-4 sm:p-6 min-w-0">
 
-            <div class="flex items-center justify-between mb-4 gap-2">
+          <!-- ===================================================== -->
+          <!-- QUICK DEPOSIT + TASK PROGRESS -->
+          <!-- ===================================================== -->
 
-              <div class="flex items-center gap-2 min-w-0">
-                <i data-lucide="building" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
+          <div
+            class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6"
+          >
+
+
+            <!-- QUICK DEPOSIT -->
+            <div class="luxury-card p-6 w-full">
+
+              <div class="flex items-center gap-2 mb-1">
+
+                <div
+                  class="w-8 h-8 rounded-lg bg-amber-950/60 border border-amber-500/30 flex items-center justify-center text-amber-400 flex-shrink-0"
+                >
+                  <i data-lucide="credit-card" class="w-4 h-4"></i>
+                </div>
 
                 <h3 class="text-sm font-bold text-white">
-                  Properties
+                  Quick Deposit
                 </h3>
+
               </div>
 
+              <p class="text-xs text-slate-400 mb-5">
+                Choose an amount and make a deposit
+              </p>
+
+
+              <!-- DEPOSIT OPTIONS -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+
+
+                <!-- 50,000 -->
+                <div
+                  class="bg-[#0e1118]/90 border border-[#1f2636] hover:border-amber-500/40 rounded-xl p-4 text-center transition-all"
+                >
+
+                  <i
+                    data-lucide="wallet"
+                    class="w-6 h-6 text-amber-400 mb-2 mx-auto"
+                  ></i>
+
+                  <div class="text-xs text-slate-400 font-medium">
+                    LKR
+                  </div>
+
+                  <div class="text-base font-extrabold text-white mb-3">
+                    50,000
+                  </div>
+
+                  <button
+                    onclick="handleQuickDeposit(50000)"
+                    class="btn-gold w-full py-2 text-xs font-bold"
+                  >
+                    Deposit Now
+                  </button>
+
+                </div>
+
+
+                <!-- 70,000 -->
+                <div
+                  class="bg-[#0e1118]/90 border border-[#1f2636] hover:border-amber-500/40 rounded-xl p-4 text-center transition-all"
+                >
+
+                  <i
+                    data-lucide="wallet"
+                    class="w-6 h-6 text-amber-400 mb-2 mx-auto"
+                  ></i>
+
+                  <div class="text-xs text-slate-400 font-medium">
+                    LKR
+                  </div>
+
+                  <div class="text-base font-extrabold text-white mb-3">
+                    70,000
+                  </div>
+
+                  <button
+                    onclick="handleQuickDeposit(70000)"
+                    class="btn-gold w-full py-2 text-xs font-bold"
+                  >
+                    Deposit Now
+                  </button>
+
+                </div>
+
+
+                <!-- 100,000 -->
+                <div
+                  class="bg-[#0e1118]/90 border border-[#1f2636] hover:border-amber-500/40 rounded-xl p-4 text-center transition-all"
+                >
+
+                  <i
+                    data-lucide="wallet"
+                    class="w-6 h-6 text-amber-400 mb-2 mx-auto"
+                  ></i>
+
+                  <div class="text-xs text-slate-400 font-medium">
+                    LKR
+                  </div>
+
+                  <div class="text-base font-extrabold text-white mb-3">
+                    100,000
+                  </div>
+
+                  <button
+                    onclick="handleQuickDeposit(100000)"
+                    class="btn-gold w-full py-2 text-xs font-bold"
+                  >
+                    Deposit Now
+                  </button>
+
+                </div>
+
+              </div>
+
+
               <button
-                onclick="navigate('#/properties')"
-                class="text-[10px] sm:text-xs font-semibold text-slate-300 hover:text-amber-400 whitespace-nowrap"
+                onclick="navigate('#/deposit')"
+                class="btn-gold-outline w-full py-3 text-xs flex items-center justify-center gap-2"
               >
-                View All
+                <span>💳</span>
+                View Deposit History
               </button>
 
             </div>
 
 
-            <!-- Property Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
 
-              ${properties.map(p => `
+            <!-- ================================================= -->
+            <!-- TASK PROGRESS -->
+            <!-- ================================================= -->
 
-                <div class="bg-[#0e1118] border border-[#1f2636] rounded-xl overflow-hidden group min-w-0">
+            <div class="luxury-card p-6 w-full">
 
-                  <div class="h-32 sm:h-28 overflow-hidden relative">
+              <div class="flex items-center justify-between mb-5 gap-3">
 
-                    <img
-                      src="${
-                        p.featured_image ||
-                        'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=600&q=80'
-                      }"
-                      alt="${p.title}"
-                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+                <div class="flex items-center gap-2">
 
+                  <div
+                    class="w-8 h-8 rounded-lg bg-purple-950/60 border border-purple-500/30 flex items-center justify-center text-purple-400 flex-shrink-0"
+                  >
+                    <i data-lucide="check-circle" class="w-4 h-4"></i>
                   </div>
 
-                  <div class="p-3">
+                  <h3 class="text-sm font-bold text-white">
+                    Task Progress
+                  </h3>
 
-                    <h4 class="text-xs font-bold text-white truncate mb-1">
-                      ${p.title}
-                    </h4>
+                </div>
 
-                    <p class="text-[10px] text-slate-400 mb-2 truncate">
-                      ${p.location}
-                    </p>
+                <button
+                  onclick="navigate('#/tasks')"
+                  class="text-xs font-semibold text-slate-300 hover:text-amber-400 whitespace-nowrap"
+                >
+                  View All Tasks
+                </button>
 
-                    <div class="text-xs font-extrabold text-amber-400 mb-3">
-                      ${formatLKR(p.price)}
-                    </div>
+              </div>
 
-                    <button
-                      onclick="navigate('#/properties')"
-                      class="btn-gold-outline w-full py-1.5 text-[10px]"
-                    >
-                      View Details
-                    </button>
+
+              <!-- RING + DETAILS -->
+              <div
+                class="flex flex-col sm:flex-row items-center gap-6 mb-5"
+              >
+
+                <!-- RING -->
+                <div
+                  class="relative w-28 h-28 flex-shrink-0 flex items-center justify-center"
+                >
+
+                  <svg
+                    class="w-28 h-28 -rotate-90 transform"
+                    viewBox="0 0 100 100"
+                  >
+
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="${radius}"
+                      stroke-width="9"
+                      class="circle-progress-bg"
+                      fill="none"
+                    />
+
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="${radius}"
+                      stroke-width="9"
+                      class="circle-progress-bar"
+                      fill="none"
+                      stroke-dasharray="${circ}"
+                      stroke-dashoffset="${offset}"
+                    />
+
+                  </svg>
+
+                  <div
+                    class="absolute inset-0 flex flex-col items-center justify-center text-center"
+                  >
+
+                    <span class="text-base font-extrabold text-white">
+                      ${done} / ${total}
+                    </span>
+
+                    <span class="text-[10px] text-slate-400 font-medium">
+                      Completed
+                    </span>
 
                   </div>
 
                 </div>
 
-              `).join('')}
+
+                <!-- TASK DETAILS -->
+                <div class="w-full flex-1 space-y-2 text-xs">
+
+                  <div class="flex justify-between py-2 border-b border-[#1f2636]/60">
+                    <span class="text-slate-400">
+                      Total Tasks
+                    </span>
+
+                    <span class="font-bold text-white">
+                      ${total}
+                    </span>
+                  </div>
+
+
+                  <div class="flex justify-between py-2 border-b border-[#1f2636]/60">
+                    <span class="text-slate-400">
+                      Completed
+                    </span>
+
+                    <span class="font-bold text-emerald-400">
+                      ${done}
+                    </span>
+                  </div>
+
+
+                  <div class="flex justify-between py-2 border-b border-[#1f2636]/60">
+                    <span class="text-slate-400">
+                      Pending
+                    </span>
+
+                    <span class="font-bold text-slate-300">
+                      ${taskProgress.pending}
+                    </span>
+                  </div>
+
+
+                  <div class="flex justify-between py-2">
+                    <span class="text-slate-400">
+                      Reward Earned
+                    </span>
+
+                    <span class="font-bold text-emerald-400">
+                      ${formatLKR(taskProgress.rewardEarned)}
+                    </span>
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <!-- PROGRESS BAR -->
+              <div class="w-full h-2 rounded-full bg-[#1b2230] overflow-hidden flex mb-3">
+
+                <div
+                  class="bg-emerald-500 h-full"
+                  style="width: ${pct}%"
+                ></div>
+
+                <div
+                  class="bg-purple-600 h-full"
+                  style="width: ${Math.min(25, 100 - pct)}%"
+                ></div>
+
+              </div>
+
+
+              <p class="text-[11px] text-slate-400">
+                Complete tasks and earn
+                <span class="text-blue-400 font-semibold">
+                  LKR ${taskProgress.rewardPerTask}
+                </span>
+                for each task.
+              </p>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- ===================================================== -->
+          <!-- TRANSACTIONS + PROPERTIES -->
+          <!-- ===================================================== -->
+
+          <div
+            class="grid grid-cols-1 lg:grid-cols-2 gap-6"
+          >
+
+
+            <!-- RECENT TRANSACTIONS -->
+            <div class="luxury-card p-6 w-full">
+
+              <div class="flex items-center justify-between mb-5">
+
+                <div class="flex items-center gap-2">
+
+                  <i
+                    data-lucide="receipt"
+                    class="w-4 h-4 text-amber-400"
+                  ></i>
+
+                  <h3 class="text-sm font-bold text-white">
+                    Recent Transactions
+                  </h3>
+
+                </div>
+
+              </div>
+
+
+              <!-- TABLE SCROLL -->
+              <div class="w-full overflow-x-auto">
+
+                <table
+                  class="w-full min-w-[650px] text-left text-xs"
+                >
+
+                  <thead>
+
+                    <tr class="text-slate-400 border-b border-[#1f2636]">
+
+                      <th class="pb-3 font-medium">
+                        Type
+                      </th>
+
+                      <th class="pb-3 font-medium">
+                        Description
+                      </th>
+
+                      <th class="pb-3 font-medium">
+                        Amount
+                      </th>
+
+                      <th class="pb-3 font-medium">
+                        Status
+                      </th>
+
+                      <th class="pb-3 font-medium">
+                        Date
+                      </th>
+
+                    </tr>
+
+                  </thead>
+
+
+                  <tbody class="divide-y divide-[#1f2636]/60">
+
+                    ${recentTransactions.map(tx => `
+                      
+                      <tr class="hover:bg-[#161b26] transition-colors">
+
+                        <td class="py-3 font-medium text-slate-300">
+                          ${tx.type}
+                        </td>
+
+                        <td class="py-3 text-slate-400">
+                          ${tx.description}
+                        </td>
+
+                        <td
+                          class="py-3 font-bold ${
+                            tx.amount < 0
+                              ? 'text-red-400'
+                              : 'text-emerald-400'
+                          }"
+                        >
+                          ${
+                            tx.amount < 0
+                              ? '- ' + formatLKR(Math.abs(tx.amount))
+                              : '+ ' + formatLKR(tx.amount)
+                          }
+                        </td>
+
+                        <td class="py-3">
+
+                          <span
+                            class="px-2 py-1 rounded text-[10px] font-semibold ${
+                              tx.status === 'Completed' || tx.status === 'Approved'
+                                ? 'bg-emerald-950 text-emerald-400 border border-emerald-800/40'
+                                : tx.status === 'Applied'
+                                ? 'bg-amber-950 text-amber-400 border border-amber-800/40'
+                                : 'bg-slate-800 text-slate-300'
+                            }"
+                          >
+                            ${tx.status}
+                          </span>
+
+                        </td>
+
+                        <td class="py-3 text-slate-400 text-[11px]">
+                          ${
+                            tx.created_at
+                              ? tx.created_at.substring(0, 10)
+                              : '02 Sep 2025'
+                          }
+                        </td>
+
+                      </tr>
+
+                    `).join('')}
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+
+              <button
+                onclick="navigate('#/transactions')"
+                class="btn-gold-outline w-full py-3 text-xs mt-5"
+              >
+                View All Transactions
+              </button>
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- PROPERTIES -->
+            <!-- ================================================= -->
+
+            <div class="luxury-card p-6 w-full">
+
+              <div class="flex items-center justify-between mb-5">
+
+                <div class="flex items-center gap-2">
+
+                  <i
+                    data-lucide="building"
+                    class="w-4 h-4 text-amber-400"
+                  ></i>
+
+                  <h3 class="text-sm font-bold text-white">
+                    Properties
+                  </h3>
+
+                </div>
+
+                <button
+                  onclick="navigate('#/properties')"
+                  class="text-xs font-semibold text-slate-300 hover:text-amber-400 whitespace-nowrap"
+                >
+                  View All
+                </button>
+
+              </div>
+
+
+              <!-- PROPERTY GRID -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                ${properties.map(p => `
+
+                  <div
+                    class="bg-[#0e1118]/95 border border-[#1f2636] rounded-xl overflow-hidden group w-full"
+                  >
+
+                    <div class="h-32 overflow-hidden relative">
+
+                      <img
+                        src="${
+                          p.featured_image ||
+                          'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=600&q=80'
+                        }"
+                        alt="${p.title}"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+
+                    </div>
+
+
+                    <div class="p-4">
+
+                      <h4 class="text-xs font-bold text-white truncate mb-1">
+                        ${p.title}
+                      </h4>
+
+                      <p class="text-[11px] text-slate-400 mb-2 truncate">
+                        ${p.location}
+                      </p>
+
+                      <div class="text-sm font-extrabold text-amber-400 mb-3">
+                        ${formatLKR(p.price)}
+                      </div>
+
+                      <button
+                        onclick="navigate('#/properties')"
+                        class="btn-gold-outline w-full py-2 text-[11px]"
+                      >
+                        View Details
+                      </button>
+
+                    </div>
+
+                  </div>
+
+                `).join('')}
+
+              </div>
 
             </div>
 
