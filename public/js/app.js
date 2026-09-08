@@ -524,16 +524,9 @@ async function renderUserDashboard() {
           class="h-14 rounded-2xl bg-[#0b0f16]/95 backdrop-blur-xl border border-amber-500/20 shadow-2xl flex items-center justify-between px-3"
         >
 
-          <button
+<button
   type="button"
-  onclick="
-    const sidebar = document.getElementById('mobile-sidebar');
-    if (sidebar) {
-      sidebar.style.transform = 'translateX(0)';
-      sidebar.style.transition = 'transform .25s ease';
-      state.sidebarOpen = true;
-    }
-  "
+  onclick="toggleMobileSidebar()"
   class="w-10 h-10 rounded-xl bg-[#151a24] border border-amber-500/30 flex items-center justify-center text-amber-400"
 >
   <i data-lucide="menu" class="w-5 h-5"></i>
