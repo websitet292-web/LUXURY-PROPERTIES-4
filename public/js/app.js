@@ -254,9 +254,13 @@ function showLuxuryRewardModal(triggerAmount = 150) {
 function renderUserSidebar(activeRoute) {
   const user = state.user || { name: 'Suresh Perera', email: 'suresh@example.com' };
 
+  // Close mobile sidebar when a menu item is selected
+  const closeMobileSidebar = "state.sidebarOpen = false; document.getElementById('mobile-sidebar')?.classList.remove('open');";
+
   return `
     <aside class="w-64 bg-[#0d1017] border-r border-[#1f2636] flex flex-col justify-between p-5 min-h-screen">
       <div>
+
         <!-- Golden Luxury Properties Logo -->
         <div class="flex flex-col items-center justify-center pb-6 border-b border-[#1f2636]">
           <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-amber-200 p-0.5 shadow-lg flex items-center justify-center mb-2">
@@ -264,95 +268,163 @@ function renderUserSidebar(activeRoute) {
               LP
             </div>
           </div>
+
           <h1 class="text-sm font-extrabold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 uppercase font-serif">
             LUXURY
           </h1>
-          <span class="text-[10px] tracking-widest text-slate-400 font-semibold uppercase">PROPERTIES</span>
+
+          <span class="text-[10px] tracking-widest text-slate-400 font-semibold uppercase">
+            PROPERTIES
+          </span>
         </div>
 
-        <!-- User Profile Avatar & Name (Matching Screenshot) -->
+
+        <!-- User Profile -->
         <div class="flex flex-col items-center py-5 border-b border-[#1f2636]">
+
           <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-amber-500/50 shadow-md mb-2">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Avatar" class="w-full h-full object-cover" />
+            <img
+              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
+              alt="Avatar"
+              class="w-full h-full object-cover"
+            />
           </div>
-          <h2 class="text-sm font-bold text-white">${user.name || 'Suresh Perera'}</h2>
-          <p class="text-[11px] text-slate-400 truncate max-w-[180px]">${user.email || 'suresh@example.com'}</p>
+
+          <h2 class="text-sm font-bold text-white">
+            ${user.name || 'Suresh Perera'}
+          </h2>
+
+          <p class="text-[11px] text-slate-400 truncate max-w-[180px]">
+            ${user.email || 'suresh@example.com'}
+          </p>
+
         </div>
+
 
         <!-- Navigation Menu -->
         <nav class="mt-4 space-y-1">
-          <a href="#/dashboard" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-            activeRoute === '#/dashboard' || activeRoute === '#/' 
-              ? 'bg-[#221c13] text-amber-400 border border-amber-500/30' 
-              : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
-          }">
+
+          <!-- Dashboard -->
+          <a
+            href="#/dashboard"
+            onclick="${closeMobileSidebar}"
+            class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+              activeRoute === '#/dashboard' || activeRoute === '#/'
+                ? 'bg-[#221c13] text-amber-400 border border-amber-500/30'
+                : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
+            }"
+          >
             <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
             <span>Dashboard</span>
           </a>
 
-          <a href="#/deposit" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-            activeRoute === '#/deposit' 
-              ? 'bg-[#221c13] text-amber-400 border border-amber-500/30' 
-              : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
-          }">
+
+          <!-- Deposit -->
+          <a
+            href="#/deposit"
+            onclick="${closeMobileSidebar}"
+            class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+              activeRoute === '#/deposit'
+                ? 'bg-[#221c13] text-amber-400 border border-amber-500/30'
+                : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
+            }"
+          >
             <i data-lucide="plus-circle" class="w-4 h-4"></i>
             <span>Deposit</span>
           </a>
 
-          <a href="#/withdrawal" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-            activeRoute === '#/withdrawal' 
-              ? 'bg-[#221c13] text-amber-400 border border-amber-500/30' 
-              : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
-          }">
+
+          <!-- Withdrawal -->
+          <a
+            href="#/withdrawal"
+            onclick="${closeMobileSidebar}"
+            class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+              activeRoute === '#/withdrawal'
+                ? 'bg-[#221c13] text-amber-400 border border-amber-500/30'
+                : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
+            }"
+          >
             <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
             <span>Withdrawal</span>
           </a>
 
-          <a href="#/tasks" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-            activeRoute === '#/tasks' 
-              ? 'bg-[#221c13] text-amber-400 border border-amber-500/30' 
-              : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
-          }">
+
+          <!-- Tasks -->
+          <a
+            href="#/tasks"
+            onclick="${closeMobileSidebar}"
+            class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+              activeRoute === '#/tasks'
+                ? 'bg-[#221c13] text-amber-400 border border-amber-500/30'
+                : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
+            }"
+          >
             <i data-lucide="check-square" class="w-4 h-4"></i>
             <span>Tasks</span>
           </a>
 
-          <a href="#/properties" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-            activeRoute === '#/properties' 
-              ? 'bg-[#221c13] text-amber-400 border border-amber-500/30' 
-              : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
-          }">
+
+          <!-- Properties -->
+          <a
+            href="#/properties"
+            onclick="${closeMobileSidebar}"
+            class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+              activeRoute === '#/properties'
+                ? 'bg-[#221c13] text-amber-400 border border-amber-500/30'
+                : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
+            }"
+          >
             <i data-lucide="home" class="w-4 h-4"></i>
             <span>Properties</span>
           </a>
 
-          <a href="#/transactions" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-            activeRoute === '#/transactions' 
-              ? 'bg-[#221c13] text-amber-400 border border-amber-500/30' 
-              : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
-          }">
+
+          <!-- Transactions -->
+          <a
+            href="#/transactions"
+            onclick="${closeMobileSidebar}"
+            class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+              activeRoute === '#/transactions'
+                ? 'bg-[#221c13] text-amber-400 border border-amber-500/30'
+                : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
+            }"
+          >
             <i data-lucide="receipt" class="w-4 h-4"></i>
             <span>Transactions</span>
           </a>
 
-          <a href="#/profile" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-            activeRoute === '#/profile' 
-              ? 'bg-[#221c13] text-amber-400 border border-amber-500/30' 
-              : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
-          }">
+
+          <!-- Profile -->
+          <a
+            href="#/profile"
+            onclick="${closeMobileSidebar}"
+            class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+              activeRoute === '#/profile'
+                ? 'bg-[#221c13] text-amber-400 border border-amber-500/30'
+                : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
+            }"
+          >
             <i data-lucide="user" class="w-4 h-4"></i>
             <span>Profile</span>
           </a>
+
         </nav>
       </div>
 
+
       <!-- Logout -->
       <div class="pt-4 border-t border-[#1f2636]">
-        <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-red-400 hover:bg-red-950/20 transition-all">
+
+        <button
+          onclick="logout()"
+          class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-red-400 hover:bg-red-950/20 transition-all"
+        >
           <i data-lucide="log-out" class="w-4 h-4"></i>
           <span>Logout</span>
         </button>
+
       </div>
+
     </aside>
   `;
 }
