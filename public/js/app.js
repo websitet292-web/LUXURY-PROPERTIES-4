@@ -246,43 +246,50 @@ function showLuxuryRewardModal(triggerAmount = 150) {
   `;
 }
 
-/* =========================================================================
-   USER PANEL LAYOUT & VIEWS
-   ========================================================================= */
-
 // User Navigation Sidebar
 function renderUserSidebar(activeRoute) {
-  const user = state.user || { name: 'Suresh Perera', email: 'suresh@example.com' };
+  const user = state.user || {
+  name: '',
+  email: ''
+};
 
-  // Close mobile sidebar when a menu item is selected
-  const closeMobileSidebar = "state.sidebarOpen = false; document.getElementById('mobile-sidebar')?.classList.remove('open');";
+  const closeMobileSidebar =
+    "state.sidebarOpen=false; document.getElementById('mobile-sidebar')?.classList.remove('open');";
 
   return `
-    <aside class="w-64 bg-[#0d1017] border-r border-[#1f2636] flex flex-col justify-between p-5 min-h-screen">
-      <div>
+    <aside
+      class="w-64 bg-[#0b0e14] border-r border-[#1f2636] flex flex-col"
+      style="height:100vh; min-height:100vh;"
+    >
 
-        <!-- Golden Luxury Properties Logo -->
-        <div class="flex flex-col items-center justify-center pb-6 border-b border-[#1f2636]">
-          <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-amber-200 p-0.5 shadow-lg flex items-center justify-center mb-2">
-            <div class="w-full h-full bg-[#0d1017] rounded-full flex items-center justify-center text-amber-400 font-serif font-bold text-lg">
+      <!-- LOGO -->
+      <div class="px-5 pt-6 pb-5 border-b border-[#1f2636]">
+        <div class="flex flex-col items-center">
+
+          <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-amber-200 p-[2px] shadow-lg flex items-center justify-center mb-2">
+            <div class="w-full h-full bg-[#0b0e14] rounded-full flex items-center justify-center text-amber-400 font-serif font-bold text-lg">
               LP
             </div>
           </div>
 
-          <h1 class="text-sm font-extrabold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 uppercase font-serif">
+          <div class="text-sm font-extrabold tracking-[0.18em] text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">
             LUXURY
-          </h1>
+          </div>
 
-          <span class="text-[10px] tracking-widest text-slate-400 font-semibold uppercase">
+          <div class="text-[9px] tracking-[0.28em] text-slate-400 font-semibold">
             PROPERTIES
-          </span>
+          </div>
+
         </div>
+      </div>
 
 
-        <!-- User Profile -->
-        <div class="flex flex-col items-center py-5 border-b border-[#1f2636]">
+      <!-- USER -->
+      <div class="px-5 py-5 border-b border-[#1f2636]">
 
-          <div class="w-14 h-14 rounded-full overflow-hidden border-2 border-amber-500/50 shadow-md mb-2">
+        <div class="flex items-center gap-3">
+
+          <div class="w-11 h-11 rounded-full overflow-hidden border-2 border-amber-500/50 flex-shrink-0">
             <img
               src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
               alt="Avatar"
@@ -290,136 +297,146 @@ function renderUserSidebar(activeRoute) {
             />
           </div>
 
-          <h2 class="text-sm font-bold text-white">
-            ${user.name || 'Suresh Perera'}
-          </h2>
+          <div class="min-w-0">
+            <div class="text-sm font-bold text-white truncate">
+              ${user.name || 'Suresh Perera'}
+            </div>
 
-          <p class="text-[11px] text-slate-400 truncate max-w-[180px]">
-            ${user.email || 'suresh@example.com'}
-          </p>
+            <div class="text-[10px] text-slate-400 truncate">
+              ${user.email || 'suresh@example.com'}
+            </div>
+          </div>
 
         </div>
 
-
-        <!-- Navigation Menu -->
-        <nav class="mt-4 space-y-1">
-
-          <!-- Dashboard -->
-          <a
-            href="#/dashboard"
-            onclick="${closeMobileSidebar}"
-            class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-              activeRoute === '#/dashboard' || activeRoute === '#/'
-                ? 'bg-[#221c13] text-amber-400 border border-amber-500/30'
-                : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
-            }"
-          >
-            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-            <span>Dashboard</span>
-          </a>
-
-
-          <!-- Deposit -->
-          <a
-            href="#/deposit"
-            onclick="${closeMobileSidebar}"
-            class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-              activeRoute === '#/deposit'
-                ? 'bg-[#221c13] text-amber-400 border border-amber-500/30'
-                : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
-            }"
-          >
-            <i data-lucide="plus-circle" class="w-4 h-4"></i>
-            <span>Deposit</span>
-          </a>
-
-
-          <!-- Withdrawal -->
-          <a
-            href="#/withdrawal"
-            onclick="${closeMobileSidebar}"
-            class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-              activeRoute === '#/withdrawal'
-                ? 'bg-[#221c13] text-amber-400 border border-amber-500/30'
-                : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
-            }"
-          >
-            <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
-            <span>Withdrawal</span>
-          </a>
-
-
-          <!-- Tasks -->
-          <a
-            href="#/tasks"
-            onclick="${closeMobileSidebar}"
-            class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-              activeRoute === '#/tasks'
-                ? 'bg-[#221c13] text-amber-400 border border-amber-500/30'
-                : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
-            }"
-          >
-            <i data-lucide="check-square" class="w-4 h-4"></i>
-            <span>Tasks</span>
-          </a>
-
-
-          <!-- Properties -->
-          <a
-            href="#/properties"
-            onclick="${closeMobileSidebar}"
-            class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-              activeRoute === '#/properties'
-                ? 'bg-[#221c13] text-amber-400 border border-amber-500/30'
-                : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
-            }"
-          >
-            <i data-lucide="home" class="w-4 h-4"></i>
-            <span>Properties</span>
-          </a>
-
-
-          <!-- Transactions -->
-          <a
-            href="#/transactions"
-            onclick="${closeMobileSidebar}"
-            class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-              activeRoute === '#/transactions'
-                ? 'bg-[#221c13] text-amber-400 border border-amber-500/30'
-                : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
-            }"
-          >
-            <i data-lucide="receipt" class="w-4 h-4"></i>
-            <span>Transactions</span>
-          </a>
-
-
-          <!-- Profile -->
-          <a
-            href="#/profile"
-            onclick="${closeMobileSidebar}"
-            class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-              activeRoute === '#/profile'
-                ? 'bg-[#221c13] text-amber-400 border border-amber-500/30'
-                : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
-            }"
-          >
-            <i data-lucide="user" class="w-4 h-4"></i>
-            <span>Profile</span>
-          </a>
-
-        </nav>
       </div>
 
 
-      <!-- Logout -->
-      <div class="pt-4 border-t border-[#1f2636]">
+      <!-- MENU -->
+      <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-1">
+
+        <a
+          href="#/dashboard"
+          onclick="${closeMobileSidebar}"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold transition-all ${
+            activeRoute === '#/dashboard' || activeRoute === '#/'
+              ? 'bg-[#241d12] text-amber-400 border border-amber-500/30'
+              : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
+          }"
+        >
+          <i data-lucide="layout-dashboard" class="w-4 h-4 flex-shrink-0"></i>
+          <span>Dashboard</span>
+        </a>
+
+
+        <a
+          href="#/deposit"
+          onclick="${closeMobileSidebar}"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold transition-all ${
+            activeRoute === '#/deposit'
+              ? 'bg-[#241d12] text-amber-400 border border-amber-500/30'
+              : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
+          }"
+        >
+          <i data-lucide="plus-circle" class="w-4 h-4 flex-shrink-0"></i>
+          <span>Deposit</span>
+        </a>
+
+
+        <a
+          href="#/withdrawal"
+          onclick="${closeMobileSidebar}"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold transition-all ${
+            activeRoute === '#/withdrawal'
+              ? 'bg-[#241d12] text-amber-400 border border-amber-500/30'
+              : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
+          }"
+        >
+          <i data-lucide="arrow-up-right" class="w-4 h-4 flex-shrink-0"></i>
+          <span>Withdrawal</span>
+        </a>
+
+
+        <a
+          href="#/tasks"
+          onclick="${closeMobileSidebar}"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold transition-all ${
+            activeRoute === '#/tasks'
+              ? 'bg-[#241d12] text-amber-400 border border-amber-500/30'
+              : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
+          }"
+        >
+          <i data-lucide="check-square" class="w-4 h-4 flex-shrink-0"></i>
+          <span>Tasks</span>
+        </a>
+
+
+        <a
+          href="#/properties"
+          onclick="${closeMobileSidebar}"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold transition-all ${
+            activeRoute === '#/properties'
+              ? 'bg-[#241d12] text-amber-400 border border-amber-500/30'
+              : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
+          }"
+        >
+          <i data-lucide="home" class="w-4 h-4 flex-shrink-0"></i>
+          <span>Properties</span>
+        </a>
+
+
+        <a
+          href="#/transactions"
+          onclick="${closeMobileSidebar}"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold transition-all ${
+            activeRoute === '#/transactions'
+              ? 'bg-[#241d12] text-amber-400 border border-amber-500/30'
+              : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
+          }"
+        >
+          <i data-lucide="receipt" class="w-4 h-4 flex-shrink-0"></i>
+          <span>Transactions</span>
+        </a>
+
+
+        <a
+          href="#/profile"
+          onclick="${closeMobileSidebar}"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold transition-all ${
+            activeRoute === '#/profile'
+              ? 'bg-[#241d12] text-amber-400 border border-amber-500/30'
+              : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
+          }"
+        >
+          <i data-lucide="user" class="w-4 h-4 flex-shrink-0"></i>
+          <span>Profile</span>
+        </a>
+
+
+        <a
+          href="#/help"
+          onclick="${closeMobileSidebar}"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold transition-all ${
+            activeRoute === '#/help'
+              ? 'bg-[#241d12] text-amber-400 border border-amber-500/30'
+              : 'text-slate-300 hover:text-amber-300 hover:bg-[#151923]'
+          }"
+        >
+          <i data-lucide="help-circle" class="w-4 h-4 flex-shrink-0"></i>
+          <span>Help</span>
+        </a>
+
+      </nav>
+
+
+      <!-- LOGOUT -->
+      <div class="px-4 py-4 border-t border-[#1f2636]">
 
         <button
           onclick="logout()"
-          class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-red-400 hover:bg-red-950/20 transition-all"
+          class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-slate-400 hover:text-red-400 hover:bg-red-950/20 transition-all"
         >
-          <i data-lucide="log-out" class="w-4 h-4"></i>
+          <i data-lucide="log-out" class="w-4 h-4 flex-shrink-0"></i>
           <span>Logout</span>
         </button>
 
@@ -461,14 +478,13 @@ function renderUserHeader(user) {
   `;
 }
 
-// View: User Dashboard - Responsive Luxury Property Version
+// View: User Dashboard - Luxury Responsive Version
 async function renderUserDashboard() {
   const res = await api('/api/user/dashboard');
   const { user, taskProgress, recentTransactions, properties } = res;
 
-  // Circular progress
   const total = taskProgress.totalTasks || 10;
-  const done = taskProgress.completed || 3;
+  const done = taskProgress.completed || 0;
   const pct = Math.min(100, Math.round((done / total) * 100));
 
   const radius = 38;
@@ -476,293 +492,308 @@ async function renderUserDashboard() {
   const offset = circ - (pct / 100) * circ;
 
   return `
-    <div class="min-h-screen w-full relative overflow-x-hidden">
+    <div class="min-h-screen w-full relative bg-[#080b10]">
 
-      <!-- Luxury Property Background -->
+      <!-- BACKGROUND -->
       <div
-        class="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        class="fixed inset-0 bg-cover bg-center bg-no-repeat"
         style="
           background-image:
-            linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+            linear-gradient(rgba(4,6,10,0.78), rgba(4,6,10,0.90)),
             url('https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=2200&q=90');
         "
       ></div>
 
-      <!-- Background Overlay -->
-      <div class="fixed inset-0 z-0 bg-black/20 pointer-events-none"></div>
+
+      <!-- DARK OVERLAY -->
+      <div class="fixed inset-0 bg-black/20 pointer-events-none"></div>
 
 
       <!-- DESKTOP SIDEBAR -->
-      <div class="hidden lg:block relative z-30 flex-shrink-0">
+      <aside
+        class="hidden lg:block fixed left-0 top-0 bottom-0 z-50 w-64"
+      >
         ${renderUserSidebar('#/dashboard')}
+      </aside>
+
+
+      <!-- MOBILE TOP BAR -->
+      <div class="lg:hidden fixed top-0 left-0 right-0 z-[70] p-3">
+
+        <div
+          class="h-14 rounded-2xl bg-[#0b0f16]/95 backdrop-blur-xl border border-amber-500/20 shadow-2xl flex items-center justify-between px-3"
+        >
+
+          <button
+            type="button"
+            onclick="toggleMobileSidebar()"
+            class="w-10 h-10 rounded-xl bg-[#151a24] border border-amber-500/30 flex items-center justify-center text-amber-400"
+          >
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+
+
+          <div class="text-center leading-none">
+            <div class="text-[12px] font-extrabold tracking-[0.15em] text-white">
+              LUXURY PROPERTIES
+            </div>
+
+            <div class="text-[7px] mt-1 tracking-[0.25em] text-amber-400">
+              PREMIUM REAL ESTATE
+            </div>
+          </div>
+
+
+          <button
+            type="button"
+            onclick="navigate('#/profile')"
+            class="w-10 h-10 rounded-xl bg-[#151a24] border border-white/10 flex items-center justify-center text-slate-300"
+          >
+            <i data-lucide="user" class="w-5 h-5"></i>
+          </button>
+
+        </div>
+
       </div>
 
 
       <!-- MOBILE SIDEBAR -->
       <div
         id="mobile-sidebar"
-        class="sidebar-drawer lg:hidden relative z-40 ${state.sidebarOpen ? 'open' : ''}"
+        class="lg:hidden fixed inset-0 z-[80]"
+        style="
+          transform:${state.sidebarOpen ? 'translateX(0)' : 'translateX(-110%)'};
+          transition:transform .25s ease;
+        "
       >
-        ${renderUserSidebar('#/dashboard')}
+
+        <!-- BACKDROP -->
+        <div
+          class="absolute inset-0 bg-black/70"
+          onclick="state.sidebarOpen=false; document.getElementById('mobile-sidebar')?.classList.remove('open'); render();"
+        ></div>
+
+
+        <!-- DRAWER -->
+        <div
+          class="relative z-10 w-64 h-full shadow-2xl"
+        >
+          ${renderUserSidebar('#/dashboard')}
+        </div>
+
       </div>
 
 
-      <!-- MAIN -->
+      <!-- MAIN CONTENT -->
       <main
-        class="relative z-10 w-full px-3 pt-20 pb-6 sm:px-5 sm:pt-20 sm:pb-8 lg:px-8 lg:pt-8"
-       >       
+        class="relative z-10 w-full lg:ml-64 min-h-screen px-3 pt-20 pb-8 sm:px-5 sm:pt-20 lg:px-8 lg:pt-8"
+      >
 
-        <!-- CONTENT WRAPPER -->
         <div class="w-full max-w-[1400px] mx-auto">
 
 
-          <!-- ===================================================== -->
+          <!-- WELCOME HEADER -->
+          <div class="mb-6">
+
+            <div class="luxury-card p-5 sm:p-6">
+
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+
+                <div>
+                  <p class="text-[10px] tracking-[0.25em] text-amber-400 uppercase mb-2">
+                    Premium Real Estate Platform
+                  </p>
+
+                  <h1 class="text-xl sm:text-2xl font-extrabold text-white">
+                    Welcome back, ${user.name || 'User'}
+                  </h1>
+
+                  <p class="text-xs text-slate-400 mt-1">
+                    Manage your property portfolio, tasks and earnings.
+                  </p>
+                </div>
+
+
+                <button
+                  onclick="navigate('#/properties')"
+                  class="btn-gold py-3 px-5 text-xs font-bold flex items-center justify-center gap-2"
+                >
+                  <i data-lucide="building-2" class="w-4 h-4"></i>
+                  Explore Properties
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
           <!-- BALANCE CARDS -->
-          <!-- ===================================================== -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
 
-          <div
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"
-          >
 
-            <!-- TOTAL BALANCE -->
-            <div
-              class="luxury-card p-5 relative overflow-hidden w-full"
-            >
+            <div class="luxury-card p-5">
               <div class="flex items-center gap-3 mb-4">
 
-                <div
-                  class="w-10 h-10 rounded-xl bg-emerald-950/80 border border-emerald-600/30 flex items-center justify-center text-emerald-400 flex-shrink-0"
-                >
+                <div class="w-10 h-10 rounded-xl bg-emerald-950/80 border border-emerald-600/30 flex items-center justify-center text-emerald-400">
                   <i data-lucide="briefcase" class="w-5 h-5"></i>
                 </div>
 
-                <span class="text-xs font-medium text-slate-300">
+                <span class="text-xs text-slate-300">
                   Total Balance
                 </span>
 
               </div>
 
-              <div>
-                <div class="text-xl sm:text-2xl font-extrabold metric-green tracking-tight mb-1 break-words">
-                  ${formatLKR(user.balance)}
-                </div>
+              <div class="text-xl sm:text-2xl font-extrabold metric-green break-words">
+                ${formatLKR(user.balance)}
+              </div>
 
-                <span class="text-[11px] text-slate-400 font-medium">
-                  Available to use
-                </span>
+              <div class="text-[11px] text-slate-400 mt-1">
+                Available to use
               </div>
             </div>
 
 
-            <!-- NEGATIVE BALANCE -->
-            <div
-              class="luxury-card p-5 relative overflow-hidden w-full border-red-900/30"
-            >
+            <div class="luxury-card p-5 border-red-900/30">
               <div class="flex items-center gap-3 mb-4">
 
-                <div
-                  class="w-10 h-10 rounded-xl bg-red-950/80 border border-red-600/30 flex items-center justify-center text-red-400 flex-shrink-0"
-                >
+                <div class="w-10 h-10 rounded-xl bg-red-950/80 border border-red-600/30 flex items-center justify-center text-red-400">
                   <i data-lucide="alert-circle" class="w-5 h-5"></i>
                 </div>
 
-                <span class="text-xs font-medium text-slate-300">
+                <span class="text-xs text-slate-300">
                   Negative Balance
                 </span>
 
               </div>
 
-              <div>
-                <div class="text-xl sm:text-2xl font-extrabold metric-red tracking-tight mb-1 break-words">
-                  - ${formatLKR(user.negative_balance)}
-                </div>
+              <div class="text-xl sm:text-2xl font-extrabold metric-red break-words">
+                - ${formatLKR(user.negative_balance)}
+              </div>
 
-                <span class="text-[11px] text-red-400/90 font-medium">
-                  Due Amount
-                </span>
+              <div class="text-[11px] text-red-400/90 mt-1">
+                Due Amount
               </div>
             </div>
 
 
-            <!-- TOTAL DEPOSIT -->
-            <div
-              class="luxury-card p-5 relative overflow-hidden w-full"
-            >
+            <div class="luxury-card p-5">
               <div class="flex items-center gap-3 mb-4">
 
-                <div
-                  class="w-10 h-10 rounded-xl bg-blue-950/80 border border-blue-600/30 flex items-center justify-center text-blue-400 flex-shrink-0"
-                >
+                <div class="w-10 h-10 rounded-xl bg-blue-950/80 border border-blue-600/30 flex items-center justify-center text-blue-400">
                   <i data-lucide="wallet" class="w-5 h-5"></i>
                 </div>
 
-                <span class="text-xs font-medium text-slate-300">
+                <span class="text-xs text-slate-300">
                   Total Deposit
                 </span>
 
               </div>
 
-              <div>
-                <div class="text-xl sm:text-2xl font-extrabold metric-blue tracking-tight mb-1 break-words">
-                  ${formatLKR(user.total_deposit)}
-                </div>
+              <div class="text-xl sm:text-2xl font-extrabold metric-blue break-words">
+                ${formatLKR(user.total_deposit)}
+              </div>
 
-                <span class="text-[11px] text-slate-400 font-medium">
-                  All Time
-                </span>
+              <div class="text-[11px] text-slate-400 mt-1">
+                All Time
               </div>
             </div>
 
 
-            <!-- TOTAL EARNINGS -->
-            <div
-              class="luxury-card p-5 relative overflow-hidden w-full"
-            >
+            <div class="luxury-card p-5">
               <div class="flex items-center gap-3 mb-4">
 
-                <div
-                  class="w-10 h-10 rounded-xl bg-amber-950/80 border border-amber-600/30 flex items-center justify-center text-amber-400 flex-shrink-0"
-                >
+                <div class="w-10 h-10 rounded-xl bg-amber-950/80 border border-amber-600/30 flex items-center justify-center text-amber-400">
                   <i data-lucide="trending-up" class="w-5 h-5"></i>
                 </div>
 
-                <span class="text-xs font-medium text-slate-300">
+                <span class="text-xs text-slate-300">
                   Total Earnings
                 </span>
 
               </div>
 
-              <div>
-                <div class="text-xl sm:text-2xl font-extrabold metric-gold tracking-tight mb-1 break-words">
-                  ${formatLKR(user.total_earnings)}
-                </div>
+              <div class="text-xl sm:text-2xl font-extrabold metric-gold break-words">
+                ${formatLKR(user.total_earnings)}
+              </div>
 
-                <span class="text-[11px] text-slate-400 font-medium">
-                  From Tasks
-                </span>
+              <div class="text-[11px] text-slate-400 mt-1">
+                From Tasks
               </div>
             </div>
 
           </div>
 
 
-
-          <!-- ===================================================== -->
           <!-- QUICK DEPOSIT + TASK PROGRESS -->
-          <!-- ===================================================== -->
-
-          <div
-            class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6"
-          >
+          <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
 
 
             <!-- QUICK DEPOSIT -->
-            <div class="luxury-card p-6 w-full">
+            <div class="luxury-card p-5 sm:p-6">
 
-              <div class="flex items-center gap-2 mb-1">
+              <div class="flex items-center gap-3 mb-2">
 
-                <div
-                  class="w-8 h-8 rounded-lg bg-amber-950/60 border border-amber-500/30 flex items-center justify-center text-amber-400 flex-shrink-0"
-                >
+                <div class="w-9 h-9 rounded-xl bg-amber-950/60 border border-amber-500/30 flex items-center justify-center text-amber-400">
                   <i data-lucide="credit-card" class="w-4 h-4"></i>
                 </div>
 
-                <h3 class="text-sm font-bold text-white">
-                  Quick Deposit
-                </h3>
+                <div>
+                  <h3 class="text-sm font-bold text-white">
+                    Quick Deposit
+                  </h3>
+
+                  <p class="text-[11px] text-slate-400">
+                    Choose an amount
+                  </p>
+                </div>
 
               </div>
 
-              <p class="text-xs text-slate-400 mb-5">
-                Choose an amount and make a deposit
-              </p>
 
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5">
 
-              <!-- DEPOSIT OPTIONS -->
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-
-
-                <!-- 50,000 -->
-                <div
-                  class="bg-[#0e1118]/90 border border-[#1f2636] hover:border-amber-500/40 rounded-xl p-4 text-center transition-all"
-                >
-
-                  <i
-                    data-lucide="wallet"
-                    class="w-6 h-6 text-amber-400 mb-2 mx-auto"
-                  ></i>
-
-                  <div class="text-xs text-slate-400 font-medium">
-                    LKR
-                  </div>
-
-                  <div class="text-base font-extrabold text-white mb-3">
-                    50,000
-                  </div>
+                <div class="bg-[#0d1119]/90 border border-[#1f2636] rounded-xl p-4 text-center">
+                  <i data-lucide="wallet" class="w-5 h-5 text-amber-400 mx-auto mb-2"></i>
+                  <div class="text-[10px] text-slate-400">LKR</div>
+                  <div class="text-base font-extrabold text-white mb-3">50,000</div>
 
                   <button
                     onclick="handleQuickDeposit(50000)"
-                    class="btn-gold w-full py-2 text-xs font-bold"
+                    class="btn-gold w-full py-2 text-[11px] font-bold"
                   >
-                    Deposit Now
+                    Deposit
                   </button>
-
                 </div>
 
 
-                <!-- 70,000 -->
-                <div
-                  class="bg-[#0e1118]/90 border border-[#1f2636] hover:border-amber-500/40 rounded-xl p-4 text-center transition-all"
-                >
-
-                  <i
-                    data-lucide="wallet"
-                    class="w-6 h-6 text-amber-400 mb-2 mx-auto"
-                  ></i>
-
-                  <div class="text-xs text-slate-400 font-medium">
-                    LKR
-                  </div>
-
-                  <div class="text-base font-extrabold text-white mb-3">
-                    70,000
-                  </div>
+                <div class="bg-[#0d1119]/90 border border-[#1f2636] rounded-xl p-4 text-center">
+                  <i data-lucide="wallet" class="w-5 h-5 text-amber-400 mx-auto mb-2"></i>
+                  <div class="text-[10px] text-slate-400">LKR</div>
+                  <div class="text-base font-extrabold text-white mb-3">70,000</div>
 
                   <button
                     onclick="handleQuickDeposit(70000)"
-                    class="btn-gold w-full py-2 text-xs font-bold"
+                    class="btn-gold w-full py-2 text-[11px] font-bold"
                   >
-                    Deposit Now
+                    Deposit
                   </button>
-
                 </div>
 
 
-                <!-- 100,000 -->
-                <div
-                  class="bg-[#0e1118]/90 border border-[#1f2636] hover:border-amber-500/40 rounded-xl p-4 text-center transition-all"
-                >
-
-                  <i
-                    data-lucide="wallet"
-                    class="w-6 h-6 text-amber-400 mb-2 mx-auto"
-                  ></i>
-
-                  <div class="text-xs text-slate-400 font-medium">
-                    LKR
-                  </div>
-
-                  <div class="text-base font-extrabold text-white mb-3">
-                    100,000
-                  </div>
+                <div class="bg-[#0d1119]/90 border border-[#1f2636] rounded-xl p-4 text-center">
+                  <i data-lucide="wallet" class="w-5 h-5 text-amber-400 mx-auto mb-2"></i>
+                  <div class="text-[10px] text-slate-400">LKR</div>
+                  <div class="text-base font-extrabold text-white mb-3">100,000</div>
 
                   <button
                     onclick="handleQuickDeposit(100000)"
-                    class="btn-gold w-full py-2 text-xs font-bold"
+                    class="btn-gold w-full py-2 text-[11px] font-bold"
                   >
-                    Deposit Now
+                    Deposit
                   </button>
-
                 </div>
 
               </div>
@@ -770,29 +801,22 @@ async function renderUserDashboard() {
 
               <button
                 onclick="navigate('#/deposit')"
-                class="btn-gold-outline w-full py-3 text-xs flex items-center justify-center gap-2"
+                class="btn-gold-outline w-full py-3 text-xs mt-4"
               >
-                <span>💳</span>
                 View Deposit History
               </button>
 
             </div>
 
 
-
-            <!-- ================================================= -->
             <!-- TASK PROGRESS -->
-            <!-- ================================================= -->
+            <div class="luxury-card p-5 sm:p-6">
 
-            <div class="luxury-card p-6 w-full">
+              <div class="flex items-center justify-between gap-3 mb-5">
 
-              <div class="flex items-center justify-between mb-5 gap-3">
+                <div class="flex items-center gap-3">
 
-                <div class="flex items-center gap-2">
-
-                  <div
-                    class="w-8 h-8 rounded-lg bg-purple-950/60 border border-purple-500/30 flex items-center justify-center text-purple-400 flex-shrink-0"
-                  >
+                  <div class="w-9 h-9 rounded-xl bg-purple-950/60 border border-purple-500/30 flex items-center justify-center text-purple-400">
                     <i data-lucide="check-circle" class="w-4 h-4"></i>
                   </div>
 
@@ -804,26 +828,20 @@ async function renderUserDashboard() {
 
                 <button
                   onclick="navigate('#/tasks')"
-                  class="text-xs font-semibold text-slate-300 hover:text-amber-400 whitespace-nowrap"
+                  class="text-[11px] font-semibold text-slate-300 hover:text-amber-400"
                 >
-                  View All Tasks
+                  View All
                 </button>
 
               </div>
 
 
-              <!-- RING + DETAILS -->
-              <div
-                class="flex flex-col sm:flex-row items-center gap-6 mb-5"
-              >
+              <div class="flex flex-col sm:flex-row items-center gap-6">
 
-                <!-- RING -->
-                <div
-                  class="relative w-28 h-28 flex-shrink-0 flex items-center justify-center"
-                >
+                <div class="relative w-28 h-28 flex-shrink-0">
 
                   <svg
-                    class="w-28 h-28 -rotate-90 transform"
+                    class="w-28 h-28 -rotate-90"
                     viewBox="0 0 100 100"
                   >
 
@@ -849,64 +867,38 @@ async function renderUserDashboard() {
 
                   </svg>
 
-                  <div
-                    class="absolute inset-0 flex flex-col items-center justify-center text-center"
-                  >
-
+                  <div class="absolute inset-0 flex flex-col items-center justify-center">
                     <span class="text-base font-extrabold text-white">
-                      ${done} / ${total}
+                      ${done}/${total}
                     </span>
 
-                    <span class="text-[10px] text-slate-400 font-medium">
+                    <span class="text-[10px] text-slate-400">
                       Completed
                     </span>
-
                   </div>
 
                 </div>
 
 
-                <!-- TASK DETAILS -->
-                <div class="w-full flex-1 space-y-2 text-xs">
+                <div class="w-full space-y-2 text-xs">
 
                   <div class="flex justify-between py-2 border-b border-[#1f2636]/60">
-                    <span class="text-slate-400">
-                      Total Tasks
-                    </span>
-
-                    <span class="font-bold text-white">
-                      ${total}
-                    </span>
+                    <span class="text-slate-400">Total Tasks</span>
+                    <span class="font-bold text-white">${total}</span>
                   </div>
-
 
                   <div class="flex justify-between py-2 border-b border-[#1f2636]/60">
-                    <span class="text-slate-400">
-                      Completed
-                    </span>
-
-                    <span class="font-bold text-emerald-400">
-                      ${done}
-                    </span>
+                    <span class="text-slate-400">Completed</span>
+                    <span class="font-bold text-emerald-400">${done}</span>
                   </div>
-
 
                   <div class="flex justify-between py-2 border-b border-[#1f2636]/60">
-                    <span class="text-slate-400">
-                      Pending
-                    </span>
-
-                    <span class="font-bold text-slate-300">
-                      ${taskProgress.pending}
-                    </span>
+                    <span class="text-slate-400">Pending</span>
+                    <span class="font-bold text-slate-300">${taskProgress.pending}</span>
                   </div>
-
 
                   <div class="flex justify-between py-2">
-                    <span class="text-slate-400">
-                      Reward Earned
-                    </span>
-
+                    <span class="text-slate-400">Reward Earned</span>
                     <span class="font-bold text-emerald-400">
                       ${formatLKR(taskProgress.rewardEarned)}
                     </span>
@@ -917,28 +909,19 @@ async function renderUserDashboard() {
               </div>
 
 
-              <!-- PROGRESS BAR -->
-              <div class="w-full h-2 rounded-full bg-[#1b2230] overflow-hidden flex mb-3">
-
+              <div class="w-full h-2 rounded-full bg-[#1b2230] overflow-hidden mt-5">
                 <div
                   class="bg-emerald-500 h-full"
-                  style="width: ${pct}%"
+                  style="width:${pct}%"
                 ></div>
-
-                <div
-                  class="bg-purple-600 h-full"
-                  style="width: ${Math.min(25, 100 - pct)}%"
-                ></div>
-
               </div>
 
-
-              <p class="text-[11px] text-slate-400">
-                Complete tasks and earn
+              <p class="text-[11px] text-slate-400 mt-3">
+                Earn
                 <span class="text-blue-400 font-semibold">
                   LKR ${taskProgress.rewardPerTask}
                 </span>
-                for each task.
+                for each completed task.
               </p>
 
             </div>
@@ -946,80 +929,49 @@ async function renderUserDashboard() {
           </div>
 
 
-
-          <!-- ===================================================== -->
           <!-- TRANSACTIONS + PROPERTIES -->
-          <!-- ===================================================== -->
-
-          <div
-            class="grid grid-cols-1 lg:grid-cols-2 gap-6"
-          >
+          <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
 
 
-            <!-- RECENT TRANSACTIONS -->
-            <div class="luxury-card p-6 w-full">
+            <!-- TRANSACTIONS -->
+            <div class="luxury-card p-5 sm:p-6">
 
               <div class="flex items-center justify-between mb-5">
 
                 <div class="flex items-center gap-2">
-
-                  <i
-                    data-lucide="receipt"
-                    class="w-4 h-4 text-amber-400"
-                  ></i>
+                  <i data-lucide="receipt" class="w-4 h-4 text-amber-400"></i>
 
                   <h3 class="text-sm font-bold text-white">
                     Recent Transactions
                   </h3>
-
                 </div>
 
               </div>
 
 
-              <!-- TABLE SCROLL -->
-              <div class="w-full overflow-x-auto">
+              <div class="overflow-x-auto">
 
-                <table
-                  class="w-full min-w-[650px] text-left text-xs"
-                >
+                <table class="w-full min-w-[620px] text-left text-xs">
 
                   <thead>
-
                     <tr class="text-slate-400 border-b border-[#1f2636]">
 
-                      <th class="pb-3 font-medium">
-                        Type
-                      </th>
-
-                      <th class="pb-3 font-medium">
-                        Description
-                      </th>
-
-                      <th class="pb-3 font-medium">
-                        Amount
-                      </th>
-
-                      <th class="pb-3 font-medium">
-                        Status
-                      </th>
-
-                      <th class="pb-3 font-medium">
-                        Date
-                      </th>
+                      <th class="pb-3 font-medium">Type</th>
+                      <th class="pb-3 font-medium">Description</th>
+                      <th class="pb-3 font-medium">Amount</th>
+                      <th class="pb-3 font-medium">Status</th>
+                      <th class="pb-3 font-medium">Date</th>
 
                     </tr>
-
                   </thead>
-
 
                   <tbody class="divide-y divide-[#1f2636]/60">
 
                     ${recentTransactions.map(tx => `
-                      
-                      <tr class="hover:bg-[#161b26] transition-colors">
 
-                        <td class="py-3 font-medium text-slate-300">
+                      <tr class="hover:bg-[#161b26]">
+
+                        <td class="py-3 text-slate-300">
                           ${tx.type}
                         </td>
 
@@ -1027,13 +979,11 @@ async function renderUserDashboard() {
                           ${tx.description}
                         </td>
 
-                        <td
-                          class="py-3 font-bold ${
-                            tx.amount < 0
-                              ? 'text-red-400'
-                              : 'text-emerald-400'
-                          }"
-                        >
+                        <td class="py-3 font-bold ${
+                          tx.amount < 0
+                            ? 'text-red-400'
+                            : 'text-emerald-400'
+                        }">
                           ${
                             tx.amount < 0
                               ? '- ' + formatLKR(Math.abs(tx.amount))
@@ -1043,21 +993,20 @@ async function renderUserDashboard() {
 
                         <td class="py-3">
 
-                          <span
-                            class="px-2 py-1 rounded text-[10px] font-semibold ${
-                              tx.status === 'Completed' || tx.status === 'Approved'
-                                ? 'bg-emerald-950 text-emerald-400 border border-emerald-800/40'
-                                : tx.status === 'Applied'
-                                ? 'bg-amber-950 text-amber-400 border border-amber-800/40'
-                                : 'bg-slate-800 text-slate-300'
-                            }"
-                          >
+                          <span class="px-2 py-1 rounded text-[10px] font-semibold ${
+                            tx.status === 'Completed' ||
+                            tx.status === 'Approved'
+                              ? 'bg-emerald-950 text-emerald-400 border border-emerald-800/40'
+                              : tx.status === 'Applied'
+                              ? 'bg-amber-950 text-amber-400 border border-amber-800/40'
+                              : 'bg-slate-800 text-slate-300'
+                          }">
                             ${tx.status}
                           </span>
 
                         </td>
 
-                        <td class="py-3 text-slate-400 text-[11px]">
+                        <td class="py-3 text-slate-400">
                           ${
                             tx.created_at
                               ? tx.created_at.substring(0, 10)
@@ -1086,31 +1035,22 @@ async function renderUserDashboard() {
             </div>
 
 
-
-            <!-- ================================================= -->
             <!-- PROPERTIES -->
-            <!-- ================================================= -->
-
-            <div class="luxury-card p-6 w-full">
+            <div class="luxury-card p-5 sm:p-6">
 
               <div class="flex items-center justify-between mb-5">
 
                 <div class="flex items-center gap-2">
-
-                  <i
-                    data-lucide="building"
-                    class="w-4 h-4 text-amber-400"
-                  ></i>
+                  <i data-lucide="building" class="w-4 h-4 text-amber-400"></i>
 
                   <h3 class="text-sm font-bold text-white">
                     Properties
                   </h3>
-
                 </div>
 
                 <button
                   onclick="navigate('#/properties')"
-                  class="text-xs font-semibold text-slate-300 hover:text-amber-400 whitespace-nowrap"
+                  class="text-[11px] font-semibold text-slate-300 hover:text-amber-400"
                 >
                   View All
                 </button>
@@ -1118,16 +1058,13 @@ async function renderUserDashboard() {
               </div>
 
 
-              <!-- PROPERTY GRID -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
                 ${properties.map(p => `
 
-                  <div
-                    class="bg-[#0e1118]/95 border border-[#1f2636] rounded-xl overflow-hidden group w-full"
-                  >
+                  <div class="bg-[#0d1119]/95 border border-[#1f2636] rounded-xl overflow-hidden">
 
-                    <div class="h-32 overflow-hidden relative">
+                    <div class="h-32 overflow-hidden">
 
                       <img
                         src="${
@@ -1135,11 +1072,10 @@ async function renderUserDashboard() {
                           'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=600&q=80'
                         }"
                         alt="${p.title}"
-                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        class="w-full h-full object-cover"
                       />
 
                     </div>
-
 
                     <div class="p-4">
 
@@ -1147,7 +1083,7 @@ async function renderUserDashboard() {
                         ${p.title}
                       </h4>
 
-                      <p class="text-[11px] text-slate-400 mb-2 truncate">
+                      <p class="text-[11px] text-slate-400 truncate mb-2">
                         ${p.location}
                       </p>
 
@@ -1177,6 +1113,7 @@ async function renderUserDashboard() {
         </div>
 
       </main>
+
     </div>
   `;
 }
