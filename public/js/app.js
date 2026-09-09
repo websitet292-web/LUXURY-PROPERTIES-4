@@ -3297,6 +3297,9 @@ async function renderAdminAuditLogs() {
 // View: Admin User Management
 async function renderAdminUsers() {
   const res = await api('/api/admin/users');
+
+  console.log('ADMIN USERS API RESPONSE:', res);
+
   const users = res.users || [];
 
   return `
