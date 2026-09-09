@@ -138,85 +138,94 @@ function closeModal() {
    POPUP MODALS (Pixel-Perfect recreations of uploaded images)
    ========================================================================= */
 
-// Modal 1: Normal Task Completion - Luxury Property Photo
+// Modal 1: Normal Task Completion - Sri Lankan Luxury Property
 function showNormalTaskModal(rewardAmount = 150, taskNumber = 1) {
   const modalContainer = document.getElementById('modal-container');
   if (!modalContainer) return;
 
-  // 40 different luxury property images
-  const propertyImages = [
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=1',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=2',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=3',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=4',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=5',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=6',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=7',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=8',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=9',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=10',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=11',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=12',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=13',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=14',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=15',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=16',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=17',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=18',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=19',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=20',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=21',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=22',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=23',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=24',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=25',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=26',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=27',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=28',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=29',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=30',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=31',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=32',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=33',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=34',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=35',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=36',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=37',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=38',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=39',
-    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=40'
+  // 40 Sri Lankan luxury property locations
+  const properties = [
+    { location: 'Colombo 7', name: 'Luxury Residence' },
+    { location: 'Mount Lavinia', name: 'Beach Villa' },
+    { location: 'Kandy', name: 'Luxury Hill Villa' },
+    { location: 'Galle', name: 'Heritage Luxury Villa' },
+    { location: 'Nuwara Eliya', name: 'Luxury Estate' },
+    { location: 'Bentota', name: 'Beachfront Villa' },
+    { location: 'Weligama', name: 'Oceanfront Residence' },
+    { location: 'Mirissa', name: 'Luxury Beach Villa' },
+    { location: 'Negombo', name: 'Beachside Luxury Residence' },
+    { location: 'Rajagiriya', name: 'Modern Luxury Residence' },
+    { location: 'Battaramulla', name: 'Premium Family Villa' },
+    { location: 'Kotte', name: 'Luxury Urban Residence' },
+    { location: 'Dehiwala', name: 'Modern Coastal Residence' },
+    { location: 'Nugegoda', name: 'Premium City Villa' },
+    { location: 'Colombo Port City', name: 'Luxury Waterfront Residence' },
+    { location: 'Kalutara', name: 'Luxury Beach Villa' },
+    { location: 'Beruwala', name: 'Oceanfront Luxury Villa' },
+    { location: 'Hikkaduwa', name: 'Premium Beach Residence' },
+    { location: 'Unawatuna', name: 'Luxury Coastal Villa' },
+    { location: 'Ella', name: 'Luxury Mountain Villa' },
+    { location: 'Dambulla', name: 'Luxury Nature Villa' },
+    { location: 'Sigiriya', name: 'Luxury Heritage Villa' },
+    { location: 'Polonnaruwa', name: 'Luxury Garden Residence' },
+    { location: 'Anuradhapura', name: 'Premium Estate Villa' },
+    { location: 'Trincomalee', name: 'Luxury Ocean Villa' },
+    { location: 'Pasikuda', name: 'Beachfront Luxury Residence' },
+    { location: 'Arugam Bay', name: 'Luxury Coastal Villa' },
+    { location: 'Tangalle', name: 'Private Beach Villa' },
+    { location: 'Matara', name: 'Luxury Ocean Residence' },
+    { location: 'Habarana', name: 'Luxury Nature Retreat' },
+    { location: 'Kurunegala', name: 'Premium Luxury Villa' },
+    { location: 'Ratnapura', name: 'Luxury Garden Estate' },
+    { location: 'Badulla', name: 'Hill Country Luxury Villa' },
+    { location: 'Hatton', name: 'Luxury Tea Estate Villa' },
+    { location: 'Kalpitiya', name: 'Luxury Lagoon Villa' },
+    { location: 'Chilaw', name: 'Premium Coastal Residence' },
+    { location: 'Avissawella', name: 'Luxury Green Estate' },
+    { location: 'Wattala', name: 'Modern Luxury Residence' },
+    { location: 'Moratuwa', name: 'Premium Coastal Residence' },
+    { location: 'Panadura', name: 'Luxury Beach Residence' }
   ];
 
-  const imageIndex = Math.max(
-    0,
-    Math.min(propertyImages.length - 1, Number(taskNumber || 1) - 1)
-  );
+  const property = properties[
+    Math.max(
+      0,
+      Math.min(properties.length - 1, Number(taskNumber || 1) - 1)
+    )
+  ];
 
-  const propertyImage = propertyImages[imageIndex];
+  // Different luxury-property image for each task
+  const propertyImage =
+    `https://loremflickr.com/900/600/luxury,villa,srilanka?lock=${taskNumber}`;
 
   modalContainer.innerHTML = `
     <div class="modal-overlay">
       <div class="luxury-card border border-amber-500/30 w-full max-w-sm p-4 sm:p-6 text-center relative overflow-hidden bg-[#11141c] shadow-2xl rounded-2xl animate-pop-in">
 
-        <!-- Luxury Property Image -->
+        <!-- Sri Lankan Luxury Property Image -->
         <div class="relative w-full h-48 sm:h-52 rounded-xl overflow-hidden mb-5 border border-amber-500/30 shadow-xl">
+
           <img
             src="${propertyImage}"
-            alt="Luxury Property"
+            alt="${property.name} - ${property.location}, Sri Lanka"
             class="w-full h-full object-cover"
             loading="eager"
           />
 
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
 
-          <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-            <span class="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-sm border border-amber-400/30 text-amber-300 text-[10px] font-bold uppercase tracking-wider">
-              Luxury Property
-            </span>
+          <div class="absolute bottom-3 left-3 right-3">
+            <div class="flex items-center justify-between gap-2">
 
-            <span class="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-sm text-white text-[10px] font-semibold">
-              Task #${taskNumber}
-            </span>
+              <span class="px-2.5 py-1 rounded-md bg-black/65 backdrop-blur-sm border border-amber-400/30 text-amber-300 text-[10px] font-bold uppercase tracking-wider">
+                🇱🇰 Sri Lanka
+              </span>
+
+              <span class="px-2.5 py-1 rounded-md bg-black/65 backdrop-blur-sm text-white text-[10px] font-semibold">
+                Task #${taskNumber}
+              </span>
+
+            </div>
           </div>
         </div>
 
@@ -226,6 +235,21 @@ function showNormalTaskModal(rewardAmount = 150, taskNumber = 1) {
         <div class="coin-particle" style="bottom: 25%; left: 10%; animation-delay: 2s;">🪙</div>
         <div class="coin-particle" style="bottom: 18%; right: 8%; animation-delay: 1.5s;">✨</div>
 
+        <!-- Property Location -->
+        <div class="mb-4">
+          <div class="text-[10px] text-amber-400 font-bold uppercase tracking-[0.2em] mb-1">
+            Luxury Property
+          </div>
+
+          <h3 class="text-lg font-extrabold text-white">
+            ${property.name}
+          </h3>
+
+          <p class="text-xs text-slate-400 mt-1">
+            📍 ${property.location}, Sri Lanka
+          </p>
+        </div>
+
         <!-- Completion Badge -->
         <div class="inline-block bg-[#0e3a24] border border-[#166534] text-[#4ade80] text-[11px] font-bold tracking-wider px-3.5 py-1 rounded-md uppercase mb-4">
           NORMAL TASK COMPLETION
@@ -234,9 +258,21 @@ function showNormalTaskModal(rewardAmount = 150, taskNumber = 1) {
         <!-- Check Icon -->
         <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-b from-[#f3e5ab] via-[#d4af37] to-[#8c6214] p-1 shadow-[0_0_25px_rgba(212,175,55,0.4)] flex items-center justify-center">
           <div class="w-full h-full rounded-full bg-gradient-to-tr from-[#996515] to-[#f5d77f] flex items-center justify-center border-2 border-[#ffecb3]">
-            <svg class="w-8 h-8 text-[#241704]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+
+            <svg
+              class="w-8 h-8 text-[#241704]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              stroke-width="3.5"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M5 13l4 4L19 7"
+              ></path>
             </svg>
+
           </div>
         </div>
 
@@ -246,7 +282,7 @@ function showNormalTaskModal(rewardAmount = 150, taskNumber = 1) {
         </h3>
 
         <p class="text-xs text-slate-300 mb-5">
-          Congratulations! Luxury property task completed successfully.
+          Congratulations! Your Sri Lankan luxury property task was completed successfully.
         </p>
 
         <!-- Reward -->
