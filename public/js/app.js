@@ -3301,7 +3301,9 @@ async function renderAdminUsers() {
   console.log('ADMIN USERS API RESPONSE:', res);
 
   const users = res.users || [];
-
+  
+  console.log('ADMIN USERS COUNT:', users.length);
+  
   return `
     <div class="min-h-screen bg-[#07090d] flex">
       <div class="hidden lg:block">${renderAdminSidebar('#/admin/users')}</div>
