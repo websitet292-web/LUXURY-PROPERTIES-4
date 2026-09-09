@@ -2873,6 +2873,208 @@ async function saveTaskRangeConfig() {
   } catch (err) {}
 }
 
+// ==========================================
+// User-Specific Task Settings
+// ==========================================
+
+let taskSettingUsers = [];
+
+// Load users for task settings
+async function loadTaskSettingUsers() {
+  try {
+    const res = await api('/api/admin/users');
+
+    if (!res.success) {
+      throw new Error(res.message || 'Failed to load users');
+    }
+
+    taskSettingUsers = res.users || [];
+
+    renderTaskSettingUserOptions(taskSettingUsers);
+
+  } catch (err) {
+    console.error('Load task setting users error:', err);
+
+    const select = document.getElementById('user-task-select');
+
+    if (select) {
+      select.innerHTML = `
+        <option value="">Failed to load users</option>
+      `;
+    }
+  }
+}
+
+
+// Render user dropdown
+function renderTaskSettingUserOptions(users) {
+  const select = document.getElementById('user-task-select');
+
+  if (!select) return;
+
+  if (!users.length) {
+    select.innerHTML = `
+      <option value="">No users found</option>
+    `;
+    return;
+  }
+
+  select.innerHTML = `
+    <option value="">Select a user...</option>
+    ${users.map(user => `
+      <option value="${user.id}">
+        ${user.username || user.name || 'User'} 
+        ${user.email ? `— ${user.email}` : ''}
+      </option>
+    `).join('')}
+  `;
+}
+
+
+// Search / filter users
+function filterTaskSettingUsers() {
+  const input = document.getElementById('user-task-search');
+
+  if (!input) return;
+
+  const term = input.value.trim().toLowerCase();
+
+  const filtered = taskSettingUsers.filter(user => {
+    const username = (user.username || '').toLowerCase();
+    const email = (user.email || '').toLowerCase();
+    const name = (user.name || '').toLowerCase();
+
+    return (
+      username.includes(term) ||
+      email.includes(term) ||
+      name.includes(term)
+    );
+  });
+
+  renderTaskSettingUserOptions(filtered);
+}
+
+
+// Load selected user's current task limit
+function loadSelectedUserTaskLimit() {
+  const select = document.getElementById('user-task-select');
+  const input = document.getElementById('user-task-limit');
+
+  if (!select || !input) return;
+
+  const userId = parseInt(select.value, 10);
+
+  if (!userId) {
+    input.value = 0;
+    return;
+  }
+
+  const user = taskSettingUsers.find(
+    u => Number(u.id) === userId
+  );
+
+  if (!user) {
+    input.value = 0;
+    return;
+  }
+
+  input.value = Number(user.custom_task_limit || 0);
+}
+
+
+// Save selected user's task limit
+async function saveUserTaskLimit() {
+  const select = document.getElementById('user-task-select');
+  const input = document.getElementById('user-task-limit');
+  const message = document.getElementById('user-task-settings-message');
+
+  if (!select || !input) return;
+
+  const userId = parseInt(select.value, 10);
+
+  if (!userId) {
+    alert('Please select a user first.');
+    return;
+  }
+
+  let taskLimit = parseInt(input.value, 10);
+
+  if (isNaN(taskLimit)) {
+    taskLimit = 0;
+  }
+
+  taskLimit = Math.max(0, Math.min(40, taskLimit));
+
+  input.value = taskLimit;
+
+  try {
+    const res = await api(`/api/admin/users/${userId}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        custom_task_limit: taskLimit
+      })
+    });
+
+    if (!res.success) {
+      throw new Error(
+        res.message || 'Failed to save task limit'
+      );
+    }
+
+    // Update local user data
+    const user = taskSettingUsers.find(
+      u => Number(u.id) === userId
+    );
+
+    if (user) {
+      user.custom_task_limit = taskLimit;
+    }
+
+    if (message) {
+      message.className =
+        'text-[11px] rounded-xl p-3 bg-green-500/10 border border-green-500/20 text-green-400';
+
+      message.textContent =
+        `Task limit saved successfully: ${taskLimit} tasks`;
+
+      message.classList.remove('hidden');
+    }
+
+  } catch (err) {
+    console.error('Save task limit error:', err);
+
+    if (message) {
+      message.className =
+        'text-[11px] rounded-xl p-3 bg-red-500/10 border border-red-500/20 text-red-400';
+
+      message.textContent =
+        err.message || 'Failed to save task limit';
+
+      message.classList.remove('hidden');
+    }
+  }
+}
+
+
+// Reset selected user's task limit to 0
+async function resetUserTaskLimit() {
+  const select = document.getElementById('user-task-select');
+  const input = document.getElementById('user-task-limit');
+
+  if (!select || !input) return;
+
+  const userId = parseInt(select.value, 10);
+
+  if (!userId) {
+    alert('Please select a user first.');
+    return;
+  }
+
+  input.value = 0;
+
+  await saveUserTaskLimit();
+}
+
 // View: Admin Deposit Management
 async function renderAdminDeposits() {
   const res = await api('/api/admin/deposits');
@@ -3413,14 +3615,13 @@ if (currentRoute === '#/signup') {
     else html = await renderAdminDashboard();
 
     app.innerHTML = html;
-    if (window.lucide) lucide.createIcons();
-    return;
-  }
+if (window.lucide) lucide.createIcons();
 
-// User Routes Protection
-if (!state.token || state.role !== 'user') {
-  navigate('#/login');
-  return;
+if (currentRoute === '#/admin/task-range') {
+  loadTaskSettingUsers();
+}
+
+return;
 }
 
 let html = '';
