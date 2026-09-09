@@ -138,54 +138,136 @@ function closeModal() {
    POPUP MODALS (Pixel-Perfect recreations of uploaded images)
    ========================================================================= */
 
-// Modal 1: Normal Task Completion (Image 1)
-function showNormalTaskModal(rewardAmount = 150) {
+// Modal 1: Normal Task Completion - Luxury Property Photo
+function showNormalTaskModal(rewardAmount = 150, taskNumber = 1) {
   const modalContainer = document.getElementById('modal-container');
   if (!modalContainer) return;
 
+  // 40 different luxury property images
+  const propertyImages = [
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=1',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=2',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=3',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=4',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=5',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=6',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=7',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=8',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=9',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=10',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=11',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=12',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=13',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=14',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=15',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=16',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=17',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=18',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=19',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=20',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=21',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=22',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=23',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=24',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=25',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=26',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=27',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=28',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=29',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=30',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=31',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=32',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=33',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=34',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=35',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=36',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=37',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=38',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=39',
+    'https://loremflickr.com/900/600/luxury,villa,realestate?lock=40'
+  ];
+
+  const imageIndex = Math.max(
+    0,
+    Math.min(propertyImages.length - 1, Number(taskNumber || 1) - 1)
+  );
+
+  const propertyImage = propertyImages[imageIndex];
+
   modalContainer.innerHTML = `
     <div class="modal-overlay">
-      <div class="luxury-card border border-amber-500/30 w-full max-w-sm p-6 text-center relative overflow-hidden bg-[#11141c] shadow-2xl rounded-2xl animate-pop-in">
-        
-        <!-- Floating Gold Coins and Confetti Particles -->
-        <div class="coin-particle" style="top: 15%; left: 8%;">🪙</div>
-        <div class="coin-particle" style="top: 25%; right: 10%; animation-delay: 1s;">✨</div>
-        <div class="coin-particle" style="top: 45%; left: 12%; animation-delay: 2s;">🪙</div>
-        <div class="coin-particle" style="top: 60%; right: 8%; animation-delay: 1.5s;">🪙</div>
-        <div class="coin-particle" style="bottom: 20%; left: 15%; animation-delay: 2.5s;">✨</div>
+      <div class="luxury-card border border-amber-500/30 w-full max-w-sm p-4 sm:p-6 text-center relative overflow-hidden bg-[#11141c] shadow-2xl rounded-2xl animate-pop-in">
 
-        <!-- Top Badge: NORMAL TASK COMPLETION -->
-        <div class="inline-block bg-[#0e3a24] border border-[#166534] text-[#4ade80] text-[11px] font-bold tracking-wider px-3.5 py-1 rounded-md uppercase mb-6">
+        <!-- Luxury Property Image -->
+        <div class="relative w-full h-48 sm:h-52 rounded-xl overflow-hidden mb-5 border border-amber-500/30 shadow-xl">
+          <img
+            src="${propertyImage}"
+            alt="Luxury Property"
+            class="w-full h-full object-cover"
+            loading="eager"
+          />
+
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"></div>
+
+          <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+            <span class="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-sm border border-amber-400/30 text-amber-300 text-[10px] font-bold uppercase tracking-wider">
+              Luxury Property
+            </span>
+
+            <span class="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-sm text-white text-[10px] font-semibold">
+              Task #${taskNumber}
+            </span>
+          </div>
+        </div>
+
+        <!-- Floating Gold Particles -->
+        <div class="coin-particle" style="top: 18%; left: 6%;">🪙</div>
+        <div class="coin-particle" style="top: 30%; right: 8%; animation-delay: 1s;">✨</div>
+        <div class="coin-particle" style="bottom: 25%; left: 10%; animation-delay: 2s;">🪙</div>
+        <div class="coin-particle" style="bottom: 18%; right: 8%; animation-delay: 1.5s;">✨</div>
+
+        <!-- Completion Badge -->
+        <div class="inline-block bg-[#0e3a24] border border-[#166534] text-[#4ade80] text-[11px] font-bold tracking-wider px-3.5 py-1 rounded-md uppercase mb-4">
           NORMAL TASK COMPLETION
         </div>
 
-        <!-- 3D Gold Medal / Checkmark Icon -->
-        <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-b from-[#f3e5ab] via-[#d4af37] to-[#8c6214] p-1 shadow-[0_0_25px_rgba(212,175,55,0.4)] flex items-center justify-center">
+        <!-- Check Icon -->
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-b from-[#f3e5ab] via-[#d4af37] to-[#8c6214] p-1 shadow-[0_0_25px_rgba(212,175,55,0.4)] flex items-center justify-center">
           <div class="w-full h-full rounded-full bg-gradient-to-tr from-[#996515] to-[#f5d77f] flex items-center justify-center border-2 border-[#ffecb3]">
-            <svg class="w-10 h-10 text-[#241704]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3.5">
+            <svg class="w-8 h-8 text-[#241704]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
             </svg>
           </div>
         </div>
 
         <!-- Title -->
-        <h3 class="text-2xl font-bold text-white mb-1 flex items-center justify-center gap-1.5">
-          <span>🎉</span> Task Completed!
+        <h3 class="text-2xl font-bold text-white mb-1">
+          🎉 Task Completed!
         </h3>
-        <p class="text-xs text-slate-300 mb-6">Great Job! You have completed the task.</p>
 
-        <!-- Glowing Gold Pill with + LKR 150 -->
+        <p class="text-xs text-slate-300 mb-5">
+          Congratulations! Luxury property task completed successfully.
+        </p>
+
+        <!-- Reward -->
         <div class="glow-pill-gold py-3 px-6 mx-auto mb-4 inline-block w-full rounded-xl">
-          <span class="text-xl font-extrabold text-[#065f46] tracking-wide">+ LKR ${rewardAmount}</span>
+          <span class="text-xl font-extrabold text-[#065f46] tracking-wide">
+            + LKR ${rewardAmount}
+          </span>
         </div>
 
-        <!-- Notification Subtext -->
-        <p class="text-xs text-slate-400 mb-6">The amount has been added to your balance.</p>
+        <p class="text-xs text-slate-400 mb-6">
+          The reward has been added to your balance.
+        </p>
 
-        <!-- Continue Button -->
-        <button onclick="closeModal(); render();" class="btn-gold w-full py-3 text-sm font-bold tracking-wide">
+        <!-- Continue -->
+        <button
+          onclick="closeModal(); render();"
+          class="btn-gold w-full py-3 text-sm font-bold tracking-wide"
+        >
           Continue
         </button>
+
       </div>
     </div>
   `;
@@ -1299,30 +1381,37 @@ async function renderUserTasks() {
   `;
 }
 
-// Complete Task Handler (Calls API, Triggers Appropriate Modal)
+// Complete Task Handler
 async function handleCompleteTask(taskNumber) {
   const btn = document.getElementById(`task-btn-${taskNumber}`);
+
   if (btn) {
     btn.disabled = true;
     btn.innerHTML = `<span class="inline-block animate-spin mr-1">⌛</span> Processing...`;
   }
 
   try {
-    const res = await api(`/api/user/tasks/${taskNumber}/complete`, { method: 'POST' });
-    
+    const res = await api(`/api/user/tasks/${taskNumber}/complete`, {
+      method: 'POST'
+    });
+
     setTimeout(() => {
       if (res.isTriggerTask) {
-        // Show Luxury Property Reward Modal (Image 2)
+        // KEEP NEGATIVE BALANCE / TRIGGER TASK LOGIC UNCHANGED
         showLuxuryRewardModal(res.triggerAmount);
       } else {
-        // Show Normal Task Completion Modal (Image 1)
-        showNormalTaskModal(res.rewardAmount || 150);
+        // NORMAL TASK ONLY
+        showNormalTaskModal(
+          res.rewardAmount || 150,
+          taskNumber
+        );
       }
     }, 400);
+
   } catch (err) {
     if (btn) {
       btn.disabled = false;
-      btn.innerHTML = `Complete Task`;
+      btn.innerHTML = `Complete Task #${taskNumber}`;
     }
   }
 }
