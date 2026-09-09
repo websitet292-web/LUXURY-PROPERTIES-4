@@ -115,6 +115,9 @@ router.get('/users', async (req, res) => {
     const { search, status } = req.query;
     let users = [];
 
+    console.log('ADMIN DB MODE:', db.isNative);
+    console.log('ADMIN DB USERS CHECK START');
+
     if (db.isNative) {
       let query = `SELECT id, username, email, phone, name, status, balance, negative_balance, total_deposit, total_earnings, total_withdrawn, custom_trigger_task, custom_negative_amount, created_at, updated_at FROM users WHERE 1=1`;
       const params = [];
