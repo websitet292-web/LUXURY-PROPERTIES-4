@@ -147,25 +147,26 @@ async function initDatabase() {
     `);
 
     await runSql(`
-      CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE NOT NULL,
-        email TEXT UNIQUE NOT NULL,
-        password_hash TEXT NOT NULL,
-        phone TEXT,
-        name TEXT,
-        status TEXT DEFAULT 'active',
-        balance REAL DEFAULT 25750.00,
-        negative_balance REAL DEFAULT 100.00,
-        total_deposit REAL DEFAULT 50000.00,
-        total_earnings REAL DEFAULT 7350.00,
-        total_withdrawn REAL DEFAULT 0.00,
-        custom_trigger_task INTEGER DEFAULT NULL,
-        custom_negative_amount REAL DEFAULT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
+    CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT UNIQUE NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      password_hash TEXT NOT NULL,
+      phone TEXT,
+      name TEXT,
+      status TEXT DEFAULT 'active',
+      balance REAL DEFAULT 25750.00,
+      negative_balance REAL DEFAULT 100.00,
+      total_deposit REAL DEFAULT 50000.00,
+      total_earnings REAL DEFAULT 7350.00,
+      total_withdrawn REAL DEFAULT 0.00,
+      custom_trigger_task INTEGER DEFAULT NULL,
+      custom_negative_amount REAL DEFAULT NULL,
+      custom_task_limit INTEGER DEFAULT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
 
     await runSql(`
       CREATE TABLE IF NOT EXISTS system_settings (
