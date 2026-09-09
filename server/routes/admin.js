@@ -116,7 +116,28 @@ router.get('/users', async (req, res) => {
     let users = [];
 
     if (db.isNative) {
-      let query = `SELECT id, username, email, phone, name, status, balance, negative_balance, total_deposit, total_earnings, total_withdrawn, custom_trigger_task, custom_negative_amount, created_at, updated_at FROM users WHERE 1=1`;
+      let query = `
+        SELECT
+          id,
+          username,
+          email,
+          phone,
+          name,
+          status,
+          balance,
+          negative_balance,
+          total_deposit,
+          total_earnings,
+          total_withdrawn,
+          custom_trigger_task,
+          custom_negative_amount,
+          custom_task_limit,
+          created_at,
+          updated_at
+        FROM users
+        WHERE 1=1
+      `;
+
       const params = [];
 
       if (search) {
@@ -124,34 +145,59 @@ router.get('/users', async (req, res) => {
         const term = `%${search}%`;
         params.push(term, term, term);
       }
+
       if (status) {
         query += ` AND status = ?`;
         params.push(status);
       }
+
       query += ` ORDER BY id DESC`;
-     users = await db.all(query, params);
-console.log('[ADMIN USERS] PostgreSQL users count:', users.length);
+
+      users = await db.all(query, params);
+
+      console.log(
+        '[ADMIN USERS] PostgreSQL users count:',
+        users.length
+      );
+
     } else {
       users = fileStore.data.users.map(u => {
         const { password_hash, ...safe } = u;
         return safe;
       });
+
       if (search) {
         const term = search.toLowerCase();
-        users = users.filter(u => 
-          u.username.toLowerCase().includes(term) || 
-          u.email.toLowerCase().includes(term) || 
+
+        users = users.filter(u =>
+          (u.username && u.username.toLowerCase().includes(term)) ||
+          (u.email && u.email.toLowerCase().includes(term)) ||
           (u.name && u.name.toLowerCase().includes(term))
         );
       }
+
       if (status) {
-        users = users.filter(u => u.status === status);
+        users = users.filter(
+          u => u.status === status
+        );
       }
     }
 
-    res.json({ success: true, users });
+    res.json({
+      success: true,
+      users
+    });
+
   } catch (err) {
-    res.status(500).json({ success: false, message: 'Failed to fetch users' });
+    console.error(
+      'Admin users fetch error:',
+      err
+    );
+
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch users'
+    });
   }
 });
 
