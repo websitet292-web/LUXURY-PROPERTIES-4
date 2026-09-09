@@ -208,47 +208,173 @@ router.post('/users', async (req, res) => {
 router.put('/users/:id', async (req, res) => {
   try {
     const userId = parseInt(req.params.id, 10);
-    const { name, phone, status, balance, negative_balance, custom_trigger_task, custom_negative_amount } = req.body;
+
+    const {
+      name,
+      phone,
+      status,
+      balance,
+      negative_balance,
+      custom_trigger_task,
+      custom_negative_amount,
+      custom_task_limit
+    } = req.body;
 
     let user;
+
     if (db.isNative) {
-      user = await db.get(`SELECT * FROM users WHERE id = ?`, [userId]);
+      user = await db.get(
+        `SELECT * FROM users WHERE id = ?`,
+        [userId]
+      );
     } else {
       user = fileStore.data.users.find(u => u.id === userId);
     }
 
     if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
     }
 
-    const newStatus = status || user.status;
-    const newBal = balance !== undefined ? parseFloat(balance) : user.balance;
-    const newNeg = negative_balance !== undefined ? parseFloat(negative_balance) : user.negative_balance;
-    const newTrig = custom_trigger_task !== undefined ? (custom_trigger_task ? parseInt(custom_trigger_task, 10) : null) : user.custom_trigger_task;
-    const newNegAmt = custom_negative_amount !== undefined ? (custom_negative_amount ? parseFloat(custom_negative_amount) : null) : user.custom_negative_amount;
+    // Existing user settings
+    const newStatus =
+      status || user.status;
 
+    const newBal =
+      balance !== undefined
+        ? parseFloat(balance)
+        : user.balance;
+
+    const newNeg =
+      negative_balance !== undefined
+        ? parseFloat(negative_balance)
+        : user.negative_balance;
+
+    const newTrig =
+      custom_trigger_task !== undefined
+        ? (custom_trigger_task
+            ? parseInt(custom_trigger_task, 10)
+            : null)
+        : user.custom_trigger_task;
+
+    const newNegAmt =
+      custom_negative_amount !== undefined
+        ? (custom_negative_amount
+            ? parseFloat(custom_negative_amount)
+            : null)
+        : user.custom_negative_amount;
+
+    // User-specific task limit
+    // Allowed range: 0 - 40
+    const newTaskLimit =
+      custom_task_limit !== undefined
+        ? Math.max(
+            0,
+            Math.min(
+              40,
+              parseInt(custom_task_limit, 10) || 0
+            )
+          )
+        : (user.custom_task_limit ?? 0);
+
+    // Native SQLite database
     if (db.isNative) {
       await db.run(
-        `UPDATE users SET name = ?, phone = ?, status = ?, balance = ?, negative_balance = ?, custom_trigger_task = ?, custom_negative_amount = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-        [name || user.name, phone !== undefined ? phone : user.phone, newStatus, newBal, newNeg, newTrig, newNegAmt, userId]
+        `UPDATE users
+         SET
+           name = ?,
+           phone = ?,
+           status = ?,
+           balance = ?,
+           negative_balance = ?,
+           custom_trigger_task = ?,
+           custom_negative_amount = ?,
+           custom_task_limit = ?,
+           updated_at = CURRENT_TIMESTAMP
+         WHERE id = ?`,
+        [
+          name || user.name,
+          phone !== undefined ? phone : user.phone,
+          newStatus,
+          newBal,
+          newNeg,
+          newTrig,
+          newNegAmt,
+          newTaskLimit,
+          userId
+        ]
       );
-    } else {
-      user.name = name || user.name;
-      user.phone = phone !== undefined ? phone : user.phone;
-      user.status = newStatus;
-      user.balance = newBal;
-      user.negative_balance = newNeg;
-      user.custom_trigger_task = newTrig;
-      user.custom_negative_amount = newNegAmt;
-      user.updated_at = new Date().toISOString();
+    }
+
+    // File-store database
+    else {
+      user.name =
+        name || user.name;
+
+      user.phone =
+        phone !== undefined
+          ? phone
+          : user.phone;
+
+      user.status =
+        newStatus;
+
+      user.balance =
+        newBal;
+
+      user.negative_balance =
+        newNeg;
+
+      user.custom_trigger_task =
+        newTrig;
+
+      user.custom_negative_amount =
+        newNegAmt;
+
+      user.custom_task_limit =
+        newTaskLimit;
+
+      user.updated_at =
+        new Date().toISOString();
+
       fileStore.save();
     }
 
-    await logAudit(req.admin.id, req.admin.name, 'Update User Info', 'User Profile', JSON.stringify({ status: user.status, balance: user.balance }), JSON.stringify({ status: newStatus, balance: newBal }), userId, 'Admin edit user');
+    await logAudit(
+      req.admin.id,
+      req.admin.name,
+      'Update User Info',
+      'User Profile',
+      JSON.stringify({
+        status: user.status,
+        balance: user.balance,
+        custom_task_limit: user.custom_task_limit
+      }),
+      JSON.stringify({
+        status: newStatus,
+        balance: newBal,
+        custom_task_limit: newTaskLimit
+      }),
+      userId,
+      'Admin edit user'
+    );
 
-    res.json({ success: true, message: 'User details updated successfully' });
+    res.json({
+      success: true,
+      message: 'User details updated successfully',
+      custom_task_limit: newTaskLimit
+    });
+
   } catch (err) {
-    res.status(500).json({ success: false, message: 'Failed to update user' });
+    console.error('Update User Error:', err);
+
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update user',
+      error: err.message
+    });
   }
 });
 
