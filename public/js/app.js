@@ -3301,25 +3301,36 @@ async function renderAdminUsers() {
   console.log('ADMIN USERS API RESPONSE:', res);
 
   const users = res.users || [];
-  
+
   console.log('ADMIN USERS COUNT:', users.length);
   console.log('ADMIN USERS HTML TEST:', users.map(u => u.name).join(', '));
-  return `
+
+  const html = `
     <div class="min-h-screen bg-[#07090d] flex">
-      <div class="hidden lg:block">${renderAdminSidebar('#/admin/users')}</div>
-      <div id="mobile-sidebar" class="sidebar-drawer lg:hidden ${state.sidebarOpen ? 'open' : ''}">${renderAdminSidebar('#/admin/users')}</div>
+      <div class="hidden lg:block">
+        ${renderAdminSidebar('#/admin/users')}
+      </div>
+
+      <div id="mobile-sidebar" class="sidebar-drawer lg:hidden ${state.sidebarOpen ? 'open' : ''}">
+        ${renderAdminSidebar('#/admin/users')}
+      </div>
 
       <main class="flex-1 p-5 md:p-8 max-w-7xl mx-auto overflow-y-auto">
+
         <header class="flex items-center justify-between pb-6 border-b border-[#1f2636]/60 mb-6">
           <div>
             <h2 class="text-xl font-bold text-white">User Management 👥</h2>
-            <p class="text-xs text-slate-400">Search, view balances, suspend/activate, and configure individual user limits.</p>
+            <p class="text-xs text-slate-400">
+              Search, view balances, suspend/activate, and configure individual user limits.
+            </p>
           </div>
         </header>
 
         <div class="luxury-card p-6">
           <div class="overflow-x-auto">
+
             <table class="w-full text-left text-xs">
+
               <thead>
                 <tr class="text-slate-400 border-b border-[#1f2636]">
                   <th class="pb-2">User Details</th>
@@ -3331,40 +3342,93 @@ async function renderAdminUsers() {
                   <th class="pb-2 text-right">Actions</th>
                 </tr>
               </thead>
+
               <tbody class="divide-y divide-[#1f2636]/60">
+
                 ${users.map(u => `
                   <tr>
+
                     <td class="py-3">
-                      <div class="font-bold text-white">${u.name || u.username}</div>
-                      <div class="text-[11px] text-slate-400">${u.email} | ${u.phone || 'No phone'}</div>
+                      <div class="font-bold text-white">
+                        ${u.name || u.username || 'Unknown User'}
+                      </div>
+
+                      <div class="text-[11px] text-slate-400">
+                        ${u.email || 'No email'} |
+                        ${u.phone || 'No phone'}
+                      </div>
                     </td>
-                    <td class="py-3 font-bold text-emerald-400">${formatLKR(u.balance)}</td>
-                    <td class="py-3 font-bold ${u.negative_balance > 0 ? 'text-red-400' : 'text-slate-400'}">
-                      ${u.negative_balance > 0 ? '- ' + formatLKR(u.negative_balance) : 'LKR 0.00'}
+
+                    <td class="py-3 font-bold text-emerald-400">
+                      ${formatLKR(u.balance || 0)}
                     </td>
-                    <td class="py-3 text-blue-400">${formatLKR(u.total_deposit)}</td>
-                    <td class="py-3 text-amber-400">${formatLKR(u.total_withdrawn || 0)}</td>
+
+                    <td class="py-3 font-bold ${
+                      Number(u.negative_balance || 0) > 0
+                        ? 'text-red-400'
+                        : 'text-slate-400'
+                    }">
+                      ${
+                        Number(u.negative_balance || 0) > 0
+                          ? '- ' + formatLKR(u.negative_balance)
+                          : 'LKR 0.00'
+                      }
+                    </td>
+
+                    <td class="py-3 text-blue-400">
+                      ${formatLKR(u.total_deposit || 0)}
+                    </td>
+
+                    <td class="py-3 text-amber-400">
+                      ${formatLKR(u.total_withdrawn || 0)}
+                    </td>
+
                     <td class="py-3">
-                      <span class="px-2 py-0.5 rounded text-[10px] font-semibold ${u.status === 'active' ? 'bg-emerald-950 text-emerald-400' : 'bg-red-950 text-red-400'}">
-                        ${u.status.toUpperCase()}
+                      <span class="px-2 py-0.5 rounded text-[10px] font-semibold ${
+                        u.status === 'active'
+                          ? 'bg-emerald-950 text-emerald-400'
+                          : 'bg-red-950 text-red-400'
+                      }">
+                        ${(u.status || 'unknown').toUpperCase()}
                       </span>
                     </td>
+
                     <td class="py-3 text-right">
-                      <button onclick="toggleUserStatus(${u.id}, '${u.status === 'active' ? 'suspended' : 'active'}')" class="px-3 py-1 rounded text-[11px] font-bold ${
-                        u.status === 'active' ? 'bg-red-950 text-red-300 hover:bg-red-900' : 'bg-emerald-950 text-emerald-300 hover:bg-emerald-900'
-                      }">
+
+                      <button
+                        onclick="toggleUserStatus(${u.id}, '${u.status === 'active' ? 'suspended' : 'active'}')"
+                        class="px-3 py-1 rounded text-[11px] font-bold ${
+                          u.status === 'active'
+                            ? 'bg-red-950 text-red-300 hover:bg-red-900'
+                            : 'bg-emerald-950 text-emerald-300 hover:bg-emerald-900'
+                        }"
+                      >
                         ${u.status === 'active' ? 'Suspend' : 'Activate'}
                       </button>
+
                     </td>
+
                   </tr>
                 `).join('')}
+
               </tbody>
+
             </table>
+
           </div>
         </div>
+
       </main>
     </div>
   `;
+
+  console.log('ADMIN USERS HTML LENGTH:', html.length);
+  console.log(
+    'ADMIN USERS HTML HAS SURESH:',
+    html.includes('Suresh Perera')
+  );
+
+  return html;
 }
 
 async function toggleUserStatus(userId, newStatus) {
