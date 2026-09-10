@@ -2352,7 +2352,11 @@ async function resetUserTaskLimit() {
     alert('Please select a user first.');
     return;
   }
-
+  
+window.resetUserTaskLimit = resetUserTaskLimit;
+window.saveUserTaskLimit = saveUserTaskLimit;
+window.loadSelectedUserTaskLimit = loadSelectedUserTaskLimit;
+  
   const confirmed = confirm(
     'Reset this user’s completed tasks?\n\n' +
     'Task progress will become 0 and the user can start again from Task 1.\n\n' +
