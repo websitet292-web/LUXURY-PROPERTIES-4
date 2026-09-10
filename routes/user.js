@@ -187,22 +187,63 @@ router.post('/tasks/:taskNumber/complete', authenticateUser, async (req, res) =>
     const taskNum = parseInt(req.params.taskNumber, 10);
 
     let user;
+
     if (db.isNative) {
-      user = await db.get(`SELECT * FROM users WHERE id = ?`, [userId]);
+      user = await db.get(
+        `SELECT * FROM users WHERE id = ?`,
+        [userId]
+      );
     } else {
-      user = fileStore.data.users.find(u => u.id === userId);
+      user = fileStore.data.users.find(
+        u => u.id === userId
+      );
     }
 
-    const maxTasks = parseInt(user.custom_task_limit || await getSetting('max_tasks', '10'), 10);
-    const triggerTask = parseInt(user.custom_trigger_task || await getSetting('negative_trigger_task', '5'), 10);
-    const defaultReward = parseFloat(await getSetting('default_task_reward', '150'));
-    const negAmount = parseFloat(user.custom_negative_amount || await getSetting('negative_balance_amount', '100'));
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    const maxTasks = parseInt(
+      user.custom_task_limit ||
+      await getSetting('max_tasks', '10'),
+      10
+    );
+
+    const triggerTask = parseInt(
+      user.custom_trigger_task ||
+      await getSetting('negative_trigger_task', '5'),
+      10
+    );
+
+    // USER-SPECIFIC TASK REWARD
+    // If custom reward exists, use it.
+    // Otherwise use global Default Task Reward.
+    const globalReward = parseFloat(
+      await getSetting('default_task_reward', '150')
+    );
+
+    const taskReward =
+      user.custom_task_reward !== null &&
+      user.custom_task_reward !== undefined
+        ? parseFloat(user.custom_task_reward)
+        : globalReward;
+
+    const negAmount = parseFloat(
+      user.custom_negative_amount ||
+      await getSetting('negative_balance_amount', '100')
+    );
 
     if (taskNum < 1 || taskNum > maxTasks) {
-      return res.status(400).json({ success: false, message: `Invalid task number. Must be between 1 and ${maxTasks}.` });
+      return res.status(400).json({
+        success: false,
+        message: `Invalid task number. Must be between 1 and ${maxTasks}.`
+      });
     }
 
-    // Check Lockout: If user has negative balance and trying to do task > triggerTask
+    // Check Lockout
     if (user.negative_balance > 0 && taskNum > triggerTask) {
       return res.status(403).json({
         success: false,
@@ -213,151 +254,437 @@ router.post('/tasks/:taskNumber/complete', authenticateUser, async (req, res) =>
 
     // Check if task already completed
     let existingRecord;
+
     if (db.isNative) {
-      existingRecord = await db.get(`SELECT * FROM user_tasks WHERE user_id = ? AND task_number = ? AND status = 'completed'`, [userId, taskNum]);
+      existingRecord = await db.get(
+        `SELECT * FROM user_tasks
+         WHERE user_id = ?
+         AND task_number = ?
+         AND status = 'completed'`,
+        [userId, taskNum]
+      );
     } else {
-      existingRecord = fileStore.data.user_tasks.find(ut => ut.user_id === userId && ut.task_number === taskNum && ut.status === 'completed');
+      existingRecord = fileStore.data.user_tasks.find(
+        ut =>
+          ut.user_id === userId &&
+          ut.task_number === taskNum &&
+          ut.status === 'completed'
+      );
     }
 
     if (existingRecord) {
-      return res.status(400).json({ success: false, message: `Task ${taskNum} has already been completed.` });
+      return res.status(400).json({
+        success: false,
+        message: `Task ${taskNum} has already been completed.`
+      });
     }
 
-    // Apply Task Reward
-    const newBalance = user.balance + defaultReward;
-    const newEarnings = user.total_earnings + defaultReward;
-    const nowIso = new Date().toISOString();
-    const nowSql = new Date().toISOString().replace('T', ' ').substring(0, 19);
+    // Apply USER-SPECIFIC Task Reward
+    const newBalance =
+      Number(user.balance || 0) + taskReward;
+
+    const newEarnings =
+      Number(user.total_earnings || 0) + taskReward;
+
+    const nowIso =
+      new Date().toISOString();
+
+    const nowSql =
+      new Date()
+        .toISOString()
+        .replace('T', ' ')
+        .substring(0, 19);
 
     // Check Trigger Task Condition
-    const isTrigger = (taskNum === triggerTask);
+    const isTrigger =
+      taskNum === triggerTask;
+
     let triggerApplied = false;
-    let finalNegativeBalance = user.negative_balance;
+
+    let finalNegativeBalance =
+      Number(user.negative_balance || 0);
 
     if (isTrigger) {
+
       // Check deduplication
       let alreadyTriggered = false;
+
       if (db.isNative) {
-        const trigCheck = await db.get(`SELECT negative_triggered FROM user_tasks WHERE user_id = ? AND task_number = ?`, [userId, taskNum]);
-        if (trigCheck && trigCheck.negative_triggered === 1) alreadyTriggered = true;
+
+        const trigCheck = await db.get(
+          `SELECT negative_triggered
+           FROM user_tasks
+           WHERE user_id = ?
+           AND task_number = ?`,
+          [userId, taskNum]
+        );
+
+        if (
+          trigCheck &&
+          trigCheck.negative_triggered === 1
+        ) {
+          alreadyTriggered = true;
+        }
+
       } else {
-        const trigCheck = fileStore.data.user_tasks.find(ut => ut.user_id === userId && ut.task_number === taskNum);
-        if (trigCheck && trigCheck.negative_triggered === 1) alreadyTriggered = true;
+
+        const trigCheck =
+          fileStore.data.user_tasks.find(
+            ut =>
+              ut.user_id === userId &&
+              ut.task_number === taskNum
+          );
+
+        if (
+          trigCheck &&
+          trigCheck.negative_triggered === 1
+        ) {
+          alreadyTriggered = true;
+        }
       }
 
       if (!alreadyTriggered) {
         triggerApplied = true;
-        finalNegativeBalance = Math.abs(negAmount); // Set negative balance owed
+
+        finalNegativeBalance =
+          Math.abs(negAmount);
       }
     }
 
-    // Update User Record & UserTasks in DB
-    const txIdReward = generateTxId();
-    const txIdNeg = generateTxId();
+    // Transaction IDs
+    const txIdReward =
+      generateTxId();
+
+    const txIdNeg =
+      generateTxId();
 
     if (db.isNative) {
+
       // Update User
       await db.run(
-        `UPDATE users SET balance = ?, total_earnings = ?, negative_balance = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-        [newBalance, newEarnings, finalNegativeBalance, userId]
+        `UPDATE users
+         SET
+           balance = ?,
+           total_earnings = ?,
+           negative_balance = ?,
+           updated_at = CURRENT_TIMESTAMP
+         WHERE id = ?`,
+        [
+          newBalance,
+          newEarnings,
+          finalNegativeBalance,
+          userId
+        ]
       );
 
       // Record or update user_tasks
-      const utRow = await db.get(`SELECT id FROM user_tasks WHERE user_id = ? AND task_number = ?`, [userId, taskNum]);
+      const utRow = await db.get(
+        `SELECT id
+         FROM user_tasks
+         WHERE user_id = ?
+         AND task_number = ?`,
+        [userId, taskNum]
+      );
+
       if (utRow) {
+
         await db.run(
-          `UPDATE user_tasks SET status = 'completed', completed_at = ?, reward_credited = ?, negative_triggered = ? WHERE id = ?`,
-          [nowSql, defaultReward, triggerApplied ? 1 : 0, utRow.id]
+          `UPDATE user_tasks
+           SET
+             status = 'completed',
+             completed_at = ?,
+             reward_credited = ?,
+             negative_triggered = ?
+           WHERE id = ?`,
+          [
+            nowSql,
+            taskReward,
+            triggerApplied ? 1 : 0,
+            utRow.id
+          ]
         );
+
       } else {
+
         await db.run(
-          `INSERT INTO user_tasks (user_id, task_id, task_number, status, completed_at, reward_credited, negative_triggered)
+          `INSERT INTO user_tasks
+           (
+             user_id,
+             task_id,
+             task_number,
+             status,
+             completed_at,
+             reward_credited,
+             negative_triggered
+           )
            VALUES (?, ?, ?, 'completed', ?, ?, ?)`,
-          [userId, taskNum, taskNum, nowSql, defaultReward, triggerApplied ? 1 : 0]
+          [
+            userId,
+            taskNum,
+            taskNum,
+            nowSql,
+            taskReward,
+            triggerApplied ? 1 : 0
+          ]
         );
       }
 
       // Add Reward Transaction
       await db.run(
-        `INSERT INTO transactions (id, user_id, type, description, amount, balance_after, status, created_by, created_at)
-         VALUES (?, ?, 'Task Reward', ?, ?, ?, 'Completed', 'System', ?)`,
-        [txIdReward, userId, `Task ${taskNum} Completed`, defaultReward, newBalance, nowSql]
+        `INSERT INTO transactions
+         (
+           id,
+           user_id,
+           type,
+           description,
+           amount,
+           balance_after,
+           status,
+           created_by,
+           created_at
+         )
+         VALUES
+         (
+           ?,
+           ?,
+           'Task Reward',
+           ?,
+           ?,
+           ?,
+           'Completed',
+           'System',
+           ?
+         )`,
+        [
+          txIdReward,
+          userId,
+          `Task ${taskNum} Completed`,
+          taskReward,
+          newBalance,
+          nowSql
+        ]
       );
 
       // If Triggered, Add Negative Balance Transaction
       if (triggerApplied) {
+
         await db.run(
-          `INSERT INTO transactions (id, user_id, type, description, amount, balance_after, status, created_by, created_at)
-           VALUES (?, ?, 'Admin Adjustment', 'Negative Balance Applied', ?, ?, 'Applied', 'System Trigger', ?)`,
-          [txIdNeg, userId, -finalNegativeBalance, -finalNegativeBalance, nowSql]
+          `INSERT INTO transactions
+           (
+             id,
+             user_id,
+             type,
+             description,
+             amount,
+             balance_after,
+             status,
+             created_by,
+             created_at
+           )
+           VALUES
+           (
+             ?,
+             ?,
+             'Admin Adjustment',
+             'Negative Balance Applied',
+             ?,
+             ?,
+             'Applied',
+             'System Trigger',
+             ?
+           )`,
+          [
+            txIdNeg,
+            userId,
+            -finalNegativeBalance,
+            -finalNegativeBalance,
+            nowSql
+          ]
         );
 
-        // Record in negative_balance_records
+        // Record negative balance
         await db.run(
-          `INSERT INTO negative_balance_records (user_id, previous_amount, new_amount, delta, reason, admin_id)
-           VALUES (?, ?, ?, ?, 'Automated Milestone Task Trigger', 1)`,
-          [userId, user.negative_balance, finalNegativeBalance, finalNegativeBalance - user.negative_balance]
+          `INSERT INTO negative_balance_records
+           (
+             user_id,
+             previous_amount,
+             new_amount,
+             delta,
+             reason,
+             admin_id
+           )
+           VALUES
+           (
+             ?,
+             ?,
+             ?,
+             ?,
+             'Automated Milestone Task Trigger',
+             1
+           )`,
+          [
+            userId,
+            user.negative_balance,
+            finalNegativeBalance,
+            finalNegativeBalance -
+              user.negative_balance
+          ]
         );
       }
-    } else {
-      user.balance = newBalance;
-      user.total_earnings = newEarnings;
-      user.negative_balance = finalNegativeBalance;
-      user.updated_at = nowIso;
 
-      let ut = fileStore.data.user_tasks.find(u => u.user_id === userId && u.task_number === taskNum);
+    } else {
+
+      // File store fallback
+      user.balance =
+        newBalance;
+
+      user.total_earnings =
+        newEarnings;
+
+      user.negative_balance =
+        finalNegativeBalance;
+
+      user.updated_at =
+        nowIso;
+
+      let ut =
+        fileStore.data.user_tasks.find(
+          u =>
+            u.user_id === userId &&
+            u.task_number === taskNum
+        );
+
       if (ut) {
-        ut.status = 'completed';
-        ut.completed_at = nowIso;
-        ut.reward_credited = defaultReward;
-        if (triggerApplied) ut.negative_triggered = 1;
+
+        ut.status =
+          'completed';
+
+        ut.completed_at =
+          nowIso;
+
+        ut.reward_credited =
+          taskReward;
+
+        if (triggerApplied) {
+          ut.negative_triggered = 1;
+        }
+
       } else {
+
         fileStore.data.user_tasks.push({
-          id: fileStore.data.user_tasks.length + 1,
-          user_id: userId,
-          task_id: taskNum,
-          task_number: taskNum,
-          status: 'completed',
-          completed_at: nowIso,
-          reward_credited: defaultReward,
-          negative_triggered: triggerApplied ? 1 : 0
+          id:
+            fileStore.data.user_tasks.length + 1,
+
+          user_id:
+            userId,
+
+          task_id:
+            taskNum,
+
+          task_number:
+            taskNum,
+
+          status:
+            'completed',
+
+          completed_at:
+            nowIso,
+
+          reward_credited:
+            taskReward,
+
+          negative_triggered:
+            triggerApplied ? 1 : 0
         });
       }
 
+      // Reward transaction
       fileStore.data.transactions.push({
-        id: txIdReward,
-        user_id: userId,
-        type: 'Task Reward',
-        description: `Task ${taskNum} Completed`,
-        amount: defaultReward,
-        balance_after: newBalance,
-        status: 'Completed',
-        created_by: 'System',
-        created_at: nowIso
+        id:
+          txIdReward,
+
+        user_id:
+          userId,
+
+        type:
+          'Task Reward',
+
+        description:
+          `Task ${taskNum} Completed`,
+
+        amount:
+          taskReward,
+
+        balance_after:
+          newBalance,
+
+        status:
+          'Completed',
+
+        created_by:
+          'System',
+
+        created_at:
+          nowIso
       });
 
+      // Negative balance transaction
       if (triggerApplied) {
+
         fileStore.data.transactions.push({
-          id: txIdNeg,
-          user_id: userId,
-          type: 'Admin Adjustment',
-          description: 'Negative Balance Applied',
-          amount: -finalNegativeBalance,
-          balance_after: -finalNegativeBalance,
-          status: 'Applied',
-          created_by: 'System Trigger',
-          created_at: nowIso
+          id:
+            txIdNeg,
+
+          user_id:
+            userId,
+
+          type:
+            'Admin Adjustment',
+
+          description:
+            'Negative Balance Applied',
+
+          amount:
+            -finalNegativeBalance,
+
+          balance_after:
+            -finalNegativeBalance,
+
+          status:
+            'Applied',
+
+          created_by:
+            'System Trigger',
+
+          created_at:
+            nowIso
         });
 
         fileStore.data.negative_balance_records.push({
-          id: fileStore.data.negative_balance_records.length + 1,
-          user_id: userId,
-          previous_amount: 0,
-          new_amount: finalNegativeBalance,
-          delta: finalNegativeBalance,
-          reason: 'Automated Milestone Task Trigger',
-          admin_id: 1,
-          created_at: nowIso
+          id:
+            fileStore.data.negative_balance_records.length + 1,
+
+          user_id:
+            userId,
+
+          previous_amount:
+            Number(user.negative_balance || 0),
+
+          new_amount:
+            finalNegativeBalance,
+
+          delta:
+            finalNegativeBalance -
+            Number(user.negative_balance || 0),
+
+          reason:
+            'Automated Milestone Task Trigger',
+
+          admin_id:
+            1,
+
+          created_at:
+            nowIso
         });
       }
 
@@ -366,20 +693,48 @@ router.post('/tasks/:taskNumber/complete', authenticateUser, async (req, res) =>
 
     res.json({
       success: true,
-      taskNumber: taskNum,
-      rewardAmount: defaultReward,
-      isTriggerTask: isTrigger && triggerApplied,
-      triggerAmount: finalNegativeBalance,
-      isLockedNow: (finalNegativeBalance > 0),
-      balance: newBalance,
-      negativeBalance: finalNegativeBalance,
-      message: isTrigger && triggerApplied 
-        ? 'Special Luxury Property Reward Task Completed! Milestone negative balance applied.'
-        : `Task ${taskNum} completed successfully! + LKR ${defaultReward} added to balance.`
+
+      taskNumber:
+        taskNum,
+
+      rewardAmount:
+        taskReward,
+
+      isTriggerTask:
+        isTrigger && triggerApplied,
+
+      triggerAmount:
+        finalNegativeBalance,
+
+      isLockedNow:
+        finalNegativeBalance > 0,
+
+      balance:
+        newBalance,
+
+      negativeBalance:
+        finalNegativeBalance,
+
+      message:
+        isTrigger && triggerApplied
+          ? 'Special Luxury Property Reward Task Completed! Milestone negative balance applied.'
+          : `Task ${taskNum} completed successfully! + LKR ${taskReward} added to balance.`
     });
+
   } catch (err) {
-    console.error('Task complete error:', err);
-    res.status(500).json({ success: false, message: 'Server error completing task' });
+
+    console.error(
+      'Task complete error:',
+      err
+    );
+
+    res.status(500).json({
+      success: false,
+      message:
+        'Server error completing task',
+      error:
+        err.message
+    });
   }
 });
 
