@@ -2705,56 +2705,6 @@ async function renderAdminTaskRange() {
           </p>
         </header>
 
-        <!-- EXISTING TASK RANGE CARD -->
-        <div class="luxury-card p-6 max-w-lg">
-          <div class="space-y-5 text-xs">
-
-            <div>
-              <label class="block text-slate-300 font-bold mb-1">
-                Maximum Tasks (0–50)
-              </label>
-
-              <select
-                id="cfg-max-tasks"
-                class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-white font-bold focus:border-amber-500 focus:outline-none"
-              >
-                <option value="10" ${s.max_tasks === 10 ? 'selected' : ''}>10 Tasks</option>
-                <option value="20" ${s.max_tasks === 20 ? 'selected' : ''}>20 Tasks</option>
-                <option value="30" ${s.max_tasks === 30 ? 'selected' : ''}>30 Tasks</option>
-                <option value="40" ${s.max_tasks === 40 ? 'selected' : ''}>40 Tasks</option>
-                <option value="50" ${s.max_tasks === 50 ? 'selected' : ''}>50 Tasks (Maximum)</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="block text-slate-300 font-bold mb-1">
-                Default Task Reward (LKR)
-              </label>
-
-              <input
-                id="cfg-task-reward"
-                type="number"
-                value="${s.default_task_reward}"
-                class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-white font-bold focus:border-amber-500 focus:outline-none"
-              />
-
-              <p class="text-[11px] text-slate-400 mt-1">
-                Default: RS 150 per completed task.
-              </p>
-            </div>
-
-            <div class="pt-4 border-t border-[#1f2636]">
-              <button
-                onclick="saveTaskRangeConfig()"
-                class="btn-gold py-3 px-8 text-xs font-bold"
-              >
-                Save Task Settings to Database
-              </button>
-            </div>
-
-          </div>
-        </div>
-
 
         <!-- USER-SPECIFIC TASK SETTINGS -->
         <div class="luxury-card p-6 max-w-lg mt-6">
@@ -2875,22 +2825,6 @@ async function renderAdminTaskRange() {
   `;
 }
 
-async function saveTaskRangeConfig() {
-  const maxTasks = document.getElementById('cfg-max-tasks')?.value;
-  const reward = document.getElementById('cfg-task-reward')?.value;
-
-  try {
-    await api('/api/admin/config', {
-      method: 'POST',
-      body: JSON.stringify({
-        max_tasks: parseInt(maxTasks, 10),
-        default_task_reward: parseFloat(reward)
-      })
-    });
-    showToast('Task settings saved permanently!', 'success');
-    render();
-  } catch (err) {}
-}
 
 // ==========================================
 // User-Specific Task Settings
@@ -2974,17 +2908,19 @@ function filterTaskSettingUsers() {
 }
 
 
-// Load selected user's current task limit
+// Load selected user's current task limit + reward
 function loadSelectedUserTaskLimit() {
   const select = document.getElementById('user-task-select');
   const input = document.getElementById('user-task-limit');
+  const rewardInput = document.getElementById('user-task-reward');
 
-  if (!select || !input) return;
+  if (!select || !input || !rewardInput) return;
 
   const userId = parseInt(select.value, 10);
 
   if (!userId) {
     input.value = 0;
+    rewardInput.value = 150;
     return;
   }
 
@@ -2994,10 +2930,21 @@ function loadSelectedUserTaskLimit() {
 
   if (!user) {
     input.value = 0;
+    rewardInput.value = 150;
     return;
   }
 
-  input.value = Number(user.custom_task_limit || 0);
+  input.value =
+    user.custom_task_limit !== null &&
+    user.custom_task_limit !== undefined
+      ? user.custom_task_limit
+      : 0;
+
+  rewardInput.value =
+    user.custom_task_reward !== null &&
+    user.custom_task_reward !== undefined
+      ? user.custom_task_reward
+      : 150;
 }
 
 // Save selected user's task limit + reward
