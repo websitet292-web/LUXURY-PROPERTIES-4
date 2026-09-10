@@ -139,10 +139,28 @@ router.get('/tasks', authenticateUser, async (req, res) => {
       user = fileStore.data.users.find(u => u.id === userId);
     }
 
-    const maxTasks = parseInt(user.custom_task_limit || await getSetting('max_tasks', '10'), 10);
-    const triggerTask = parseInt(user.custom_trigger_task || await getSetting('negative_trigger_task', '5'), 10);
-    const defaultReward = parseFloat(await getSetting('default_task_reward', '150'));
-    const negAmount = parseFloat(user.custom_negative_amount || await getSetting('negative_balance_amount', '100'));
+    const maxTasks = parseInt(
+  user.custom_task_limit || await getSetting('max_tasks', '10'),
+  10
+);
+
+const hasCustomNegativeConfig =
+  user.custom_trigger_task !== null &&
+  user.custom_trigger_task !== undefined &&
+  user.custom_negative_amount !== null &&
+  user.custom_negative_amount !== undefined;
+
+const triggerTask = hasCustomNegativeConfig
+  ? parseInt(user.custom_trigger_task, 10)
+  : null;
+
+const defaultReward = parseFloat(
+  await getSetting('default_task_reward', '150')
+);
+
+const negAmount = hasCustomNegativeConfig
+  ? parseFloat(user.custom_negative_amount)
+  : 0;
 
     let userTaskRecords = [];
     if (db.isNative) {
@@ -155,13 +173,17 @@ router.get('/tasks', authenticateUser, async (req, res) => {
     const completedCount = completedNumbers.size;
 
     // Check if user is locked out due to negative balance
-    const isLocked = (user.negative_balance > 0) && (completedCount >= triggerTask);
+    const isLocked =
+  triggerTask !== null &&
+  (user.negative_balance > 0) &&
+  (completedCount >= triggerTask);
 
     // Build task list 1 to maxTasks
     const taskList = [];
     for (let i = 1; i <= maxTasks; i++) {
       const isDone = completedNumbers.has(i);
-      const isTrigger = (i === triggerTask);
+      const isTrigger =
+  triggerTask !== null && i === triggerTask;
       
       // Determine playable state
       // Task 1 is available if not completed. Subsequent task i is available if task i-1 is done AND not locked.
@@ -172,11 +194,15 @@ router.get('/tasks', authenticateUser, async (req, res) => {
         } else if (completedNumbers.has(i - 1)) {
           // If previous task is completed, can we play?
           // If we passed triggerTask and negative balance > 0, we are locked!
-          if (i > triggerTask && user.negative_balance > 0) {
-            canPlay = false; // BLOCKED!
-          } else {
-            canPlay = true;
-          }
+          if (
+  triggerTask !== null &&
+  i > triggerTask &&
+  user.negative_balance > 0
+) {
+  canPlay = false; // BLOCKED!
+} else {
+  canPlay = true;
+}
         }
       }
 
@@ -239,11 +265,15 @@ router.post('/tasks/:taskNumber/complete', authenticateUser, async (req, res) =>
       10
     );
 
-    const triggerTask = parseInt(
-      user.custom_trigger_task ||
-      await getSetting('negative_trigger_task', '5'),
-      10
-    );
+    const hasCustomNegativeConfig =
+  user.custom_trigger_task !== null &&
+  user.custom_trigger_task !== undefined &&
+  user.custom_negative_amount !== null &&
+  user.custom_negative_amount !== undefined;
+
+const triggerTask = hasCustomNegativeConfig
+  ? parseInt(user.custom_trigger_task, 10)
+  : null;
 
     // USER-SPECIFIC TASK REWARD
     // If custom reward exists, use it.
@@ -258,10 +288,9 @@ router.post('/tasks/:taskNumber/complete', authenticateUser, async (req, res) =>
         ? parseFloat(user.custom_task_reward)
         : globalReward;
 
-    const negAmount = parseFloat(
-      user.custom_negative_amount ||
-      await getSetting('negative_balance_amount', '100')
-    );
+    const negAmount = hasCustomNegativeConfig
+  ? parseFloat(user.custom_negative_amount)
+  : 0;
 
     if (taskNum < 1 || taskNum > maxTasks) {
       return res.status(400).json({
@@ -270,8 +299,12 @@ router.post('/tasks/:taskNumber/complete', authenticateUser, async (req, res) =>
       });
     }
 
-    // Check Lockout
-    if (user.negative_balance > 0 && taskNum > triggerTask) {
+   // Check Lockout
+if (
+  triggerTask !== null &&
+  user.negative_balance > 0 &&
+  taskNum > triggerTask
+) {
       return res.status(403).json({
         success: false,
         isLocked: true,
