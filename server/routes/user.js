@@ -203,7 +203,15 @@ router.post('/tasks/:taskNumber/complete', authenticateUser, async (req, res) =>
 
     const maxTasks = parseInt(user.custom_task_limit || await getSetting('max_tasks', '10'), 10);
     const triggerTask = parseInt(user.custom_trigger_task || await getSetting('negative_trigger_task', '5'), 10);
-    const defaultReward = parseFloat(await getSetting('default_task_reward', '150'));
+    const globalReward = parseFloat(
+  await getSetting('default_task_reward', '150')
+);
+
+const defaultReward =
+  user.custom_task_reward !== null &&
+  user.custom_task_reward !== undefined
+    ? parseFloat(user.custom_task_reward)
+    : globalReward;
     const negAmount = parseFloat(user.custom_negative_amount || await getSetting('negative_balance_amount', '100'));
 
     if (taskNum < 1 || taskNum > maxTasks) {
