@@ -3092,6 +3092,64 @@ async function saveUserTaskLimit() {
   }
 }
 
+// Reset ONLY user's completed task progress
+async function resetUserTaskLimit() {
+  const select = document.getElementById('user-task-select');
+  const message = document.getElementById('user-task-settings-message');
+
+  if (!select) return;
+
+  const userId = parseInt(select.value, 10);
+
+  if (!userId) {
+    alert('Please select a user first.');
+    return;
+  }
+
+  const confirmed = confirm(
+    'Reset this user’s completed tasks?\n\n' +
+    'Task progress will become 0 and the user can start again from Task 1.\n\n' +
+    'The saved task limit, reward, balance, earnings, deposits and withdrawals will NOT be changed.'
+  );
+
+  if (!confirmed) return;
+
+  try {
+    const res = await api(`/api/admin/users/${userId}/tasks/reset`, {
+      method: 'POST'
+    });
+
+    if (!res.success) {
+      throw new Error(
+        res.message || 'Failed to reset task progress'
+      );
+    }
+
+    if (message) {
+      message.className =
+        'text-[11px] rounded-xl p-3 bg-green-500/10 border border-green-500/20 text-green-400';
+
+      message.textContent =
+        'Task progress reset successfully. User can start again from Task 1.';
+
+      message.classList.remove('hidden');
+    }
+
+  } catch (err) {
+    console.error('Reset task progress error:', err);
+
+    if (message) {
+      message.className =
+        'text-[11px] rounded-xl p-3 bg-red-500/10 border border-red-500/20 text-red-400';
+
+      message.textContent =
+        err.message || 'Failed to reset task progress';
+
+      message.classList.remove('hidden');
+    }
+  }
+}
+
 window.resetUserTaskLimit = resetUserTaskLimit;
 window.saveUserTaskLimit = saveUserTaskLimit;
 window.loadSelectedUserTaskLimit = loadSelectedUserTaskLimit;
