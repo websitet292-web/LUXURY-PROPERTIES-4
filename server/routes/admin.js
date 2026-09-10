@@ -263,7 +263,8 @@ router.put('/users/:id', async (req, res) => {
       negative_balance,
       custom_trigger_task,
       custom_negative_amount,
-      custom_task_limit
+      custom_task_limit,
+       custom_task_reward
     } = req.body;
 
     let user;
@@ -324,7 +325,17 @@ router.put('/users/:id', async (req, res) => {
             )
           )
         : (user.custom_task_limit ?? 0);
-
+    
+// User-specific task reward
+const newTaskReward =
+  custom_task_reward !== undefined
+    ? Math.max(
+        0,
+        parseFloat(custom_task_reward) || 0
+      )
+    : (user.custom_task_reward ?? null);
+    
+    
     // Native SQLite database
     if (db.isNative) {
       await db.run(
@@ -338,6 +349,7 @@ router.put('/users/:id', async (req, res) => {
            custom_trigger_task = ?,
            custom_negative_amount = ?,
            custom_task_limit = ?,
+           custom_task_reward = ?,
            updated_at = CURRENT_TIMESTAMP
          WHERE id = ?`,
         [
@@ -349,6 +361,7 @@ router.put('/users/:id', async (req, res) => {
           newTrig,
           newNegAmt,
           newTaskLimit,
+          newTaskReward,
           userId
         ]
       );
@@ -382,6 +395,9 @@ router.put('/users/:id', async (req, res) => {
       user.custom_task_limit =
         newTaskLimit;
 
+     user.custom_task_reward =
+      newTaskReward;
+      
       user.updated_at =
         new Date().toISOString();
 
@@ -408,10 +424,11 @@ router.put('/users/:id', async (req, res) => {
     );
 
     res.json({
-      success: true,
-      message: 'User details updated successfully',
-      custom_task_limit: newTaskLimit
-    });
+  success: true,
+  message: 'User details updated successfully',
+  custom_task_limit: newTaskLimit,
+  custom_task_reward: newTaskReward
+});
 
   } catch (err) {
     console.error('Update User Error:', err);
