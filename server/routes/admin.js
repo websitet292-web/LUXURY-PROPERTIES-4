@@ -424,6 +424,111 @@ router.put('/users/:id', async (req, res) => {
   }
 });
 
+// Reset ONLY a user's task progress
+// This does NOT change task limit, balance, earnings,
+// deposits, withdrawals, or negative balance.
+router.post('/users/:id/tasks/reset', async (req, res) => {
+  try {
+    const userId = parseInt(req.params.id, 10);
+
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid user ID'
+      });
+    }
+
+    // Check that the user exists
+    let user;
+
+    if (db.isNative) {
+      user = await db.get(
+        `SELECT id, username, name, custom_task_limit
+         FROM users
+         WHERE id = ?`,
+        [userId]
+      );
+    } else {
+      user = fileStore.data.users.find(
+        u => Number(u.id) === userId
+      );
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    let deletedCount = 0;
+
+    if (db.isNative) {
+      // Delete ONLY this user's task progress
+      const result = await db.run(
+        `DELETE FROM user_tasks WHERE user_id = ?`,
+        [userId]
+      );
+
+      deletedCount = result?.changes || 0;
+
+    } else {
+      // File-store fallback
+      const beforeCount = fileStore.data.user_tasks.length;
+
+      fileStore.data.user_tasks =
+        fileStore.data.user_tasks.filter(
+          ut => Number(ut.user_id) !== userId
+        );
+
+      deletedCount =
+        beforeCount - fileStore.data.user_tasks.length;
+
+      fileStore.save();
+    }
+
+    // Keep the saved task limit unchanged
+    const taskLimit = user.custom_task_limit ?? 0;
+
+    // Audit log
+    await logAudit(
+      req.admin.id,
+      req.admin.name,
+      'Reset User Task Progress',
+      'User Tasks',
+      JSON.stringify({
+        user_id: userId,
+        deleted_task_records: deletedCount
+      }),
+      JSON.stringify({
+        user_id: userId,
+        task_progress: 0,
+        custom_task_limit: taskLimit
+      }),
+      userId,
+      'Admin reset user task progress'
+    );
+
+    res.json({
+      success: true,
+      message: 'User task progress reset successfully.',
+      userId,
+      completed: 0,
+      custom_task_limit: taskLimit,
+      deletedCount
+    });
+
+  } catch (err) {
+    console.error('Reset User Task Progress Error:', err);
+
+    res.status(500).json({
+      success: false,
+      message: 'Failed to reset user task progress',
+      error: err.message
+    });
+  }
+});
+
 // 5. POST: /api/admin/negative-balance/adjust
 router.post('/negative-balance/adjust', async (req, res) => {
   try {
