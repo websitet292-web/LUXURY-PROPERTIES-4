@@ -3092,6 +3092,9 @@ async function saveUserTaskLimit() {
   }
 }
 
+window.resetUserTaskLimit = resetUserTaskLimit;
+window.saveUserTaskLimit = saveUserTaskLimit;
+window.loadSelectedUserTaskLimit = loadSelectedUserTaskLimit;
 
 // View: Admin Deposit Management
 async function renderAdminDeposits() {
