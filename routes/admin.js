@@ -210,128 +210,154 @@ router.post('/users', async (req, res) => {
 router.put('/users/:id', async (req, res) => {
   try {
     const userId = parseInt(req.params.id, 10);
-    const { name, phone, status, balance, negative_balance, custom_trigger_task, custom_negative_amount } = req.body;
+
+    const {
+      name,
+      phone,
+      status,
+      balance,
+      negative_balance,
+      custom_trigger_task,
+      custom_negative_amount,
+      custom_task_limit,
+      custom_task_reward
+    } = req.body;
 
     let user;
+
     if (db.isNative) {
-      user = await db.get(`SELECT * FROM users WHERE id = ?`, [userId]);
+      user = await db.get(
+        `SELECT * FROM users WHERE id = ?`,
+        [userId]
+      );
     } else {
-      user = fileStore.data.users.find(u => u.id === userId);
+      user = fileStore.data.users.find(
+        u => Number(u.id) === userId
+      );
     }
 
     if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
-
-    const newStatus = status || user.status;
-    const newBal = balance !== undefined ? parseFloat(balance) : user.balance;
-    const newNeg = negative_balance !== undefined ? parseFloat(negative_balance) : user.negative_balance;
-    const newTrig = custom_trigger_task !== undefined ? (custom_trigger_task ? parseInt(custom_trigger_task, 10) : null) : user.custom_trigger_task;
-    const newNegAmt = custom_negative_amount !== undefined ? (custom_negative_amount ? parseFloat(custom_negative_amount) : null) : user.custom_negative_amount;
-
-    if (db.isNative) {
-      await db.run(
-        `UPDATE users SET name = ?, phone = ?, status = ?, balance = ?, negative_balance = ?, custom_trigger_task = ?, custom_negative_amount = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-        [name || user.name, phone !== undefined ? phone : user.phone, newStatus, newBal, newNeg, newTrig, newNegAmt, userId]
-      );
-    } else {
-      user.name = name || user.name;
-      user.phone = phone !== undefined ? phone : user.phone;
-      user.status = newStatus;
-      user.balance = newBal;
-      user.negative_balance = newNeg;
-      user.custom_trigger_task = newTrig;
-      user.custom_negative_amount = newNegAmt;
-      user.updated_at = new Date().toISOString();
-      fileStore.save();
-    }
-
-    await logAudit(req.admin.id, req.admin.name, 'Update User Info', 'User Profile', JSON.stringify({ status: user.status, balance: user.balance }), JSON.stringify({ status: newStatus, balance: newBal }), userId, 'Admin edit user');
-
-    res.json({ success: true, message: 'User details updated successfully' });
-  } catch (err) {
-    res.status(500).json({ success: false, message: 'Failed to update user' });
-  }
-});
-
-// 5. POST: /api/admin/negative-balance/adjust
-router.post('/negative-balance/adjust', async (req, res) => {
-  try {
-    const { userId, newAmount, delta, mode, reason } = req.body;
-    // mode can be: 'set', 'increase', 'decrease', 'clear'
-    const targetUserId = parseInt(userId, 10);
-
-    let user;
-    if (db.isNative) {
-      user = await db.get(`SELECT * FROM users WHERE id = ?`, [targetUserId]);
-    } else {
-      user = fileStore.data.users.find(u => u.id === targetUserId);
-    }
-
-    if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
-
-    const prevNeg = user.negative_balance;
-    let targetNeg = prevNeg;
-
-    if (mode === 'clear') {
-      targetNeg = 0.00;
-    } else if (mode === 'set') {
-      targetNeg = Math.max(0, parseFloat(newAmount) || 0);
-    } else if (mode === 'increase') {
-      targetNeg = prevNeg + (parseFloat(delta) || 0);
-    } else if (mode === 'decrease') {
-      targetNeg = Math.max(0, prevNeg - (parseFloat(delta) || 0));
-    } else if (newAmount !== undefined) {
-      targetNeg = Math.max(0, parseFloat(newAmount) || 0);
-    }
-
-    const calculatedDelta = targetNeg - prevNeg;
-    const nowIso = new Date().toISOString();
-    const nowSql = new Date().toISOString().replace('T', ' ').substring(0, 19);
-    const txId = 'TXN-' + Math.floor(10000 + Math.random() * 90000);
-
-    if (db.isNative) {
-      await db.run(`UPDATE users SET negative_balance = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?`, [targetNeg, targetUserId]);
-
-      await db.run(
-        `INSERT INTO negative_balance_records (user_id, previous_amount, new_amount, delta, reason, admin_id)
-         VALUES (?, ?, ?, ?, ?, ?)`,
-        [targetUserId, prevNeg, targetNeg, calculatedDelta, reason || 'Manual Admin Adjustment', req.admin.id]
-      );
-
-      await db.run(
-        `INSERT INTO transactions (id, user_id, type, description, amount, balance_after, status, created_by, created_at)
-         VALUES (?, ?, 'Admin Adjustment', ?, ?, ?, 'Applied', ?, ?)`,
-        [txId, targetUserId, `Negative Balance Adjustment: ${reason || 'Admin action'}`, -targetNeg, -targetNeg, req.admin.name, nowSql]
-      );
-    } else {
-      user.negative_balance = targetNeg;
-      user.updated_at = nowIso;
-
-      fileStore.data.negative_balance_records.push({
-        id: fileStore.data.negative_balance_records.length + 1,
-        user_id: targetUserId,
-        previous_amount: prevNeg,
-        new_amount: targetNeg,
-        delta: calculatedDelta,
-        reason: reason || 'Manual Admin Adjustment',
-        admin_id: req.admin.id,
-        created_at: nowIso
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
       });
+    }
 
-      fileStore.data.transactions.push({
-        id: txId,
-        user_id: targetUserId,
-        type: 'Admin Adjustment',
-        description: `Negative Balance Adjustment: ${reason || 'Admin action'}`,
-        amount: -targetNeg,
-        balance_after: -targetNeg,
-        status: 'Applied',
-        created_by: req.admin.name,
-        created_at: nowIso
-      });
+    const newStatus =
+      status || user.status;
+
+    const newBal =
+      balance !== undefined
+        ? parseFloat(balance)
+        : user.balance;
+
+    const newNeg =
+      negative_balance !== undefined
+        ? parseFloat(negative_balance)
+        : user.negative_balance;
+
+    const newTrig =
+      custom_trigger_task !== undefined
+        ? (
+            custom_trigger_task
+              ? parseInt(custom_trigger_task, 10)
+              : null
+          )
+        : user.custom_trigger_task;
+
+    const newNegAmt =
+      custom_negative_amount !== undefined
+        ? (
+            custom_negative_amount
+              ? parseFloat(custom_negative_amount)
+              : null
+          )
+        : user.custom_negative_amount;
+
+    // Custom task limit
+    const newTaskLimit =
+      custom_task_limit !== undefined
+        ? Math.max(
+            0,
+            Math.min(
+              40,
+              parseInt(custom_task_limit, 10) || 0
+            )
+          )
+        : (user.custom_task_limit ?? 0);
+
+    // Custom task reward
+    const newTaskReward =
+      custom_task_reward !== undefined
+        ? Math.max(
+            0,
+            parseFloat(custom_task_reward) || 0
+          )
+        : (user.custom_task_reward ?? null);
+
+    if (db.isNative) {
+
+      await db.run(
+        `UPDATE users
+         SET
+           name = ?,
+           phone = ?,
+           status = ?,
+           balance = ?,
+           negative_balance = ?,
+           custom_trigger_task = ?,
+           custom_negative_amount = ?,
+           custom_task_limit = ?,
+           custom_task_reward = ?,
+           updated_at = CURRENT_TIMESTAMP
+         WHERE id = ?`,
+        [
+          name || user.name,
+          phone !== undefined ? phone : user.phone,
+          newStatus,
+          newBal,
+          newNeg,
+          newTrig,
+          newNegAmt,
+          newTaskLimit,
+          newTaskReward,
+          userId
+        ]
+      );
+
+    } else {
+
+      user.name =
+        name || user.name;
+
+      user.phone =
+        phone !== undefined
+          ? phone
+          : user.phone;
+
+      user.status =
+        newStatus;
+
+      user.balance =
+        newBal;
+
+      user.negative_balance =
+        newNeg;
+
+      user.custom_trigger_task =
+        newTrig;
+
+      user.custom_negative_amount =
+        newNegAmt;
+
+      user.custom_task_limit =
+        newTaskLimit;
+
+      user.custom_task_reward =
+        newTaskReward;
+
+      user.updated_at =
+        new Date().toISOString();
 
       fileStore.save();
     }
@@ -339,23 +365,40 @@ router.post('/negative-balance/adjust', async (req, res) => {
     await logAudit(
       req.admin.id,
       req.admin.name,
-      'Adjust Negative Balance',
-      'negative_balance',
-      `LKR ${prevNeg.toFixed(2)}`,
-      `LKR ${targetNeg.toFixed(2)}`,
-      targetUserId,
-      reason || 'Admin panel adjustment'
+      'Update User Info',
+      'User Profile',
+      JSON.stringify({
+        status: user.status,
+        balance: user.balance,
+        custom_task_limit: user.custom_task_limit,
+        custom_task_reward: user.custom_task_reward
+      }),
+      JSON.stringify({
+        status: newStatus,
+        balance: newBal,
+        custom_task_limit: newTaskLimit,
+        custom_task_reward: newTaskReward
+      }),
+      userId,
+      'Admin edit user'
     );
 
     res.json({
       success: true,
-      message: `Negative balance updated from LKR ${prevNeg.toFixed(2)} to LKR ${targetNeg.toFixed(2)}`,
-      previousAmount: prevNeg,
-      newAmount: targetNeg
+      message: 'User details updated successfully',
+      custom_task_limit: newTaskLimit,
+      custom_task_reward: newTaskReward
     });
+
   } catch (err) {
-    console.error('Negative balance adjust error:', err);
-    res.status(500).json({ success: false, message: 'Server error adjusting negative balance' });
+
+    console.error('Update User Error:', err);
+
+    res.status(500).json({
+      success: false,
+      message: 'Failed to update user',
+      error: err.message
+    });
   }
 });
 
