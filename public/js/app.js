@@ -2611,51 +2611,110 @@ async function submitNegativeBalanceAdjust() {
   } catch (err) {}
 }
 
-// View: Admin Negative Task Configuration
 async function renderAdminTriggerConfig() {
-  const res = await api('/api/admin/config');
-  const s = res.settings;
+  const res = await api('/api/admin/users');
+  const users = res.users || [];
 
   return `
     <div class="min-h-screen bg-[#07090d] flex">
       <div class="hidden lg:block">${renderAdminSidebar('#/admin/trigger-config')}</div>
-      <div id="mobile-sidebar" class="sidebar-drawer lg:hidden ${state.sidebarOpen ? 'open' : ''}">${renderAdminSidebar('#/admin/trigger-config')}</div>
+      <div id="mobile-sidebar" class="sidebar-drawer lg:hidden ${state.sidebarOpen ? 'open' : ''}">
+        ${renderAdminSidebar('#/admin/trigger-config')}
+      </div>
 
       <main class="flex-1 p-5 md:p-8 max-w-4xl mx-auto overflow-y-auto">
+
         <header class="pb-6 border-b border-[#1f2636]/60 mb-6">
           <h2 class="text-xl font-bold text-white">Negative Task Configuration ⚡</h2>
-          <p class="text-xs text-slate-400">Select which task triggers the negative balance and how much amount is applied.</p>
+          <p class="text-xs text-slate-400">
+            Select a user and configure negative task settings for that user only.
+          </p>
         </header>
 
         <div class="luxury-card p-6">
           <div class="space-y-5 text-xs max-w-lg">
-            
+
+            <!-- Select User -->
             <div>
               <label class="block text-slate-300 font-bold mb-1">
-                Negative Balance Trigger Task (Task 1 to 50)
+                Select User
               </label>
-              <p class="text-slate-400 text-[11px] mb-2">When user completes this task number, the negative balance is automatically applied.</p>
-              <select id="cfg-trigger-task" class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-amber-400 font-bold focus:border-amber-500 focus:outline-none">
-                ${Array.from({ length: 50 }, (_, i) => i + 1).map(n => `
-                  <option value="${n}" ${s.negative_trigger_task === n ? 'selected' : ''}>
-                    Task ${n} ${s.negative_trigger_task === n ? '(Current Active Trigger)' : ''}
+
+              <p class="text-slate-400 text-[11px] mb-2">
+                Negative settings will apply only to the selected user.
+              </p>
+
+              <select
+                id="negative-user-select"
+                onchange="loadSelectedNegativeTaskConfig()"
+                class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-amber-400 font-bold focus:border-amber-500 focus:outline-none"
+              >
+                <option value="">-- Select User --</option>
+
+                ${users.map(u => `
+                  <option value="${u.id}">
+                    ${u.name || u.username || u.email}
+                    ${u.email ? ` — ${u.email}` : ''}
                   </option>
                 `).join('')}
               </select>
             </div>
 
+            <!-- Trigger Task -->
+            <div>
+              <label class="block text-slate-300 font-bold mb-1">
+                Negative Balance Trigger Task (Task 1 to 50)
+              </label>
+
+              <p class="text-slate-400 text-[11px] mb-2">
+                When the selected user completes this task, the negative balance will be applied.
+              </p>
+
+              <select
+                id="cfg-trigger-task"
+                class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-amber-400 font-bold focus:border-amber-500 focus:outline-none"
+              >
+                ${Array.from({ length: 50 }, (_, i) => i + 1).map(n => `
+                  <option value="${n}">
+                    Task ${n}
+                  </option>
+                `).join('')}
+              </select>
+            </div>
+
+            <!-- Negative Amount -->
             <div>
               <label class="block text-slate-300 font-bold mb-1">
                 Trigger Negative Balance Amount (LKR)
               </label>
-              <p class="text-slate-400 text-[11px] mb-2">The negative balance amount added when the trigger task is reached.</p>
-              <input id="cfg-trigger-amount" type="number" value="${s.negative_balance_amount}" class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-white font-bold focus:border-amber-500 focus:outline-none" />
+
+              <p class="text-slate-400 text-[11px] mb-2">
+                This amount will be applied only to the selected user.
+              </p>
+
+              <input
+                id="cfg-trigger-amount"
+                type="number"
+                min="0"
+                value="0"
+                class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-white font-bold focus:border-amber-500 focus:outline-none"
+              />
             </div>
 
-            <div class="pt-4 border-t border-[#1f2636]">
-              <button onclick="saveTriggerConfig()" class="btn-gold py-3 px-8 text-xs font-bold">
-                Save Trigger Configuration to Database
+            <div
+              id="negative-task-settings-message"
+              class="hidden text-[11px] rounded-xl p-3"
+            ></div>
+
+            <div class="pt-4 border-t border-[#1f2636] flex gap-3">
+
+              <button
+                onclick="saveUserNegativeTaskConfig()"
+                class="btn-gold py-3 px-8 text-xs font-bold"
+              >
+                Save User Configuration
               </button>
+
             </div>
 
           </div>
@@ -2664,7 +2723,6 @@ async function renderAdminTriggerConfig() {
     </div>
   `;
 }
-
 async function saveTriggerConfig() {
   const triggerTask = document.getElementById('cfg-trigger-task')?.value;
   const triggerAmt = document.getElementById('cfg-trigger-amount')?.value;
@@ -3100,6 +3158,138 @@ async function resetUserTaskLimit() {
 window.resetUserTaskLimit = resetUserTaskLimit;
 window.saveUserTaskLimit = saveUserTaskLimit;
 window.loadSelectedUserTaskLimit = loadSelectedUserTaskLimit;
+
+// ==========================================
+// User-Specific Negative Task Settings
+// ==========================================
+
+async function loadSelectedNegativeTaskConfig() {
+  const select = document.getElementById('negative-user-select');
+  const triggerInput = document.getElementById('cfg-trigger-task');
+  const amountInput = document.getElementById('cfg-trigger-amount');
+
+  if (!select || !triggerInput || !amountInput) return;
+
+  const userId = parseInt(select.value, 10);
+
+  if (!userId) {
+    triggerInput.value = 1;
+    amountInput.value = 0;
+    return;
+  }
+
+  try {
+    // Get all admin users
+    const res = await api('/api/admin/users');
+    const users = res.users || [];
+
+    const user = users.find(
+      u => Number(u.id) === userId
+    );
+
+    if (!user) {
+      triggerInput.value = 1;
+      amountInput.value = 0;
+      return;
+    }
+
+    triggerInput.value =
+      user.custom_trigger_task !== null &&
+      user.custom_trigger_task !== undefined
+        ? user.custom_trigger_task
+        : 1;
+
+    amountInput.value =
+      user.custom_negative_amount !== null &&
+      user.custom_negative_amount !== undefined
+        ? user.custom_negative_amount
+        : 0;
+
+  } catch (err) {
+    console.error('Load negative task config error:', err);
+  }
+}
+
+
+// Save selected user's negative task configuration
+async function saveUserNegativeTaskConfig() {
+  const select = document.getElementById('negative-user-select');
+  const triggerInput = document.getElementById('cfg-trigger-task');
+  const amountInput = document.getElementById('cfg-trigger-amount');
+  const message = document.getElementById('negative-task-settings-message');
+
+  if (!select || !triggerInput || !amountInput) return;
+
+  const userId = parseInt(select.value, 10);
+
+  if (!userId) {
+    alert('Please select a user first.');
+    return;
+  }
+
+  let triggerTask = parseInt(triggerInput.value, 10);
+
+  if (isNaN(triggerTask)) {
+    triggerTask = 1;
+  }
+
+  triggerTask = Math.max(1, Math.min(50, triggerTask));
+
+  let negativeAmount = parseFloat(amountInput.value);
+
+  if (isNaN(negativeAmount)) {
+    negativeAmount = 0;
+  }
+
+  negativeAmount = Math.max(0, negativeAmount);
+
+  try {
+    const res = await api(`/api/admin/users/${userId}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        custom_trigger_task: triggerTask,
+        custom_negative_amount: negativeAmount
+      })
+    });
+
+    if (!res.success) {
+      throw new Error(
+        res.message || 'Failed to save negative task configuration'
+      );
+    }
+
+    if (message) {
+      message.className =
+        'text-[11px] rounded-xl p-3 bg-green-500/10 border border-green-500/20 text-green-400';
+
+      message.textContent =
+        `Saved for selected user: Task ${triggerTask} → LKR ${negativeAmount.toFixed(2)}`;
+
+      message.classList.remove('hidden');
+    }
+
+  } catch (err) {
+    console.error('Save user negative task config error:', err);
+
+    if (message) {
+      message.className =
+        'text-[11px] rounded-xl p-3 bg-red-500/10 border border-red-500/20 text-red-400';
+
+      message.textContent =
+        err.message || 'Failed to save negative task configuration';
+
+      message.classList.remove('hidden');
+    }
+  }
+}
+
+
+// Make functions available to HTML buttons/select
+window.loadSelectedNegativeTaskConfig =
+  loadSelectedNegativeTaskConfig;
+
+window.saveUserNegativeTaskConfig =
+  saveUserNegativeTaskConfig;
 
 // View: Admin Deposit Management
 async function renderAdminDeposits() {
