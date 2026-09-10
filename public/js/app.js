@@ -2823,6 +2823,25 @@ async function renderAdminTaskRange() {
               </p>
             </div>
 
+<!-- TASK REWARD -->
+<div>
+  <label class="block text-slate-300 font-bold mb-1">
+    Reward Per Task (LKR)
+  </label>
+
+  <input
+    id="user-task-reward"
+    type="number"
+    min="0"
+    step="0.01"
+    value="150"
+    class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-white font-bold focus:border-amber-500 focus:outline-none"
+  />
+
+  <p class="text-[11px] text-slate-400 mt-1">
+    Set how much this user earns for each completed task.
+  </p>
+</div>
 
             <!-- BUTTONS -->
             <div class="pt-4 border-t border-[#1f2636] flex gap-3">
@@ -2981,11 +3000,11 @@ function loadSelectedUserTaskLimit() {
   input.value = Number(user.custom_task_limit || 0);
 }
 
-
-// Save selected user's task limit
+// Save selected user's task limit + reward
 async function saveUserTaskLimit() {
   const select = document.getElementById('user-task-select');
   const input = document.getElementById('user-task-limit');
+  const rewardInput = document.getElementById('user-task-reward');
   const message = document.getElementById('user-task-settings-message');
 
   if (!select || !input) return;
@@ -2997,6 +3016,7 @@ async function saveUserTaskLimit() {
     return;
   }
 
+  // Task limit
   let taskLimit = parseInt(input.value, 10);
 
   if (isNaN(taskLimit)) {
@@ -3007,17 +3027,33 @@ async function saveUserTaskLimit() {
 
   input.value = taskLimit;
 
+  // Reward per task
+  let taskReward = parseFloat(
+    rewardInput ? rewardInput.value : 0
+  );
+
+  if (isNaN(taskReward)) {
+    taskReward = 0;
+  }
+
+  taskReward = Math.max(0, taskReward);
+
+  if (rewardInput) {
+    rewardInput.value = taskReward;
+  }
+
   try {
     const res = await api(`/api/admin/users/${userId}`, {
       method: 'PUT',
       body: JSON.stringify({
-        custom_task_limit: taskLimit
+        custom_task_limit: taskLimit,
+        custom_task_reward: taskReward
       })
     });
 
     if (!res.success) {
       throw new Error(
-        res.message || 'Failed to save task limit'
+        res.message || 'Failed to save user task settings'
       );
     }
 
@@ -3028,6 +3064,7 @@ async function saveUserTaskLimit() {
 
     if (user) {
       user.custom_task_limit = taskLimit;
+      user.custom_task_reward = taskReward;
     }
 
     if (message) {
@@ -3035,96 +3072,26 @@ async function saveUserTaskLimit() {
         'text-[11px] rounded-xl p-3 bg-green-500/10 border border-green-500/20 text-green-400';
 
       message.textContent =
-        `Task limit saved successfully: ${taskLimit} tasks`;
+        `Settings saved successfully: ${taskLimit} tasks × LKR ${taskReward.toFixed(2)} per task`;
 
       message.classList.remove('hidden');
     }
 
   } catch (err) {
-    console.error('Save task limit error:', err);
+    console.error('Save user task settings error:', err);
 
     if (message) {
       message.className =
         'text-[11px] rounded-xl p-3 bg-red-500/10 border border-red-500/20 text-red-400';
 
       message.textContent =
-        err.message || 'Failed to save task limit';
+        err.message || 'Failed to save user task settings';
 
       message.classList.remove('hidden');
     }
   }
 }
 
-
-// Reset selected user's TASK PROGRESS only
-// This does NOT change the saved task limit.
-async function resetUserTaskLimit() {
-  const select = document.getElementById('user-task-select');
-  const input = document.getElementById('user-task-limit');
-  const message = document.getElementById('user-task-settings-message');
-
-  if (!select || !input) return;
-
-  const userId = parseInt(select.value, 10);
-
-  if (!userId) {
-    alert('Please select a user first.');
-    return;
-  }
-
-  const confirmed = confirm(
-    'Reset this user’s completed tasks?\n\n' +
-    'Their task progress will become 0 and they can start again from Task 1.\n\n' +
-    'The saved task limit, balance, earnings, deposits and withdrawals will NOT be changed.'
-  );
-
-  if (!confirmed) return;
-
-  try {
-    const res = await api(`/api/admin/users/${userId}/tasks/reset`, {
-      method: 'POST'
-    });
-
-    if (!res.success) {
-      throw new Error(
-        res.message || 'Failed to reset task progress'
-      );
-    }
-
-    // IMPORTANT:
-    // Keep the saved task limit exactly as it is.
-    const user = taskSettingUsers.find(
-      u => Number(u.id) === userId
-    );
-
-    if (user) {
-      input.value = user.custom_task_limit ?? 0;
-    }
-
-    if (message) {
-      message.className =
-        'text-[11px] rounded-xl p-3 bg-green-500/10 border border-green-500/20 text-green-400';
-
-      message.textContent =
-        'Task progress reset successfully. User can start again from Task 1.';
-
-      message.classList.remove('hidden');
-    }
-
-  } catch (err) {
-    console.error('Reset task progress error:', err);
-
-    if (message) {
-      message.className =
-        'text-[11px] rounded-xl p-3 bg-red-500/10 border border-red-500/20 text-red-400';
-
-      message.textContent =
-        err.message || 'Failed to reset task progress';
-
-      message.classList.remove('hidden');
-    }
-  }
-}
 
 // View: Admin Deposit Management
 async function renderAdminDeposits() {
