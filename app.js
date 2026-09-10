@@ -2353,10 +2353,6 @@ async function resetUserTaskLimit() {
     return;
   }
   
-window.resetUserTaskLimit = resetUserTaskLimit;
-window.saveUserTaskLimit = saveUserTaskLimit;
-window.loadSelectedUserTaskLimit = loadSelectedUserTaskLimit;
-  
   const confirmed = confirm(
     'Reset this user’s completed tasks?\n\n' +
     'Task progress will become 0 and the user can start again from Task 1.\n\n' +
@@ -2422,6 +2418,9 @@ window.loadSelectedUserTaskLimit = loadSelectedUserTaskLimit;
     }
   }
 }
+window.resetUserTaskLimit = resetUserTaskLimit;
+window.saveUserTaskLimit = saveUserTaskLimit;
+window.loadSelectedUserTaskLimit = loadSelectedUserTaskLimit;
 
 // View: Admin Deposit Management
 async function renderAdminDeposits() {
