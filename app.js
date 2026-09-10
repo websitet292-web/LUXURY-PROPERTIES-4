@@ -2043,46 +2043,156 @@ async function renderAdminTaskRange() {
 
   return `
     <div class="min-h-screen bg-[#07090d] flex">
-      <div class="hidden lg:block">${renderAdminSidebar('#/admin/task-range')}</div>
-      <div id="mobile-sidebar" class="sidebar-drawer lg:hidden ${state.sidebarOpen ? 'open' : ''}">${renderAdminSidebar('#/admin/task-range')}</div>
+
+      <div class="hidden lg:block">
+        ${renderAdminSidebar('#/admin/task-range')}
+      </div>
+
+      <div
+        id="mobile-sidebar"
+        class="sidebar-drawer lg:hidden ${state.sidebarOpen ? 'open' : ''}"
+      >
+        ${renderAdminSidebar('#/admin/task-range')}
+      </div>
 
       <main class="flex-1 p-5 md:p-8 max-w-4xl mx-auto overflow-y-auto">
+
         <header class="pb-6 border-b border-[#1f2636]/60 mb-6">
-          <h2 class="text-xl font-bold text-white">Task Range & Reward Settings 🎛️</h2>
-          <p class="text-xs text-slate-400">Configure total active tasks (0–50) and per-task completion rewards.</p>
+          <h2 class="text-xl font-bold text-white">
+            User Task & Reward Settings 👤
+          </h2>
+
+          <p class="text-xs text-slate-400">
+            Search a user and set their individual task limit and reward.
+          </p>
         </header>
 
+
+        <!-- USER-SPECIFIC TASK SETTINGS -->
         <div class="luxury-card p-6 max-w-lg">
+
+          <div class="mb-5">
+            <h3 class="text-base font-bold text-white">
+              User-Specific Task Settings 👤
+            </h3>
+
+            <p class="text-[11px] text-slate-400 mt-1">
+              Set a custom task limit and reward for an individual user.
+            </p>
+          </div>
+
+
           <div class="space-y-5 text-xs">
+
+            <!-- SEARCH USER -->
             <div>
-              <label class="block text-slate-300 font-bold mb-1">Maximum Tasks (0–50)</label>
-              <select id="cfg-max-tasks" class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-white font-bold focus:border-amber-500 focus:outline-none">
-                <option value="10" ${s.max_tasks === 10 ? 'selected' : ''}>10 Tasks</option>
-                <option value="20" ${s.max_tasks === 20 ? 'selected' : ''}>20 Tasks</option>
-                <option value="30" ${s.max_tasks === 30 ? 'selected' : ''}>30 Tasks</option>
-                <option value="40" ${s.max_tasks === 40 ? 'selected' : ''}>40 Tasks</option>
-                <option value="50" ${s.max_tasks === 50 ? 'selected' : ''}>50 Tasks (Maximum)</option>
+              <label class="block text-slate-300 font-bold mb-1">
+                Search User
+              </label>
+
+              <input
+                id="user-task-search"
+                type="text"
+                placeholder="Search username, email or name..."
+                class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-white font-bold focus:border-amber-500 focus:outline-none"
+                oninput="filterTaskSettingUsers()"
+              />
+            </div>
+
+
+            <!-- SELECT USER -->
+            <div>
+              <label class="block text-slate-300 font-bold mb-1">
+                Select User
+              </label>
+
+              <select
+                id="user-task-select"
+                class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-white font-bold focus:border-amber-500 focus:outline-none"
+                onchange="loadSelectedUserTaskLimit()"
+              >
+                <option value="">
+                  Loading users...
+                </option>
               </select>
             </div>
 
+
+            <!-- TASK LIMIT -->
             <div>
-              <label class="block text-slate-300 font-bold mb-1">Default Task Reward (LKR)</label>
-              <input id="cfg-task-reward" type="number" value="${s.default_task_reward}" class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-white font-bold focus:border-amber-500 focus:outline-none" />
-              <p class="text-[11px] text-slate-400 mt-1">Default: RS 150 per completed task.</p>
+              <label class="block text-slate-300 font-bold mb-1">
+                Tasks Allowed (0–40)
+              </label>
+
+              <input
+                id="user-task-limit"
+                type="number"
+                min="0"
+                max="40"
+                value="0"
+                class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-white font-bold focus:border-amber-500 focus:outline-none"
+              />
+
+              <p class="text-[11px] text-slate-400 mt-1">
+                Enter a value from 0 to 40.
+              </p>
             </div>
 
-            <div class="pt-4 border-t border-[#1f2636]">
-              <button onclick="saveTaskRangeConfig()" class="btn-gold py-3 px-8 text-xs font-bold">
-                Save Task Settings to Database
-              </button>
+
+            <!-- TASK REWARD -->
+            <div>
+              <label class="block text-slate-300 font-bold mb-1">
+                Reward Per Task (LKR)
+              </label>
+
+              <input
+                id="user-task-reward"
+                type="number"
+                min="0"
+                step="0.01"
+                value="150"
+                class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-white font-bold focus:border-amber-500 focus:outline-none"
+              />
+
+              <p class="text-[11px] text-slate-400 mt-1">
+                Set how much this user earns for each completed task.
+              </p>
             </div>
+
+
+            <!-- BUTTONS -->
+            <div class="pt-4 border-t border-[#1f2636] flex gap-3">
+
+              <button
+                onclick="saveUserTaskLimit()"
+                class="btn-gold py-3 px-6 text-xs font-bold"
+              >
+                Save
+              </button>
+
+              <button
+                onclick="resetUserTaskLimit()"
+                class="py-3 px-6 text-xs font-bold rounded-xl border border-red-500/30 text-red-400 hover:bg-red-500/10"
+              >
+                Reset
+              </button>
+
+            </div>
+
+
+            <!-- MESSAGE -->
+            <div
+              id="user-task-settings-message"
+              class="hidden text-[11px] rounded-xl p-3"
+            ></div>
+
           </div>
         </div>
+
       </main>
     </div>
   `;
 }
-
 async function saveTaskRangeConfig() {
   const maxTasks = document.getElementById('cfg-max-tasks')?.value;
   const reward = document.getElementById('cfg-task-reward')?.value;
