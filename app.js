@@ -2196,22 +2196,7 @@ async function renderAdminTaskRange() {
     </div>
   `;
 }
-async function saveTaskRangeConfig() {
-  const maxTasks = document.getElementById('cfg-max-tasks')?.value;
-  const reward = document.getElementById('cfg-task-reward')?.value;
 
-  try {
-    await api('/api/admin/config', {
-      method: 'POST',
-      body: JSON.stringify({
-        max_tasks: parseInt(maxTasks, 10),
-        default_task_reward: parseFloat(reward)
-      })
-    });
-    showToast('Task settings saved permanently!', 'success');
-    render();
-  } catch (err) {}
-}
 
 // Load selected user's task limit + reward
 async function loadSelectedUserTaskLimit() {
