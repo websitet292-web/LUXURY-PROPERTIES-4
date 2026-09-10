@@ -34,16 +34,43 @@ router.get('/dashboard', authenticateUser, async (req, res) => {
     }
 
     // Task config & counts
-    const maxTasks = parseInt(user.custom_task_limit || await getSetting('max_tasks', '10'), 10);
-    const triggerTask = parseInt(user.custom_trigger_task || await getSetting('negative_trigger_task', '5'), 10);
-    const defaultReward = parseFloat(await getSetting('default_task_reward', '150'));
+const maxTasks = parseInt(
+  user.custom_task_limit || await getSetting('max_tasks', '10'),
+  10
+);
 
-    let userTasks = [];
-    if (db.isNative) {
-      userTasks = await db.all(`SELECT * FROM user_tasks WHERE user_id = ? AND task_number <= ? ORDER BY task_number ASC`, [userId, maxTasks]);
-    } else {
-      userTasks = fileStore.data.user_tasks.filter(ut => ut.user_id === userId && ut.task_number <= maxTasks);
-    }
+const triggerTask = parseInt(
+  user.custom_trigger_task || await getSetting('negative_trigger_task', '5'),
+  10
+);
+
+const globalReward = parseFloat(
+  await getSetting('default_task_reward', '150')
+);
+
+const defaultReward =
+  user.custom_task_reward !== null &&
+  user.custom_task_reward !== undefined
+    ? parseFloat(user.custom_task_reward)
+    : globalReward;
+
+let userTasks = [];
+
+if (db.isNative) {
+  userTasks = await db.all(
+    `SELECT * FROM user_tasks
+     WHERE user_id = ?
+     AND task_number <= ?
+     ORDER BY task_number ASC`,
+    [userId, maxTasks]
+  );
+} else {
+  userTasks = fileStore.data.user_tasks.filter(
+    ut =>
+      ut.user_id === userId &&
+      ut.task_number <= maxTasks
+  );
+}
 
     const completedCount = userTasks.filter(t => t.status === 'completed').length;
     const pendingCount = Math.max(0, maxTasks - completedCount);
