@@ -3056,10 +3056,12 @@ async function saveUserTaskLimit() {
 }
 
 
-// Reset selected user's task limit to 0
+// Reset selected user's TASK PROGRESS only
+// This does NOT change the saved task limit.
 async function resetUserTaskLimit() {
   const select = document.getElementById('user-task-select');
   const input = document.getElementById('user-task-limit');
+  const message = document.getElementById('user-task-settings-message');
 
   if (!select || !input) return;
 
@@ -3070,9 +3072,58 @@ async function resetUserTaskLimit() {
     return;
   }
 
-  input.value = 0;
+  const confirmed = confirm(
+    'Reset this user’s completed tasks?\n\n' +
+    'Their task progress will become 0 and they can start again from Task 1.\n\n' +
+    'The saved task limit, balance, earnings, deposits and withdrawals will NOT be changed.'
+  );
 
-  await saveUserTaskLimit();
+  if (!confirmed) return;
+
+  try {
+    const res = await api(`/api/admin/users/${userId}/tasks/reset`, {
+      method: 'POST'
+    });
+
+    if (!res.success) {
+      throw new Error(
+        res.message || 'Failed to reset task progress'
+      );
+    }
+
+    // IMPORTANT:
+    // Keep the saved task limit exactly as it is.
+    const user = taskSettingUsers.find(
+      u => Number(u.id) === userId
+    );
+
+    if (user) {
+      input.value = user.custom_task_limit ?? 0;
+    }
+
+    if (message) {
+      message.className =
+        'text-[11px] rounded-xl p-3 bg-green-500/10 border border-green-500/20 text-green-400';
+
+      message.textContent =
+        'Task progress reset successfully. User can start again from Task 1.';
+
+      message.classList.remove('hidden');
+    }
+
+  } catch (err) {
+    console.error('Reset task progress error:', err);
+
+    if (message) {
+      message.className =
+        'text-[11px] rounded-xl p-3 bg-red-500/10 border border-red-500/20 text-red-400';
+
+      message.textContent =
+        err.message || 'Failed to reset task progress';
+
+      message.classList.remove('hidden');
+    }
+  }
 }
 
 // View: Admin Deposit Management
