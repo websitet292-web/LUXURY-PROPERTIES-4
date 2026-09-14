@@ -250,6 +250,96 @@ router.post('/users', async (req, res) => {
   }
 });
 
+// Admin: Add balance to ONE selected user only
+router.post('/users/:id/add-balance', async (req, res) => {
+  try {
+    const userId = parseInt(req.params.id, 10);
+    const amount = parseFloat(req.body.amount);
+
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid user ID'
+      });
+    }
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please enter a valid amount greater than 0'
+      });
+    }
+
+    let user;
+
+    if (db.isNative) {
+      user = await db.get(
+        `SELECT id, username, name, balance
+         FROM users
+         WHERE id = ?`,
+        [userId]
+      );
+    } else {
+      user = fileStore.data.users.find(
+        u => Number(u.id) === userId
+      );
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    const previousBalance = parseFloat(user.balance || 0);
+    const newBalance = previousBalance + amount;
+
+    if (db.isNative) {
+      await db.run(
+        `UPDATE users
+         SET balance = ?,
+             updated_at = CURRENT_TIMESTAMP
+         WHERE id = ?`,
+        [newBalance, userId]
+      );
+    } else {
+      user.balance = newBalance;
+      user.updated_at = new Date().toISOString();
+      fileStore.save();
+    }
+
+    await logAudit(
+      req.admin.id,
+      req.admin.name,
+      'Add User Balance',
+      'User Balance',
+      `LKR ${previousBalance.toFixed(2)}`,
+      `LKR ${newBalance.toFixed(2)}`,
+      userId,
+      `Admin manually added LKR ${amount.toFixed(2)}`
+    );
+
+    return res.json({
+      success: true,
+      message: `LKR ${amount.toFixed(2)} added successfully.`,
+      userId,
+      addedAmount: amount,
+      previousBalance,
+      newBalance
+    });
+
+  } catch (err) {
+    console.error('Add User Balance Error:', err);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to add user balance',
+      error: err.message
+    });
+  }
+});
+
 // 4. PUT: /api/admin/users/:id
 router.put('/users/:id', async (req, res) => {
   try {
