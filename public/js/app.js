@@ -3542,6 +3542,69 @@ async function renderAdminUsers() {
           </div>
         </header>
 
+<div class="luxury-card p-5 mb-6">
+  <h3 class="text-sm font-bold text-white mb-1">
+    Add User Balance 💰
+  </h3>
+
+  <p class="text-[11px] text-slate-400 mb-4">
+    Select a user and manually add an amount to that user's balance only.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+
+    <div>
+      <label class="block text-[11px] text-slate-300 font-bold mb-1">
+        Select User
+      </label>
+
+      <select
+        id="admin-balance-user"
+        class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-amber-400 font-bold focus:border-amber-500 focus:outline-none"
+      >
+        <option value="">-- Select User --</option>
+
+        ${users.map(u => `
+          <option value="${u.id}">
+            ${u.name || u.username || 'Unknown User'}
+            ${u.email ? ` — ${u.email}` : ''}
+          </option>
+        `).join('')}
+      </select>
+    </div>
+
+    <div>
+      <label class="block text-[11px] text-slate-300 font-bold mb-1">
+        Amount (LKR)
+      </label>
+
+      <input
+        id="admin-balance-amount"
+        type="number"
+        min="0"
+        step="0.01"
+        placeholder="Enter amount"
+        class="w-full bg-[#0d1017] border border-[#1f2636] rounded-xl px-4 py-2.5 text-white font-bold focus:border-amber-500 focus:outline-none"
+      />
+    </div>
+
+    <div class="flex items-end">
+      <button
+        onclick="adminAddUserBalance()"
+        class="w-full btn-gold py-2.5 px-5 text-xs font-bold rounded-xl"
+      >
+        + Add Balance
+      </button>
+    </div>
+
+  </div>
+
+  <div
+    id="admin-balance-message"
+    class="hidden mt-3 text-[11px] rounded-xl p-3"
+  ></div>
+</div>
+
         <div class="luxury-card p-6">
           <div class="overflow-x-auto">
 
@@ -3657,6 +3720,75 @@ async function toggleUserStatus(userId, newStatus) {
     render();
   } catch (err) {}
 }
+
+async function adminAddUserBalance() {
+  const userSelect = document.getElementById('admin-balance-user');
+  const amountInput = document.getElementById('admin-balance-amount');
+  const message = document.getElementById('admin-balance-message');
+
+  if (!userSelect || !amountInput) return;
+
+  const userId = parseInt(userSelect.value, 10);
+  const amount = parseFloat(amountInput.value);
+
+  if (!userId) {
+    alert('Please select a user first.');
+    return;
+  }
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    alert('Please enter a valid amount greater than 0.');
+    return;
+  }
+
+  try {
+    const res = await api(
+      `/api/admin/users/${userId}/add-balance`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          amount
+        })
+      }
+    );
+
+    if (!res.success) {
+      throw new Error(
+        res.message || 'Failed to add balance'
+      );
+    }
+
+    if (message) {
+      message.className =
+        'mt-3 text-[11px] rounded-xl p-3 bg-green-500/10 border border-green-500/20 text-green-400';
+
+      message.textContent =
+        `Successfully added LKR ${amount.toFixed(2)}. New balance: LKR ${Number(res.newBalance).toFixed(2)}`;
+
+      message.classList.remove('hidden');
+    }
+
+    amountInput.value = '';
+
+    // Refresh user list so new balance appears immediately
+    render();
+
+  } catch (err) {
+    console.error('Admin Add Balance Error:', err);
+
+    if (message) {
+      message.className =
+        'mt-3 text-[11px] rounded-xl p-3 bg-red-500/10 border border-red-500/20 text-red-400';
+
+      message.textContent =
+        err.message || 'Failed to add balance';
+
+      message.classList.remove('hidden');
+    }
+  }
+}
+
+window.adminAddUserBalance = adminAddUserBalance;
 
 // View: Admin Properties CRUD
 async function renderAdminProperties() {
