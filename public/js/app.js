@@ -2024,46 +2024,65 @@ function renderUserLogin() {
 
 
         <!-- Login Form -->
-        <form onsubmit="handleUserLoginSubmit(event)" class="space-y-4">
+        <div>
 
-          <div>
-            <label class="block text-xs text-slate-300 mb-2">
-              Email / Username
-            </label>
-
-            <input
-              id="u-login-email"
-              type="text"
-              placeholder="Enter email or username"
-              required
-              class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none transition"
-            />
-          </div>
-
-
-          <div>
-            <label class="block text-xs text-slate-300 mb-2">
-              Password
-            </label>
-
-            <input
-              id="u-login-pass"
-              type="password"
-              placeholder="Enter password"
-              required
-              class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none transition"
-            />
-          </div>
-
-
+          <!-- Sign In Button -->
           <button
-            type="submit"
+            type="button"
+            onclick="
+              this.style.display='none';
+              document.getElementById('login-form-box').classList.remove('hidden');
+            "
             class="btn-gold w-full py-3 text-xs font-bold"
           >
-            Sign In to Dashboard
+            Sign In
           </button>
 
-        </form>
+          <!-- Login Fields -->
+          <form
+            id="login-form-box"
+            onsubmit="handleUserLoginSubmit(event)"
+            class="space-y-4 hidden mt-4"
+          >
+
+            <div>
+              <label class="block text-xs text-slate-300 mb-2">
+                Email / Username
+              </label>
+
+              <input
+                id="u-login-email"
+                type="text"
+                placeholder="Enter email or username"
+                required
+                class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none transition"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs text-slate-300 mb-2">
+                Password
+              </label>
+
+              <input
+                id="u-login-pass"
+                type="password"
+                placeholder="Enter password"
+                required
+                class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none transition"
+              />
+            </div>
+
+            <button
+              type="submit"
+              class="btn-gold w-full py-3 text-xs font-bold"
+            >
+              Sign In to Dashboard
+            </button>
+
+          </form>
+
+        </div>
 
 
         <!-- Create Account -->
