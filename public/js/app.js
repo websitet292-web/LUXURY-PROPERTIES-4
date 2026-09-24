@@ -1905,7 +1905,7 @@ function renderUserLogin() {
   <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/80"></div>
 </div>
 
-      <div class="relative z-10 luxury-card border border-amber-500/30 w-full max-w-md p-8 bg-[#0e1118]/95 shadow-2xl backdrop-blur-xl rounded-3xl">
+      <div class="relative z-10 luxury-card border border-amber-400/30 w-full max-w-md p-7 sm:p-8 bg-[#0b0e14]/85 shadow-2xl backdrop-blur-xl rounded-3xl">
 
         <!-- PREMIUM LOGO -->
         <div class="text-center mb-8">
