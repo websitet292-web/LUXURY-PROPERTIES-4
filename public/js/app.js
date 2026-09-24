@@ -1888,75 +1888,111 @@ function renderUserProfile() {
   `;
 }
 
+```javascript
 function renderUserLogin() {
   return `
-    <div class="min-h-screen bg-[#07090d] flex items-center justify-center p-4 relative overflow-hidden">
+    <div class="min-h-screen bg-[#050609] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
 
-    <!-- Luxury Background -->
-<div class="absolute inset-0">
-  <img
-    src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=2200&q=90"
-    alt="Luxury Modern Villa"
-    class="w-full h-full object-cover"
-    style="object-position:center;"
-  />
+      <!-- Cinematic Luxury Background -->
+      <div class="absolute inset-0">
+        <img
+          src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=2200&q=90"
+          alt="Luxury Modern Villa"
+          class="w-full h-full object-cover"
+          style="object-position:center center; transform:scale(1.03);"
+        />
 
-  <div class="absolute inset-0 bg-black/70"></div>
-  <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/80"></div>
-</div>
+        <!-- Dark Cinematic Overlay -->
+        <div class="absolute inset-0 bg-black/60"></div>
 
-      <div class="relative z-10 luxury-card border border-amber-500/30 w-full max-w-md p-8 bg-[#0e1118]/95 shadow-2xl backdrop-blur-xl rounded-3xl">
+        <!-- Luxury Gradient -->
+        <div class="absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-black/80"></div>
+
+        <!-- Bottom Cinematic Fade -->
+        <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+
+        <!-- Subtle Gold Glow -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                    w-[280px] h-[280px] sm:w-[420px] sm:h-[420px]
+                    bg-amber-500/10 blur-[100px] rounded-full">
+        </div>
+      </div>
+
+
+      <!-- Login Card -->
+      <div
+        class="relative z-10 w-full max-w-md
+               p-6 sm:p-8 md:p-9
+               bg-[#0b0e14]/90
+               border border-amber-500/30
+               shadow-[0_25px_80px_rgba(0,0,0,0.65)]
+               backdrop-blur-xl
+               rounded-3xl
+               overflow-hidden"
+      >
+
+        <!-- Card Gold Glow -->
+        <div class="absolute -top-24 -right-24 w-48 h-48 bg-amber-400/10 blur-3xl rounded-full pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-amber-500/5 blur-3xl rounded-full pointer-events-none"></div>
+
 
         <!-- PREMIUM LOGO -->
-        <div class="text-center mb-8">
+        <div class="relative text-center mb-8">
 
           <div class="flex items-center justify-center gap-3 mb-4">
-            <div class="h-px w-12 bg-gradient-to-r from-transparent to-amber-400"></div>
+            <div class="h-px w-10 sm:w-12 bg-gradient-to-r from-transparent to-amber-400"></div>
 
-            <span class="text-[9px] text-amber-400 tracking-[0.4em] font-semibold">
+            <span class="text-[8px] sm:text-[9px] text-amber-400 tracking-[0.4em] font-semibold">
               EST. 2026
             </span>
 
-            <div class="h-px w-12 bg-gradient-to-l from-transparent to-amber-400"></div>
+            <div class="h-px w-10 sm:w-12 bg-gradient-to-l from-transparent to-amber-400"></div>
           </div>
 
-          <h1 class="font-serif text-3xl sm:text-4xl font-bold tracking-[0.16em]
-                     text-transparent bg-clip-text
-                     bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500">
+
+          <h1
+            class="font-serif text-3xl sm:text-4xl font-bold tracking-[0.14em] sm:tracking-[0.16em]
+                   text-transparent bg-clip-text
+                   bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500"
+          >
             LUXURY
           </h1>
 
-          <h1 class="font-serif text-3xl sm:text-4xl font-bold tracking-[0.16em]
-                     text-transparent bg-clip-text
-                     bg-gradient-to-r from-yellow-500 via-amber-300 to-amber-100">
+          <h1
+            class="font-serif text-3xl sm:text-4xl font-bold tracking-[0.14em] sm:tracking-[0.16em]
+                   text-transparent bg-clip-text
+                   bg-gradient-to-r from-yellow-500 via-amber-300 to-amber-100"
+          >
             PROPERTIES
           </h1>
 
-          <div class="flex items-center justify-center gap-3 mt-4">
-            <div class="h-px w-8 bg-amber-500/60"></div>
 
-            <p class="text-[9px] text-slate-400 tracking-[0.35em]">
+          <div class="flex items-center justify-center gap-3 mt-4">
+            <div class="h-px w-7 sm:w-8 bg-amber-500/60"></div>
+
+            <p class="text-[8px] sm:text-[9px] text-slate-400 tracking-[0.3em] sm:tracking-[0.35em]">
               PREMIUM REAL ESTATE
             </p>
 
-            <div class="h-px w-8 bg-amber-500/60"></div>
+            <div class="h-px w-7 sm:w-8 bg-amber-500/60"></div>
           </div>
 
         </div>
 
 
         <!-- Login Header -->
-        <div class="text-center mb-7">
+        <div class="relative text-center mb-7">
 
           <div class="flex items-center justify-center gap-3 mb-3">
-            <div class="h-px w-8 bg-amber-500/40"></div>
+            <div class="h-px w-7 bg-amber-500/40"></div>
 
             <span class="text-amber-400 text-xs">✦</span>
 
-            <div class="h-px w-8 bg-amber-500/40"></div>
+            <div class="h-px w-7 bg-amber-500/40"></div>
           </div>
 
-          <h2 class="text-2xl font-serif font-bold text-white">
+
+          <h2 class="text-2xl sm:text-[26px] font-serif font-bold text-white">
             Welcome Back
           </h2>
 
@@ -1968,8 +2004,10 @@ function renderUserLogin() {
 
 
         <!-- Login Form -->
-        <form onsubmit="handleUserLoginSubmit(event)" class="space-y-4">
+        <!-- EXISTING LOGIN FUNCTIONALITY PRESERVED -->
+        <form onsubmit="handleUserLoginSubmit(event)" class="relative space-y-4">
 
+          <!-- Email / Username -->
           <div>
             <label class="block text-xs text-slate-300 mb-2">
               Email / Username
@@ -1980,11 +2018,22 @@ function renderUserLogin() {
               type="text"
               placeholder="Enter email or username"
               required
-              class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none transition"
+              autocomplete="username"
+              class="w-full bg-[#07090d]/90
+                     border border-[#303746]
+                     rounded-xl
+                     px-4 py-3.5
+                     text-white text-sm
+                     placeholder:text-slate-600
+                     focus:border-amber-500
+                     focus:ring-1 focus:ring-amber-500/40
+                     focus:outline-none
+                     transition-all duration-300"
             />
           </div>
 
 
+          <!-- Password -->
           <div>
             <label class="block text-xs text-slate-300 mb-2">
               Password
@@ -1995,14 +2044,30 @@ function renderUserLogin() {
               type="password"
               placeholder="Enter password"
               required
-              class="w-full bg-[#090b0f] border border-[#1f2636] rounded-xl px-4 py-3 text-white focus:border-amber-500 focus:outline-none transition"
+              autocomplete="current-password"
+              class="w-full bg-[#07090d]/90
+                     border border-[#303746]
+                     rounded-xl
+                     px-4 py-3.5
+                     text-white text-sm
+                     placeholder:text-slate-600
+                     focus:border-amber-500
+                     focus:ring-1 focus:ring-amber-500/40
+                     focus:outline-none
+                     transition-all duration-300"
             />
           </div>
 
 
+          <!-- Sign In Button -->
+          <!-- EXISTING SUBMIT BUTTON PRESERVED -->
           <button
             type="submit"
-            class="btn-gold w-full py-3 text-xs font-bold"
+            class="btn-gold w-full py-3.5 text-xs sm:text-sm font-bold
+                   tracking-wide rounded-xl
+                   transition-all duration-300
+                   hover:scale-[1.01]
+                   active:scale-[0.99]"
           >
             Sign In to Dashboard
           </button>
@@ -2011,15 +2076,17 @@ function renderUserLogin() {
 
 
         <!-- Create Account -->
-        <div class="text-center mt-5">
+        <div class="relative text-center mt-6">
 
-          <p class="text-xs text-slate-400">
+          <p class="text-xs text-slate-500">
             Don't have an account?
           </p>
 
           <a
             href="#/signup"
-            class="inline-block mt-2 text-sm text-amber-400 hover:text-amber-300 font-bold transition"
+            class="inline-block mt-2 text-sm text-amber-400
+                   hover:text-amber-300
+                   font-bold transition-colors duration-300"
           >
             Create New Account →
           </a>
@@ -2027,10 +2094,10 @@ function renderUserLogin() {
         </div>
 
 
-        <!-- Bottom Line -->
-        <div class="pt-5 mt-5 border-t border-[#1f2636] text-center">
+        <!-- Bottom Security Line -->
+        <div class="relative pt-5 mt-6 border-t border-[#252b38] text-center">
 
-          <p class="text-[9px] text-slate-600 tracking-[0.3em]">
+          <p class="text-[8px] sm:text-[9px] text-slate-600 tracking-[0.25em] sm:tracking-[0.3em]">
             SECURE • PRIVATE • PREMIUM
           </p>
 
@@ -2040,6 +2107,8 @@ function renderUserLogin() {
     </div>
   `;
 }
+```
+
 
 function renderUserSignup() {
   return `
