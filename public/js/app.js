@@ -1892,17 +1892,73 @@ function renderUserLogin() {
   return `
     <div class="min-h-screen bg-[#07090d] flex items-center justify-center p-4 relative overflow-hidden">
 
-    <!-- Luxury Background -->
-<div class="absolute inset-0">
+<!-- Cinematic Luxury Property Background -->
+<div class="absolute inset-0 overflow-hidden">
+
+  <style>
+    @keyframes luxuryPropertyFade {
+      0%, 28% {
+        opacity: 1;
+        transform: scale(1.03);
+      }
+      33%, 61% {
+        opacity: 0;
+        transform: scale(1.08);
+      }
+      66%, 94% {
+        opacity: 0;
+        transform: scale(1.03);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1.03);
+      }
+    }
+
+    .luxury-property-slide {
+      animation: luxuryPropertyFade 18s ease-in-out infinite;
+    }
+
+    .luxury-property-slide-2 {
+      animation-delay: 6s;
+    }
+
+    .luxury-property-slide-3 {
+      animation-delay: 12s;
+    }
+  </style>
+
+  <!-- Property 1 -->
   <img
     src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=2200&q=90"
-    alt="Luxury Modern Villa"
-    class="w-full h-full object-cover"
-    style="object-position:center center; transform:scale(1.03);"
+    alt="Luxury Property"
+    class="luxury-property-slide absolute inset-0 w-full h-full object-cover"
+    style="object-position:center;"
   />
 
-  <div class="absolute inset-0 bg-black/70"></div>
-  <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/80"></div>
+  <!-- Property 2 -->
+  <img
+    src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=90"
+    alt="Luxury Property"
+    class="luxury-property-slide luxury-property-slide-2 absolute inset-0 w-full h-full object-cover"
+    style="object-position:center;"
+  />
+
+  <!-- Property 3 -->
+  <img
+    src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=2200&q=90"
+    alt="Luxury Property"
+    class="luxury-property-slide luxury-property-slide-3 absolute inset-0 w-full h-full object-cover"
+    style="object-position:center;"
+  />
+
+  <!-- Dark cinematic overlay -->
+  <div class="absolute inset-0 bg-black/65"></div>
+
+  <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/45 to-black/80"></div>
+
+  <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+
 </div>
 
       <div class="relative z-10 luxury-card border border-amber-400/30 w-full max-w-md p-7 sm:p-8 bg-[#0b0e14]/85 shadow-2xl backdrop-blur-xl rounded-3xl">
