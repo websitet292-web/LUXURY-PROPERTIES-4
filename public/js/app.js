@@ -1958,7 +1958,7 @@ function renderUserLogin() {
   <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/45 to-black/80"></div>
 
 
-      <div class="relative z-10 luxury-card border border-amber-400/30 w-[260px] p-3 bg-black/20 shadow-2xl backdrop-blur-md rounded-3xl">
+      <div class="relative z-10 luxury-card border border-amber-400/30 w-[260px] p-3 bg-black/20 shadow-2xl backdrop-blur-md rounded-3xl mx-auto">
       
         <!-- PREMIUM LOGO -->
         <div class="text-center mb-4">
