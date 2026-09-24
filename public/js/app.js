@@ -1964,7 +1964,7 @@ function renderUserLogin() {
       <div class="relative z-10 luxury-card border border-amber-400/30 w-full max-w-[300px] p-4 bg-[#0b0e14]/85 shadow-2xl backdrop-blur-xl rounded-3xl">
       
         <!-- PREMIUM LOGO -->
-        <div class="text-center mb-8">
+        <div class="text-center mb-4">
 
           <div class="flex items-center justify-center gap-3 mb-4">
             <div class="h-px w-12 bg-gradient-to-r from-transparent to-amber-400"></div>
