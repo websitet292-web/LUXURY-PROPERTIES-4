@@ -1898,7 +1898,7 @@ function renderUserLogin() {
     src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=2200&q=90"
     alt="Luxury Modern Villa"
     class="w-full h-full object-cover"
-    style="object-position:center;"
+    style="object-position:center center; transform:scale(1.03);"
   />
 
   <div class="absolute inset-0 bg-black/70"></div>
